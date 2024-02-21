@@ -1,0 +1,311 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{81CE3E7C-9E42-4A5A-962F-11FA67D17203}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ServiceLearning</RootNamespace>
+    <AssemblyName>ServiceLearning</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ComponentFactory.Krypton.Design">
+      <HintPath>D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Docking">
+      <HintPath>D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Navigator">
+      <HintPath>D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Navigator.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Ribbon">
+      <HintPath>D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Ribbon.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Toolkit">
+      <HintPath>D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentFactory.Krypton.Workspace">
+      <HintPath>D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Workspace.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DANHGIA_DETAILS.cs" />
+    <Compile Include="DANH_GIA.cs" />
+    <Compile Include="DOI_TAC.cs" />
+    <Compile Include="frmAddHoatDong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddHoatDong.Designer.cs">
+      <DependentUpon>frmAddHoatDong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmKhoaDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmKhoaDetails.Designer.cs">
+      <DependentUpon>frmKhoaDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSinhVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSinhVien.Designer.cs">
+      <DependentUpon>frmSinhVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTTDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTTDetails.Designer.cs">
+      <DependentUpon>frmTTDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTK_DoiTac.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTK_DoiTac.Designer.cs">
+      <DependentUpon>frmTK_DoiTac.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTK_GiangVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTK_GiangVien.Designer.cs">
+      <DependentUpon>frmTK_GiangVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTK_Khoa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTK_Khoa.Designer.cs">
+      <DependentUpon>frmTK_Khoa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTK_TaiChinh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTK_TaiChinh.Designer.cs">
+      <DependentUpon>frmTK_TaiChinh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmTK_TaiTro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTK_TaiTro.Designer.cs">
+      <DependentUpon>frmTK_TaiTro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmViewHoatDong.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmViewHoatDong.Designer.cs">
+      <DependentUpon>frmViewHoatDong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm_GiangVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_GiangVien.Designer.cs">
+      <DependentUpon>frm_GiangVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GIANG_VIEN.cs" />
+    <Compile Include="HANG_MUC.cs" />
+    <Compile Include="HD_DOITAC.cs" />
+    <Compile Include="HD_GIANGVIEN.cs" />
+    <Compile Include="HD_SINHVIEN.cs" />
+    <Compile Include="HD_TAITRO.cs" />
+    <Compile Include="HOAT_DONG.cs" />
+    <Compile Include="Home.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Home.Designer.cs">
+      <DependentUpon>Home.cs</DependentUpon>
+    </Compile>
+    <Compile Include="KHOA.cs" />
+    <Compile Include="Model1.cs" />
+    <Compile Include="frmAddHangMuc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddHangMuc.Designer.cs">
+      <DependentUpon>frmAddHangMuc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm_DoiTac_Details.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_DoiTac_Details.Designer.cs">
+      <DependentUpon>frm_DoiTac_Details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PHU_TRACH.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service_LearningDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Service_LearningDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="frm_Theme.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Theme.Designer.cs">
+      <DependentUpon>frm_Theme.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SINH_VIEN.cs" />
+    <Compile Include="TAI_CHINH.cs" />
+    <Compile Include="TAI_TRO.cs" />
+    <EmbeddedResource Include="frmAddHangMuc.resx">
+      <DependentUpon>frmAddHangMuc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddHoatDong.resx">
+      <DependentUpon>frmAddHoatDong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmKhoaDetails.resx">
+      <DependentUpon>frmKhoaDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSinhVien.resx">
+      <DependentUpon>frmSinhVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTTDetails.resx">
+      <DependentUpon>frmTTDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTK_DoiTac.resx">
+      <DependentUpon>frmTK_DoiTac.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTK_GiangVien.resx">
+      <DependentUpon>frmTK_GiangVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTK_Khoa.resx">
+      <DependentUpon>frmTK_Khoa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTK_TaiChinh.resx">
+      <DependentUpon>frmTK_TaiChinh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTK_TaiTro.resx">
+      <DependentUpon>frmTK_TaiTro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmViewHoatDong.resx">
+      <DependentUpon>frmViewHoatDong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_DoiTac_Details.resx">
+      <DependentUpon>frm_DoiTac_Details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_GiangVien.resx">
+      <DependentUpon>frm_GiangVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Theme.resx">
+      <DependentUpon>frm_Theme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Home.resx">
+      <DependentUpon>Home.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Service_LearningDataSet.xsc">
+      <DependentUpon>Service_LearningDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Service_LearningDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Service_LearningDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service_LearningDataSet.xss">
+      <DependentUpon>Service_LearningDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icon\icons8-create.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icon\icons8-delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icon\icons8-details.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icon\icons8-edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon\photos_icon_156733.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EntityFramework">
+      <Version>6.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="EPPlus">
+      <Version>7.0.9</Version>
+    </PackageReference>
+    <PackageReference Include="Guna.UI2.WinForms">
+      <Version>2.0.4.6</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Office.Interop.Excel">
+      <Version>15.0.4795.1001</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Design.dll" />
+    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Docking.dll" />
+    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Navigator.dll" />
+    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Ribbon.dll" />
+    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Toolkit.dll" />
+    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Workspace.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

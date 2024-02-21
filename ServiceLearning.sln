@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLearning", "ServiceLearning\ServiceLearning.csproj", "{81CE3E7C-9E42-4A5A-962F-11FA67D17203}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81CE3E7C-9E42-4A5A-962F-11FA67D17203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81CE3E7C-9E42-4A5A-962F-11FA67D17203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81CE3E7C-9E42-4A5A-962F-11FA67D17203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81CE3E7C-9E42-4A5A-962F-11FA67D17203}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18694466-FF0B-4613-A1A7-AB8CA28D1427}
+	EndGlobalSection
+EndGlobal
