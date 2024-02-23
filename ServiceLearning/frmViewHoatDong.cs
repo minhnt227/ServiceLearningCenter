@@ -20,7 +20,7 @@ namespace ServiceLearning
         public frmViewHoatDong()
         {
             InitializeComponent();
-            this.Text = "Tạo Mới Hoạt Động";
+            this.Text = "Tạo Mới Hoạt Động" ;
         }
         public void LoadFormView(int idHD)
         {
