@@ -12,6 +12,9 @@ using System.Collections;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Xml.Serialization;
 using ComponentFactory.Krypton.Toolkit;
+using OfficeOpenXml;
+using System.IO;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ServiceLearning
 {
@@ -117,6 +120,190 @@ namespace ServiceLearning
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnSVExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
+
+                        using (ExcelPackage excelPackage = new ExcelPackage())
+                        {
+                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(txtTenHD.Text);
+
+                            // Ghi header của DataGridView vào Excel
+                            for (int i = 1; i <= dgvSinhVien.Columns.Count; i++)
+                            {
+                                worksheet.Cells[3, i].Value = dgvSinhVien.Columns[i - 1].HeaderText;
+                                worksheet.Cells[3, i].Style.Font.Bold = true;
+                            }
+
+                            // Ghi dữ liệu từ DataGridView vào Excel
+                            for (int i = 1; i <= dgvSinhVien.Rows.Count; i++)
+                            {
+                                for (int j = 1; j <= dgvSinhVien.Columns.Count; j++)
+                                {
+                                    worksheet.Cells[i + 3, j].Value = dgvSinhVien.Rows[i - 1].Cells[j - 1].Value;
+                                }
+                            }
+                            worksheet.Cells.AutoFitColumns(0);
+                            excelPackage.SaveAs(excelFile);
+                            MessageBox.Show("Export thành công!");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi:\n\n " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnGVExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
+
+                        using (ExcelPackage excelPackage = new ExcelPackage())
+                        {
+                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(txtTenHD.Text);
+
+                            // Ghi header của DataGridView vào Excel
+                            for (int i = 1; i <= dgv_GV.Columns.Count; i++)
+                            {
+                                worksheet.Cells[3, i].Value = dgv_GV.Columns[i - 1].HeaderText;
+                                worksheet.Cells[3, i].Style.Font.Bold = true;
+                            }
+
+                            // Ghi dữ liệu từ DataGridView vào Excel
+                            for (int i = 1; i <= dgv_GV.Rows.Count; i++)
+                            {
+                                for (int j = 1; j <= dgv_GV.Columns.Count; j++)
+                                {
+                                    worksheet.Cells[i + 3, j].Value = dgv_GV.Rows[i - 1].Cells[j - 1].Value;
+                                }
+                            }
+                            worksheet.Cells.AutoFitColumns(0);
+                            excelPackage.SaveAs(excelFile);
+                            MessageBox.Show("Export thành công!");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi:\n\n " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDTExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
+
+                        using (ExcelPackage excelPackage = new ExcelPackage())
+                        {
+                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(txtTenHD.Text);
+
+                            // Ghi header của DataGridView vào Excel
+                            for (int i = 1; i <= dgvDoiTac.Columns.Count; i++)
+                            {
+                                worksheet.Cells[3, i].Value = dgvDoiTac.Columns[i - 1].HeaderText;
+                                worksheet.Cells[3, i].Style.Font.Bold = true;
+                            }
+
+                            // Ghi dữ liệu từ DataGridView vào Excel
+                            for (int i = 1; i <= dgvDoiTac.Rows.Count; i++)
+                            {
+                                for (int j = 1; j <= dgvDoiTac.Columns.Count; j++)
+                                {
+                                    worksheet.Cells[i + 3, j].Value = dgvDoiTac.Rows[i - 1].Cells[j - 1].Value;
+                                }
+                            }
+                            worksheet.Cells.AutoFitColumns(0);
+                            excelPackage.SaveAs(excelFile);
+                            MessageBox.Show("Export thành công!");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi:\n\n " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnTTExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
+
+                        using (ExcelPackage excelPackage = new ExcelPackage())
+                        {
+                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(txtTenHD.Text);
+
+                            // Ghi header của DataGridView vào Excel
+                            for (int i = 1; i <= dgvTaiTro.Columns.Count; i++)
+                            {
+                                worksheet.Cells[3, i].Value = dgvTaiTro.Columns[i - 1].HeaderText;
+                                worksheet.Cells[3, i].Style.Font.Bold = true;
+                            }
+
+                            // Ghi dữ liệu từ DataGridView vào Excel
+                            for (int i = 1; i <= dgvTaiTro.Rows.Count; i++)
+                            {
+                                for (int j = 1; j <= dgvTaiTro.Columns.Count; j++)
+                                {
+                                    worksheet.Cells[i + 3, j].Value = dgvTaiTro.Rows[i - 1].Cells[j - 1].Value;
+                                }
+                            }
+                            worksheet.Cells.AutoFitColumns(0);
+                            excelPackage.SaveAs(excelFile);
+                            MessageBox.Show("Export thành công!");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi:\n\n " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -40,13 +40,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.gbSVList = new System.Windows.Forms.GroupBox();
             this.dgvSinhVien = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
-            this.MSSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.HoTenSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Role = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Notes_SV = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DB_Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DB_Role = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.gbTaiChinh = new System.Windows.Forms.GroupBox();
             this.numUEF = new ComponentFactory.Krypton.Toolkit.KryptonNumericUpDown();
@@ -61,30 +54,40 @@
             this.label27 = new System.Windows.Forms.Label();
             this.gbTTList = new System.Windows.Forms.GroupBox();
             this.dgvTaiTro = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
-            this.TT_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TT_Rep = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TT_SDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TT_Email = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TT_Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TT_IDDB = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbDT_List = new System.Windows.Forms.GroupBox();
             this.dgvDoiTac = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
-            this.DT_Ten = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DT_DaiDien = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DT_SDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DT_Email = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DT_NoiDung = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ID_DB = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbGVList = new System.Windows.Forms.GroupBox();
             this.dgv_GV = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
+            this.btnExit = new ComponentFactory.Krypton.Toolkit.KryptonButton();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.btnSVExport = new System.Windows.Forms.Button();
+            this.MSSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HoTenSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Role = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Notes_SV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DB_Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MaGV = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.HoTenLot = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Ten = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GVKhoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GV_Role = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GVKHoa_DB = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnExit = new ComponentFactory.Krypton.Toolkit.KryptonButton();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.DT_Ten = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DT_DaiDien = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DT_SDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DT_Email = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DT_NoiDung = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ID_DB = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TT_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TT_Rep = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TT_SDT = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TT_Email = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TT_Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TT_IDDB = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnGVExport = new System.Windows.Forms.Button();
+            this.btnDTExport = new System.Windows.Forms.Button();
+            this.btnTTExport = new System.Windows.Forms.Button();
             this.gbGeneralInfo.SuspendLayout();
             this.gbSVList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSinhVien)).BeginInit();
@@ -204,7 +207,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbSVList.Controls.Add(this.dgvSinhVien);
             this.gbSVList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.142858F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbSVList.Location = new System.Drawing.Point(17, 312);
+            this.gbSVList.Location = new System.Drawing.Point(17, 331);
             this.gbSVList.Name = "gbSVList";
             this.gbSVList.Size = new System.Drawing.Size(1195, 322);
             this.gbSVList.TabIndex = 2;
@@ -223,8 +226,7 @@
             this.Khoa,
             this.Role,
             this.Notes_SV,
-            this.DB_Khoa,
-            this.DB_Role});
+            this.DB_Khoa});
             this.dgvSinhVien.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvSinhVien.Location = new System.Drawing.Point(3, 25);
             this.dgvSinhVien.Name = "dgvSinhVien";
@@ -237,65 +239,16 @@
             this.dgvSinhVien.Size = new System.Drawing.Size(1189, 294);
             this.dgvSinhVien.TabIndex = 0;
             // 
-            // MSSV
-            // 
-            this.MSSV.HeaderText = "MSSV";
-            this.MSSV.MinimumWidth = 9;
-            this.MSSV.Name = "MSSV";
-            this.MSSV.ReadOnly = true;
-            // 
-            // HoTenSV
-            // 
-            this.HoTenSV.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.HoTenSV.HeaderText = "Họ và Tên";
-            this.HoTenSV.MinimumWidth = 9;
-            this.HoTenSV.Name = "HoTenSV";
-            this.HoTenSV.ReadOnly = true;
-            this.HoTenSV.Width = 150;
-            // 
-            // Khoa
-            // 
-            this.Khoa.HeaderText = "Khoa";
-            this.Khoa.MinimumWidth = 9;
-            this.Khoa.Name = "Khoa";
-            this.Khoa.ReadOnly = true;
-            // 
-            // Role
-            // 
-            this.Role.HeaderText = "Vai trò";
-            this.Role.MinimumWidth = 9;
-            this.Role.Name = "Role";
-            this.Role.ReadOnly = true;
-            // 
-            // Notes_SV
-            // 
-            this.Notes_SV.HeaderText = "Ghi Chú";
-            this.Notes_SV.MinimumWidth = 9;
-            this.Notes_SV.Name = "Notes_SV";
-            this.Notes_SV.ReadOnly = true;
-            // 
-            // DB_Khoa
-            // 
-            this.DB_Khoa.HeaderText = "DB_Khoa";
-            this.DB_Khoa.MinimumWidth = 9;
-            this.DB_Khoa.Name = "DB_Khoa";
-            this.DB_Khoa.ReadOnly = true;
-            this.DB_Khoa.Visible = false;
-            // 
-            // DB_Role
-            // 
-            this.DB_Role.HeaderText = "DB_Role";
-            this.DB_Role.MinimumWidth = 9;
-            this.DB_Role.Name = "DB_Role";
-            this.DB_Role.ReadOnly = true;
-            this.DB_Role.Visible = false;
-            // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.btnTTExport);
+            this.panel1.Controls.Add(this.btnDTExport);
+            this.panel1.Controls.Add(this.btnGVExport);
+            this.panel1.Controls.Add(this.btnSVExport);
             this.panel1.Controls.Add(this.gbTaiChinh);
             this.panel1.Controls.Add(this.gbTTList);
             this.panel1.Controls.Add(this.gbGeneralInfo);
@@ -322,7 +275,7 @@
             this.gbTaiChinh.Controls.Add(this.label31);
             this.gbTaiChinh.Controls.Add(this.label27);
             this.gbTaiChinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.142858F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbTaiChinh.Location = new System.Drawing.Point(20, 1961);
+            this.gbTaiChinh.Location = new System.Drawing.Point(20, 1991);
             this.gbTaiChinh.Name = "gbTaiChinh";
             this.gbTaiChinh.Size = new System.Drawing.Size(1194, 349);
             this.gbTaiChinh.TabIndex = 2;
@@ -460,7 +413,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbTTList.Controls.Add(this.dgvTaiTro);
             this.gbTTList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.142858F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbTTList.Location = new System.Drawing.Point(20, 1542);
+            this.gbTTList.Location = new System.Drawing.Point(20, 1593);
             this.gbTTList.Name = "gbTTList";
             this.gbTTList.Size = new System.Drawing.Size(1195, 361);
             this.gbTTList.TabIndex = 2;
@@ -492,65 +445,13 @@
             this.dgvTaiTro.Size = new System.Drawing.Size(1189, 333);
             this.dgvTaiTro.TabIndex = 0;
             // 
-            // TT_Name
-            // 
-            this.TT_Name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.TT_Name.Frozen = true;
-            this.TT_Name.HeaderText = "Tên Nhà Tài Trợ";
-            this.TT_Name.MinimumWidth = 9;
-            this.TT_Name.Name = "TT_Name";
-            this.TT_Name.ReadOnly = true;
-            this.TT_Name.Width = 201;
-            // 
-            // TT_Rep
-            // 
-            this.TT_Rep.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.TT_Rep.HeaderText = "Đại Diện";
-            this.TT_Rep.MinimumWidth = 9;
-            this.TT_Rep.Name = "TT_Rep";
-            this.TT_Rep.ReadOnly = true;
-            this.TT_Rep.Width = 128;
-            // 
-            // TT_SDT
-            // 
-            this.TT_SDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.TT_SDT.HeaderText = "Số Điện Thoại";
-            this.TT_SDT.MinimumWidth = 9;
-            this.TT_SDT.Name = "TT_SDT";
-            this.TT_SDT.ReadOnly = true;
-            this.TT_SDT.Width = 172;
-            // 
-            // TT_Email
-            // 
-            this.TT_Email.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.TT_Email.HeaderText = "Email";
-            this.TT_Email.MinimumWidth = 9;
-            this.TT_Email.Name = "TT_Email";
-            this.TT_Email.ReadOnly = true;
-            this.TT_Email.Width = 108;
-            // 
-            // TT_Notes
-            // 
-            this.TT_Notes.HeaderText = "Nội Dung";
-            this.TT_Notes.MinimumWidth = 9;
-            this.TT_Notes.Name = "TT_Notes";
-            this.TT_Notes.ReadOnly = true;
-            // 
-            // TT_IDDB
-            // 
-            this.TT_IDDB.HeaderText = "ID_DB";
-            this.TT_IDDB.MinimumWidth = 9;
-            this.TT_IDDB.Name = "TT_IDDB";
-            this.TT_IDDB.ReadOnly = true;
-            this.TT_IDDB.Visible = false;
-            // 
             // gbDT_List
             // 
             this.gbDT_List.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbDT_List.Controls.Add(this.dgvDoiTac);
             this.gbDT_List.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.142858F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbDT_List.Location = new System.Drawing.Point(20, 1122);
+            this.gbDT_List.Location = new System.Drawing.Point(20, 1160);
             this.gbDT_List.Name = "gbDT_List";
             this.gbDT_List.Size = new System.Drawing.Size(1195, 361);
             this.gbDT_List.TabIndex = 2;
@@ -582,65 +483,13 @@
             this.dgvDoiTac.Size = new System.Drawing.Size(1189, 333);
             this.dgvDoiTac.TabIndex = 0;
             // 
-            // DT_Ten
-            // 
-            this.DT_Ten.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.DT_Ten.Frozen = true;
-            this.DT_Ten.HeaderText = "Tên Đối Tác";
-            this.DT_Ten.MinimumWidth = 9;
-            this.DT_Ten.Name = "DT_Ten";
-            this.DT_Ten.ReadOnly = true;
-            this.DT_Ten.Width = 164;
-            // 
-            // DT_DaiDien
-            // 
-            this.DT_DaiDien.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.DT_DaiDien.HeaderText = "Đại Diện";
-            this.DT_DaiDien.MinimumWidth = 9;
-            this.DT_DaiDien.Name = "DT_DaiDien";
-            this.DT_DaiDien.ReadOnly = true;
-            this.DT_DaiDien.Width = 128;
-            // 
-            // DT_SDT
-            // 
-            this.DT_SDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.DT_SDT.HeaderText = "Số Điện Thoại";
-            this.DT_SDT.MinimumWidth = 9;
-            this.DT_SDT.Name = "DT_SDT";
-            this.DT_SDT.ReadOnly = true;
-            this.DT_SDT.Width = 172;
-            // 
-            // DT_Email
-            // 
-            this.DT_Email.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.DT_Email.HeaderText = "Email";
-            this.DT_Email.MinimumWidth = 9;
-            this.DT_Email.Name = "DT_Email";
-            this.DT_Email.ReadOnly = true;
-            this.DT_Email.Width = 108;
-            // 
-            // DT_NoiDung
-            // 
-            this.DT_NoiDung.HeaderText = "Nội Dung";
-            this.DT_NoiDung.MinimumWidth = 9;
-            this.DT_NoiDung.Name = "DT_NoiDung";
-            this.DT_NoiDung.ReadOnly = true;
-            // 
-            // ID_DB
-            // 
-            this.ID_DB.HeaderText = "ID_DB";
-            this.ID_DB.MinimumWidth = 9;
-            this.ID_DB.Name = "ID_DB";
-            this.ID_DB.ReadOnly = true;
-            this.ID_DB.Visible = false;
-            // 
             // gbGVList
             // 
             this.gbGVList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbGVList.Controls.Add(this.dgv_GV);
             this.gbGVList.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.142858F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbGVList.Location = new System.Drawing.Point(20, 697);
+            this.gbGVList.Location = new System.Drawing.Point(20, 718);
             this.gbGVList.Name = "gbGVList";
             this.gbGVList.Size = new System.Drawing.Size(1195, 361);
             this.gbGVList.TabIndex = 2;
@@ -671,6 +520,80 @@
             this.dgv_GV.RowTemplate.Height = 31;
             this.dgv_GV.Size = new System.Drawing.Size(1189, 333);
             this.dgv_GV.TabIndex = 0;
+            // 
+            // btnExit
+            // 
+            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExit.Location = new System.Drawing.Point(1104, 14);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(144, 54);
+            this.btnExit.TabIndex = 4;
+            this.btnExit.Values.Text = "Thoát";
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.btnExit);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 844);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1285, 80);
+            this.panel2.TabIndex = 5;
+            // 
+            // btnSVExport
+            // 
+            this.btnSVExport.BackColor = System.Drawing.Color.Transparent;
+            this.btnSVExport.Location = new System.Drawing.Point(52, 278);
+            this.btnSVExport.Name = "btnSVExport";
+            this.btnSVExport.Size = new System.Drawing.Size(133, 38);
+            this.btnSVExport.TabIndex = 3;
+            this.btnSVExport.Text = "Xuất Excel";
+            this.btnSVExport.UseVisualStyleBackColor = false;
+            this.btnSVExport.Click += new System.EventHandler(this.btnSVExport_Click);
+            // 
+            // MSSV
+            // 
+            this.MSSV.HeaderText = "MSSV";
+            this.MSSV.MinimumWidth = 9;
+            this.MSSV.Name = "MSSV";
+            this.MSSV.ReadOnly = true;
+            // 
+            // HoTenSV
+            // 
+            this.HoTenSV.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.HoTenSV.HeaderText = "Họ và Tên";
+            this.HoTenSV.MinimumWidth = 9;
+            this.HoTenSV.Name = "HoTenSV";
+            this.HoTenSV.ReadOnly = true;
+            this.HoTenSV.Width = 150;
+            // 
+            // Khoa
+            // 
+            this.Khoa.HeaderText = "Khoa";
+            this.Khoa.MinimumWidth = 9;
+            this.Khoa.Name = "Khoa";
+            this.Khoa.ReadOnly = true;
+            // 
+            // Role
+            // 
+            this.Role.HeaderText = "Vai trò";
+            this.Role.MinimumWidth = 9;
+            this.Role.Name = "Role";
+            this.Role.ReadOnly = true;
+            // 
+            // Notes_SV
+            // 
+            this.Notes_SV.HeaderText = "Ghi Chú";
+            this.Notes_SV.MinimumWidth = 9;
+            this.Notes_SV.Name = "Notes_SV";
+            this.Notes_SV.ReadOnly = true;
+            // 
+            // DB_Khoa
+            // 
+            this.DB_Khoa.HeaderText = "Mã Khoa";
+            this.DB_Khoa.MinimumWidth = 9;
+            this.DB_Khoa.Name = "DB_Khoa";
+            this.DB_Khoa.ReadOnly = true;
             // 
             // MaGV
             // 
@@ -718,30 +641,145 @@
             // 
             // GVKHoa_DB
             // 
-            this.GVKHoa_DB.HeaderText = "GVKHoa_DB";
+            this.GVKHoa_DB.HeaderText = "Mã Đơn Vị";
             this.GVKHoa_DB.MinimumWidth = 9;
             this.GVKHoa_DB.Name = "GVKHoa_DB";
             this.GVKHoa_DB.ReadOnly = true;
-            this.GVKHoa_DB.Visible = false;
             // 
-            // btnExit
+            // DT_Ten
             // 
-            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExit.Location = new System.Drawing.Point(1104, 14);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(144, 54);
-            this.btnExit.TabIndex = 4;
-            this.btnExit.Values.Text = "Thoát";
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            this.DT_Ten.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.DT_Ten.Frozen = true;
+            this.DT_Ten.HeaderText = "Tên Đối Tác";
+            this.DT_Ten.MinimumWidth = 9;
+            this.DT_Ten.Name = "DT_Ten";
+            this.DT_Ten.ReadOnly = true;
+            this.DT_Ten.Width = 164;
             // 
-            // panel2
+            // DT_DaiDien
             // 
-            this.panel2.Controls.Add(this.btnExit);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 844);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1285, 80);
-            this.panel2.TabIndex = 5;
+            this.DT_DaiDien.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.DT_DaiDien.HeaderText = "Đại Diện";
+            this.DT_DaiDien.MinimumWidth = 9;
+            this.DT_DaiDien.Name = "DT_DaiDien";
+            this.DT_DaiDien.ReadOnly = true;
+            this.DT_DaiDien.Width = 138;
+            // 
+            // DT_SDT
+            // 
+            this.DT_SDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.DT_SDT.HeaderText = "Số Điện Thoại";
+            this.DT_SDT.MinimumWidth = 9;
+            this.DT_SDT.Name = "DT_SDT";
+            this.DT_SDT.ReadOnly = true;
+            this.DT_SDT.Width = 187;
+            // 
+            // DT_Email
+            // 
+            this.DT_Email.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.DT_Email.HeaderText = "Email";
+            this.DT_Email.MinimumWidth = 9;
+            this.DT_Email.Name = "DT_Email";
+            this.DT_Email.ReadOnly = true;
+            this.DT_Email.Width = 108;
+            // 
+            // DT_NoiDung
+            // 
+            this.DT_NoiDung.HeaderText = "Nội Dung";
+            this.DT_NoiDung.MinimumWidth = 9;
+            this.DT_NoiDung.Name = "DT_NoiDung";
+            this.DT_NoiDung.ReadOnly = true;
+            // 
+            // ID_DB
+            // 
+            this.ID_DB.HeaderText = "ID_DB";
+            this.ID_DB.MinimumWidth = 9;
+            this.ID_DB.Name = "ID_DB";
+            this.ID_DB.ReadOnly = true;
+            // 
+            // TT_Name
+            // 
+            this.TT_Name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.TT_Name.Frozen = true;
+            this.TT_Name.HeaderText = "Tên Nhà Tài Trợ";
+            this.TT_Name.MinimumWidth = 9;
+            this.TT_Name.Name = "TT_Name";
+            this.TT_Name.ReadOnly = true;
+            this.TT_Name.Width = 201;
+            // 
+            // TT_Rep
+            // 
+            this.TT_Rep.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.TT_Rep.HeaderText = "Đại Diện";
+            this.TT_Rep.MinimumWidth = 9;
+            this.TT_Rep.Name = "TT_Rep";
+            this.TT_Rep.ReadOnly = true;
+            this.TT_Rep.Width = 138;
+            // 
+            // TT_SDT
+            // 
+            this.TT_SDT.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.TT_SDT.HeaderText = "Số Điện Thoại";
+            this.TT_SDT.MinimumWidth = 9;
+            this.TT_SDT.Name = "TT_SDT";
+            this.TT_SDT.ReadOnly = true;
+            this.TT_SDT.Width = 187;
+            // 
+            // TT_Email
+            // 
+            this.TT_Email.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.TT_Email.HeaderText = "Email";
+            this.TT_Email.MinimumWidth = 9;
+            this.TT_Email.Name = "TT_Email";
+            this.TT_Email.ReadOnly = true;
+            this.TT_Email.Width = 108;
+            // 
+            // TT_Notes
+            // 
+            this.TT_Notes.HeaderText = "Nội Dung";
+            this.TT_Notes.MinimumWidth = 9;
+            this.TT_Notes.Name = "TT_Notes";
+            this.TT_Notes.ReadOnly = true;
+            // 
+            // TT_IDDB
+            // 
+            this.TT_IDDB.HeaderText = "ID_DB";
+            this.TT_IDDB.MinimumWidth = 9;
+            this.TT_IDDB.Name = "TT_IDDB";
+            this.TT_IDDB.ReadOnly = true;
+            // 
+            // btnGVExport
+            // 
+            this.btnGVExport.BackColor = System.Drawing.Color.Transparent;
+            this.btnGVExport.Location = new System.Drawing.Point(52, 667);
+            this.btnGVExport.Name = "btnGVExport";
+            this.btnGVExport.Size = new System.Drawing.Size(133, 38);
+            this.btnGVExport.TabIndex = 4;
+            this.btnGVExport.Text = "Xuất Excel";
+            this.btnGVExport.UseVisualStyleBackColor = false;
+            this.btnGVExport.Click += new System.EventHandler(this.btnGVExport_Click);
+            // 
+            // btnDTExport
+            // 
+            this.btnDTExport.BackColor = System.Drawing.Color.Transparent;
+            this.btnDTExport.Location = new System.Drawing.Point(52, 1111);
+            this.btnDTExport.Name = "btnDTExport";
+            this.btnDTExport.Size = new System.Drawing.Size(133, 38);
+            this.btnDTExport.TabIndex = 5;
+            this.btnDTExport.Text = "Xuất Excel";
+            this.btnDTExport.UseVisualStyleBackColor = false;
+            this.btnDTExport.Click += new System.EventHandler(this.btnDTExport_Click);
+            // 
+            // btnTTExport
+            // 
+            this.btnTTExport.BackColor = System.Drawing.Color.Transparent;
+            this.btnTTExport.Location = new System.Drawing.Point(52, 1543);
+            this.btnTTExport.Name = "btnTTExport";
+            this.btnTTExport.Size = new System.Drawing.Size(133, 38);
+            this.btnTTExport.TabIndex = 6;
+            this.btnTTExport.Text = "Xuất Excel";
+            this.btnTTExport.UseVisualStyleBackColor = false;
+            this.btnTTExport.Click += new System.EventHandler(this.btnTTExport_Click);
             // 
             // frmViewHoatDong
             // 
@@ -790,33 +828,8 @@
         private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgv_GV;
         private System.Windows.Forms.GroupBox gbDT_List;
         private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgvDoiTac;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DT_Ten;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DT_DaiDien;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DT_SDT;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DT_Email;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DT_NoiDung;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID_DB;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MSSV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn HoTenSV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Khoa;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Role;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Notes_SV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DB_Khoa;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DB_Role;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MaGV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn HoTenLot;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Ten;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GVKhoa;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GV_Role;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GVKHoa_DB;
         private System.Windows.Forms.GroupBox gbTTList;
         private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgvTaiTro;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TT_Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TT_Rep;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TT_SDT;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TT_Email;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TT_Notes;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TT_IDDB;
         private System.Windows.Forms.GroupBox gbTaiChinh;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label28;
@@ -831,5 +844,33 @@
         private System.Windows.Forms.TextBox txtDateEnd;
         private System.Windows.Forms.TextBox txtDateBegin;
         private System.Windows.Forms.TextBox txtLoai;
+        private System.Windows.Forms.Button btnSVExport;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MSSV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HoTenSV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Khoa;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Role;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Notes_SV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DB_Khoa;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TT_Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TT_Rep;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TT_SDT;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TT_Email;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TT_Notes;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TT_IDDB;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DT_Ten;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DT_DaiDien;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DT_SDT;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DT_Email;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DT_NoiDung;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID_DB;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MaGV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HoTenLot;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Ten;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GVKhoa;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GV_Role;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GVKHoa_DB;
+        private System.Windows.Forms.Button btnGVExport;
+        private System.Windows.Forms.Button btnTTExport;
+        private System.Windows.Forms.Button btnDTExport;
     }
 }
