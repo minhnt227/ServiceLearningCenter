@@ -297,14 +297,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Design.dll" />
-    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Docking.dll" />
-    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Navigator.dll" />
-    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Ribbon.dll" />
-    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Toolkit.dll" />
-    <Analyzer Include="D:\Krypton-master\Krypton-master\Bin\ComponentFactory.Krypton.Workspace.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
