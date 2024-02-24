@@ -120,51 +120,61 @@ namespace ServiceLearning
         }
         private void btnExport_Click(object sender, EventArgs e)
         {
+            using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*" })
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    ToExcel(dgvGV, sfd.FileName);
+                }
+        }
+        private void ToExcel(DataGridView dtg, string fileName)
+        {
+            Microsoft.Office.Interop.Excel.Application excel;
+            Microsoft.Office.Interop.Excel.Workbook workbook;
+            Microsoft.Office.Interop.Excel.Worksheet worksheet;
             try
             {
-                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                //Tạo đối tượng COM.
+                excel = new Microsoft.Office.Interop.Excel.Application();
+                excel.Visible = false;
+                excel.DisplayAlerts = false;
+                //tạo mới một Workbooks bằng phương thức add()
+                workbook = excel.Workbooks.Add(Type.Missing);
+                worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Sheets["Sheet1"];
+                //đặt tên cho sheet
+                worksheet.Name = "Thống kê sinh viên";
+
+                // export header trong DataGridView
+                for (int i = 0; i < dtg.ColumnCount; i++)
                 {
-                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
-                    saveFileDialog.FilterIndex = 2;
-                    saveFileDialog.RestoreDirectory = true;
-
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    worksheet.Cells[1, i + 1] = dtg.Columns[i].HeaderText;
+                }
+                // export nội dung trong DataGridView
+                for (int i = 0; i < dtg.RowCount; i++)
+                {
+                    for (int j = 0; j < dtg.ColumnCount; j++)
                     {
-                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
-
-                        using (ExcelPackage excelPackage = new ExcelPackage())
-                        {
-                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("GiangVienData");
-
-                            // Ghi header của DataGridView vào Excel
-                            for (int i = 1; i <= dgvGV.Columns.Count; i++)
-                            {
-                                worksheet.Cells[1, i].Value = dgvGV.Columns[i - 1].HeaderText;
-                                worksheet.Cells[1, i].Style.Font.Bold = true;
-                            }
-
-                            // Ghi dữ liệu từ DataGridView vào Excel
-                            for (int i = 1; i <= dgvGV.Rows.Count; i++)
-                            {
-                                for (int j = 1; j <= dgvGV.Columns.Count; j++)
-                                {
-                                    worksheet.Cells[i + 1, j].Value = dgvGV.Rows[i - 1].Cells[j - 1].Value;
-                                }
-                            }
-
-                            excelPackage.SaveAs(excelFile);
-                            MessageBox.Show("Export thành công!");
-                        }
+                        worksheet.Cells[i + 2, j + 1] = dtg.Rows[i].Cells[j].Value;
                     }
                 }
+                excel.Columns.AutoFit();
+                // sử dụng phương thức SaveAs() để lưu workbook với filename
+                workbook.SaveAs(fileName);
+                //đóng workbook
+                workbook.Close();
+                excel.Quit();
+                MessageBox.Show("Xuất dữ liệu ra Excel thành công!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                workbook = null;
+                worksheet = null;
             }
         }
-
-        private void dtpBD_ValueChanged(object sender, EventArgs e)
+            private void dtpBD_ValueChanged(object sender, EventArgs e)
         {
             dtpBD.CustomFormat = "yyyy-MM-dd";
             btnLoc.Enabled = true;

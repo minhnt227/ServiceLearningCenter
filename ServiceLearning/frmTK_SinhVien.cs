@@ -205,6 +205,18 @@ namespace ServiceLearning
                     }
                     else if (cmbLoai.SelectedIndex == -1 && dtpBD.Text != " " && dtpKT.Text != " ")
                     {
+                        
+                        DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                        DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                        // MessageBox.Show(BD.ToString());
+                        lstMaHD = (from s in db.SINH_VIEN
+                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                                   where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD && c.NgayKetThuc <= KT 
+                                   select (c.MaHD)).ToList();
+                    }
+                    else if (cmbLoai.SelectedIndex != -1 && dtpBD.Text != " " && dtpKT.Text != " ")
+                    {
                         string loai = cmbLoai.SelectedItem.ToString();
                         DateTime BD = Convert.ToDateTime(dtpBD.Text);
                         DateTime KT = Convert.ToDateTime(dtpKT.Text);
@@ -213,17 +225,6 @@ namespace ServiceLearning
                                    join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
                                    join c in db.HOAT_DONG on b.MaHD equals c.MaHD
                                    where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD && c.NgayKetThuc <= KT && c.Loai == loai
-                                   select (c.MaHD)).ToList();
-                    }
-                    else if (cmbLoai.SelectedIndex != -1 && dtpBD.Text != " " && dtpKT.Text != " ")
-                    {
-                        DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                        DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                        // MessageBox.Show(BD.ToString());
-                        lstMaHD = (from s in db.SINH_VIEN
-                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD && c.NgayKetThuc <= KT
                                    select (c.MaHD)).ToList();
                     }
 
