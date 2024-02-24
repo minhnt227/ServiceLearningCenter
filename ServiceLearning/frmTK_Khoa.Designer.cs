@@ -63,10 +63,10 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvTK_1.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvTK_1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dgvTK_1.Location = new System.Drawing.Point(2, 0);
+            this.dgvTK_1.Location = new System.Drawing.Point(2, 98);
             this.dgvTK_1.Name = "dgvTK_1";
             this.dgvTK_1.RowHeadersVisible = false;
-            this.dgvTK_1.Size = new System.Drawing.Size(746, 474);
+            this.dgvTK_1.Size = new System.Drawing.Size(814, 374);
             this.dgvTK_1.TabIndex = 6;
             this.dgvTK_1.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dgvTK_1.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -117,7 +117,7 @@
             this.btnExport.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btnExport.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.btnExport.ForeColor = System.Drawing.Color.White;
-            this.btnExport.Location = new System.Drawing.Point(603, 480);
+            this.btnExport.Location = new System.Drawing.Point(647, 511);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(145, 27);
             this.btnExport.TabIndex = 7;

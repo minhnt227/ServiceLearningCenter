@@ -18,6 +18,7 @@ namespace ServiceLearning
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
             Application.Run(new frmHome());
+           // Application.Run(new frmTK_SinhVien());
         }
     }
 }

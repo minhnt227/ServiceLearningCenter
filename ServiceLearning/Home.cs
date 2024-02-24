@@ -95,7 +95,7 @@ namespace ServiceLearning
 
         private void btn_TKKhoa(object sender, EventArgs e)
         {
-            container(new frmTK_Khoa());
+            container(new frmTK_SinhVien());
         }
 
         private void btn_TaiTro(object sender, EventArgs e)

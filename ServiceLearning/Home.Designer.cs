@@ -263,7 +263,7 @@
             this.guna2Button8.Name = "guna2Button8";
             this.guna2Button8.Size = new System.Drawing.Size(208, 33);
             this.guna2Button8.TabIndex = 5;
-            this.guna2Button8.Text = "Thống kê khoa";
+            this.guna2Button8.Text = "Thống kê sinh viên";
             this.guna2Button8.Click += new System.EventHandler(this.btn_TKKhoa);
             // 
             // guna2Button13
