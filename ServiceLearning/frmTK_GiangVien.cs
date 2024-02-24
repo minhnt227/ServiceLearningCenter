@@ -101,7 +101,7 @@ namespace ServiceLearning
         private void Xoa()
         {
             int n = dgvGV.Rows.Count;
-            MessageBox.Show(n.ToString());
+            //MessageBox.Show(n.ToString());
             for (int i = 0; i < n; i++)
             {
                 if (dgvGV.Rows[i].Cells[5].Value == " " || dgvGV.Rows[i].Cells[4].Value == " ")
@@ -215,7 +215,7 @@ namespace ServiceLearning
         }
         private void LocGiangVien()
         {
-           // try
+            try
             {
                 dgvGV.Rows.Clear();
                 dgvGV.Refresh();
@@ -312,10 +312,10 @@ namespace ServiceLearning
                 }
                Xoa();
             }
-            /*catch (Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-            }*/
+            }
         }
     }
 }
