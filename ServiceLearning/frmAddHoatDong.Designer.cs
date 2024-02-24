@@ -56,20 +56,13 @@
             this.label6 = new System.Windows.Forms.Label();
             this.gbSVList = new System.Windows.Forms.GroupBox();
             this.dgvSinhVien = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
-            this.MSSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.HoTenSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Role = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Notes_SV = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DB_Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DB_Role = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label33 = new System.Windows.Forms.Label();
             this.btnTTImport = new System.Windows.Forms.Button();
             this.btnTTExport = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.btnDTImport = new System.Windows.Forms.Button();
-            this.btnGVExcel = new System.Windows.Forms.Button();
+            this.btnGVImport = new System.Windows.Forms.Button();
             this.btnDTExport = new System.Windows.Forms.Button();
             this.bgHD_TT = new System.Windows.Forms.GroupBox();
             this.btnTT_Del = new ComponentFactory.Krypton.Toolkit.KryptonButton();
@@ -137,12 +130,6 @@
             this.ID_DB = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbGVList = new System.Windows.Forms.GroupBox();
             this.dgv_GV = new ComponentFactory.Krypton.Toolkit.KryptonDataGridView();
-            this.MaGV = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.HoTenLot = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ten = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GVKhoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GV_Role = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GVKHoa_DB = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbHD_GV = new System.Windows.Forms.GroupBox();
             this.btnDelGV = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.btnEditGV = new ComponentFactory.Krypton.Toolkit.KryptonButton();
@@ -162,6 +149,18 @@
             this.btnAddHD = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.btnExit = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.MSSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HoTenSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Role = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Notes_SV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DB_Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MaGV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HoTenLot = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ten = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GVKhoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GV_Role = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GVKHoa_DB = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbGeneralInfo.SuspendLayout();
             this.gbSinhVien.SuspendLayout();
             this.gbSVList.SuspendLayout();
@@ -481,8 +480,7 @@
             this.Khoa,
             this.Role,
             this.Notes_SV,
-            this.DB_Khoa,
-            this.DB_Role});
+            this.DB_Khoa});
             this.dgvSinhVien.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvSinhVien.Location = new System.Drawing.Point(3, 25);
             this.dgvSinhVien.Name = "dgvSinhVien";
@@ -496,58 +494,6 @@
             this.dgvSinhVien.TabIndex = 0;
             this.dgvSinhVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSinhVien_CellClick);
             // 
-            // MSSV
-            // 
-            this.MSSV.HeaderText = "MSSV";
-            this.MSSV.MinimumWidth = 9;
-            this.MSSV.Name = "MSSV";
-            this.MSSV.ReadOnly = true;
-            // 
-            // HoTenSV
-            // 
-            this.HoTenSV.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.HoTenSV.HeaderText = "Họ và Tên";
-            this.HoTenSV.MinimumWidth = 9;
-            this.HoTenSV.Name = "HoTenSV";
-            this.HoTenSV.ReadOnly = true;
-            this.HoTenSV.Width = 150;
-            // 
-            // Khoa
-            // 
-            this.Khoa.HeaderText = "Khoa";
-            this.Khoa.MinimumWidth = 9;
-            this.Khoa.Name = "Khoa";
-            this.Khoa.ReadOnly = true;
-            // 
-            // Role
-            // 
-            this.Role.HeaderText = "Vai trò";
-            this.Role.MinimumWidth = 9;
-            this.Role.Name = "Role";
-            this.Role.ReadOnly = true;
-            // 
-            // Notes_SV
-            // 
-            this.Notes_SV.HeaderText = "Ghi Chú";
-            this.Notes_SV.MinimumWidth = 9;
-            this.Notes_SV.Name = "Notes_SV";
-            this.Notes_SV.ReadOnly = true;
-            // 
-            // DB_Khoa
-            // 
-            this.DB_Khoa.HeaderText = "DB_Khoa";
-            this.DB_Khoa.MinimumWidth = 9;
-            this.DB_Khoa.Name = "DB_Khoa";
-            this.DB_Khoa.ReadOnly = true;
-            // 
-            // DB_Role
-            // 
-            this.DB_Role.HeaderText = "DB_Role";
-            this.DB_Role.MinimumWidth = 9;
-            this.DB_Role.Name = "DB_Role";
-            this.DB_Role.ReadOnly = true;
-            this.DB_Role.Visible = false;
-            // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -559,7 +505,7 @@
             this.panel1.Controls.Add(this.btnTTExport);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.btnDTImport);
-            this.panel1.Controls.Add(this.btnGVExcel);
+            this.panel1.Controls.Add(this.btnGVImport);
             this.panel1.Controls.Add(this.btnDTExport);
             this.panel1.Controls.Add(this.bgHD_TT);
             this.panel1.Controls.Add(this.gbHD_DoiTac);
@@ -598,6 +544,7 @@
             this.btnTTImport.TabIndex = 6;
             this.btnTTImport.Text = "Import Excel";
             this.btnTTImport.UseVisualStyleBackColor = true;
+            this.btnTTImport.Click += new System.EventHandler(this.btnTTImport_Click);
             // 
             // btnTTExport
             // 
@@ -607,6 +554,7 @@
             this.btnTTExport.TabIndex = 7;
             this.btnTTExport.Text = "Export Excel";
             this.btnTTExport.UseVisualStyleBackColor = true;
+            this.btnTTExport.Click += new System.EventHandler(this.btnTTExport_Click);
             // 
             // label1
             // 
@@ -625,15 +573,17 @@
             this.btnDTImport.TabIndex = 4;
             this.btnDTImport.Text = "Import Excel";
             this.btnDTImport.UseVisualStyleBackColor = true;
+            this.btnDTImport.Click += new System.EventHandler(this.btnDTImport_Click);
             // 
-            // btnGVExcel
+            // btnGVImport
             // 
-            this.btnGVExcel.Location = new System.Drawing.Point(332, 1004);
-            this.btnGVExcel.Name = "btnGVExcel";
-            this.btnGVExcel.Size = new System.Drawing.Size(142, 43);
-            this.btnGVExcel.TabIndex = 4;
-            this.btnGVExcel.Text = "Import Excel";
-            this.btnGVExcel.UseVisualStyleBackColor = true;
+            this.btnGVImport.Location = new System.Drawing.Point(332, 1004);
+            this.btnGVImport.Name = "btnGVImport";
+            this.btnGVImport.Size = new System.Drawing.Size(142, 43);
+            this.btnGVImport.TabIndex = 4;
+            this.btnGVImport.Text = "Import Excel";
+            this.btnGVImport.UseVisualStyleBackColor = true;
+            this.btnGVImport.Click += new System.EventHandler(this.btnGVImport_Click);
             // 
             // btnDTExport
             // 
@@ -643,6 +593,7 @@
             this.btnDTExport.TabIndex = 4;
             this.btnDTExport.Text = "Export Excel";
             this.btnDTExport.UseVisualStyleBackColor = true;
+            this.btnDTExport.Click += new System.EventHandler(this.btnDTExport_Click);
             // 
             // bgHD_TT
             // 
@@ -961,6 +912,7 @@
             this.btnExportSV.TabIndex = 4;
             this.btnExportSV.Text = "Export Excel";
             this.btnExportSV.UseVisualStyleBackColor = true;
+            this.btnExportSV.Click += new System.EventHandler(this.btnExportSV_Click);
             // 
             // btnImportSV
             // 
@@ -970,6 +922,7 @@
             this.btnImportSV.TabIndex = 4;
             this.btnImportSV.Text = "Import Excel";
             this.btnImportSV.UseVisualStyleBackColor = true;
+            this.btnImportSV.Click += new System.EventHandler(this.btnImportSV_Click);
             // 
             // btnGVExport
             // 
@@ -979,6 +932,7 @@
             this.btnGVExport.TabIndex = 4;
             this.btnGVExport.Text = "Export Excel";
             this.btnGVExport.UseVisualStyleBackColor = true;
+            this.btnGVExport.Click += new System.EventHandler(this.btnGVExport_Click);
             // 
             // label14
             // 
@@ -1360,57 +1314,6 @@
             this.dgv_GV.TabIndex = 0;
             this.dgv_GV.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_GV_CellClick);
             // 
-            // MaGV
-            // 
-            this.MaGV.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.MaGV.Frozen = true;
-            this.MaGV.HeaderText = "Mã Giảng Viên";
-            this.MaGV.MinimumWidth = 9;
-            this.MaGV.Name = "MaGV";
-            this.MaGV.ReadOnly = true;
-            this.MaGV.Width = 195;
-            // 
-            // HoTenLot
-            // 
-            this.HoTenLot.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.HoTenLot.HeaderText = "Họ và Tên Lót";
-            this.HoTenLot.MinimumWidth = 9;
-            this.HoTenLot.Name = "HoTenLot";
-            this.HoTenLot.ReadOnly = true;
-            this.HoTenLot.Width = 185;
-            // 
-            // Ten
-            // 
-            this.Ten.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.Ten.HeaderText = "Tên";
-            this.Ten.MinimumWidth = 9;
-            this.Ten.Name = "Ten";
-            this.Ten.ReadOnly = true;
-            this.Ten.Width = 90;
-            // 
-            // GVKhoa
-            // 
-            this.GVKhoa.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.GVKhoa.HeaderText = "Đơn vị";
-            this.GVKhoa.MinimumWidth = 9;
-            this.GVKhoa.Name = "GVKhoa";
-            this.GVKhoa.ReadOnly = true;
-            this.GVKhoa.Width = 119;
-            // 
-            // GV_Role
-            // 
-            this.GV_Role.HeaderText = "Vai trò";
-            this.GV_Role.MinimumWidth = 9;
-            this.GV_Role.Name = "GV_Role";
-            this.GV_Role.ReadOnly = true;
-            // 
-            // GVKHoa_DB
-            // 
-            this.GVKHoa_DB.HeaderText = "GVKHoa_DB";
-            this.GVKHoa_DB.MinimumWidth = 9;
-            this.GVKHoa_DB.Name = "GVKHoa_DB";
-            this.GVKHoa_DB.ReadOnly = true;
-            // 
             // gbHD_GV
             // 
             this.gbHD_GV.Controls.Add(this.btnDelGV);
@@ -1603,6 +1506,101 @@
             this.panel2.Size = new System.Drawing.Size(1244, 80);
             this.panel2.TabIndex = 5;
             // 
+            // MSSV
+            // 
+            this.MSSV.HeaderText = "MSSV";
+            this.MSSV.MinimumWidth = 9;
+            this.MSSV.Name = "MSSV";
+            this.MSSV.ReadOnly = true;
+            // 
+            // HoTenSV
+            // 
+            this.HoTenSV.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.HoTenSV.HeaderText = "Họ và Tên";
+            this.HoTenSV.MinimumWidth = 9;
+            this.HoTenSV.Name = "HoTenSV";
+            this.HoTenSV.ReadOnly = true;
+            this.HoTenSV.Width = 150;
+            // 
+            // Khoa
+            // 
+            this.Khoa.HeaderText = "Khoa";
+            this.Khoa.MinimumWidth = 9;
+            this.Khoa.Name = "Khoa";
+            this.Khoa.ReadOnly = true;
+            // 
+            // Role
+            // 
+            this.Role.HeaderText = "Vai trò";
+            this.Role.MinimumWidth = 9;
+            this.Role.Name = "Role";
+            this.Role.ReadOnly = true;
+            // 
+            // Notes_SV
+            // 
+            this.Notes_SV.HeaderText = "Ghi Chú";
+            this.Notes_SV.MinimumWidth = 9;
+            this.Notes_SV.Name = "Notes_SV";
+            this.Notes_SV.ReadOnly = true;
+            // 
+            // DB_Khoa
+            // 
+            this.DB_Khoa.HeaderText = "Mã Khoa";
+            this.DB_Khoa.MinimumWidth = 9;
+            this.DB_Khoa.Name = "DB_Khoa";
+            this.DB_Khoa.ReadOnly = true;
+            // 
+            // MaGV
+            // 
+            this.MaGV.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.MaGV.Frozen = true;
+            this.MaGV.HeaderText = "Mã Giảng Viên";
+            this.MaGV.MinimumWidth = 9;
+            this.MaGV.Name = "MaGV";
+            this.MaGV.ReadOnly = true;
+            this.MaGV.Width = 195;
+            // 
+            // HoTenLot
+            // 
+            this.HoTenLot.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.HoTenLot.HeaderText = "Họ và Tên Lót";
+            this.HoTenLot.MinimumWidth = 9;
+            this.HoTenLot.Name = "HoTenLot";
+            this.HoTenLot.ReadOnly = true;
+            this.HoTenLot.Width = 185;
+            // 
+            // Ten
+            // 
+            this.Ten.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Ten.HeaderText = "Tên";
+            this.Ten.MinimumWidth = 9;
+            this.Ten.Name = "Ten";
+            this.Ten.ReadOnly = true;
+            this.Ten.Width = 90;
+            // 
+            // GVKhoa
+            // 
+            this.GVKhoa.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.GVKhoa.HeaderText = "Đơn vị";
+            this.GVKhoa.MinimumWidth = 9;
+            this.GVKhoa.Name = "GVKhoa";
+            this.GVKhoa.ReadOnly = true;
+            this.GVKhoa.Width = 119;
+            // 
+            // GV_Role
+            // 
+            this.GV_Role.HeaderText = "Vai trò";
+            this.GV_Role.MinimumWidth = 9;
+            this.GV_Role.Name = "GV_Role";
+            this.GV_Role.ReadOnly = true;
+            // 
+            // GVKHoa_DB
+            // 
+            this.GVKHoa_DB.HeaderText = "Mã Khoa";
+            this.GVKHoa_DB.MinimumWidth = 9;
+            this.GVKHoa_DB.Name = "GVKHoa_DB";
+            this.GVKHoa_DB.ReadOnly = true;
+            // 
             // frmAddHoatDong
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -1694,7 +1692,7 @@
         private System.Windows.Forms.GroupBox gbGVList;
         private ComponentFactory.Krypton.Toolkit.KryptonDataGridView dgv_GV;
         private System.Windows.Forms.Label lblDonvi;
-        private System.Windows.Forms.Button btnGVExcel;
+        private System.Windows.Forms.Button btnGVImport;
         private System.Windows.Forms.Button btnGVExport;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.GroupBox gbHD_DoiTac;
@@ -1753,13 +1751,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnDTImport;
         private System.Windows.Forms.Button btnDTExport;
-        private System.Windows.Forms.DataGridViewTextBoxColumn MSSV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn HoTenSV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Khoa;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Role;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Notes_SV;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DB_Khoa;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DB_Role;
         private System.Windows.Forms.DataGridViewTextBoxColumn TT_Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn TT_Rep;
         private System.Windows.Forms.DataGridViewTextBoxColumn TT_SDT;
@@ -1772,6 +1763,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn DT_Email;
         private System.Windows.Forms.DataGridViewTextBoxColumn DT_NoiDung;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID_DB;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MSSV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HoTenSV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Khoa;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Role;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Notes_SV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DB_Khoa;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaGV;
         private System.Windows.Forms.DataGridViewTextBoxColumn HoTenLot;
         private System.Windows.Forms.DataGridViewTextBoxColumn Ten;
