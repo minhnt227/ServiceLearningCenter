@@ -154,21 +154,90 @@ namespace ServiceLearning
             if (cmbLoai.SelectedIndex != -1)
             {
                 string loai = cmbLoai.SelectedItem.ToString();
-                lstMaHD = (from s in db.HOAT_DONG
-                           where s.Hide == false && s.Loai == loai
-                           select (s.MaHD)).ToList();
-                lstTenHD = (from s in db.HOAT_DONG
-                            where s.Hide == false && s.Loai == loai
-                            select (s.TenHoatDong)).ToList();
+                if (dtpBD.Text == " " && dtpKT.Text == " ")
+                {
+                    lstMaHD = (from s in db.HOAT_DONG
+                               where s.Hide == false && s.Loai == loai
+                               select (s.MaHD)).ToList();
+                    lstTenHD = (from s in db.HOAT_DONG
+                                where s.Hide == false && s.Loai == loai
+                                select (s.TenHoatDong)).ToList();
+                }
+                else if (dtpBD.Text != " " && dtpKT.Text == " ")
+                {
+                    DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                    lstMaHD = (from s in db.HOAT_DONG
+                               where s.Hide == false && s.Loai == loai && s.NgayBatDau >= BD
+                               select (s.MaHD)).ToList();
+                    lstTenHD = (from s in db.HOAT_DONG
+                                where s.Hide == false && s.Loai == loai & s.NgayBatDau >= BD
+                                select (s.TenHoatDong)).ToList();
+                }
+                else if (dtpBD.Text == " " && dtpKT.Text != " ")
+                {
+                    DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                    lstMaHD = (from s in db.HOAT_DONG
+                               where s.Hide == false && s.Loai == loai && s.NgayKetThuc <=KT
+                               select (s.MaHD)).ToList();
+                    lstTenHD = (from s in db.HOAT_DONG
+                                where s.Hide == false && s.Loai == loai && s.NgayKetThuc <= KT
+                                select (s.TenHoatDong)).ToList();
+                }
+                else if(dtpBD.Text != " " && dtpKT.Text != " ")
+                {
+                    DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                    DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                    lstMaHD = (from s in db.HOAT_DONG
+                               where s.Hide == false && s.Loai == loai && s.NgayBatDau >= BD && s.NgayKetThuc <= KT
+                               select (s.MaHD)).ToList();
+                    lstTenHD = (from s in db.HOAT_DONG
+                                where s.Hide == false && s.Loai == loai && s.NgayBatDau >= BD && s.NgayKetThuc <= KT
+                                select (s.TenHoatDong)).ToList();
+                }
             }
             else
             {
-                lstMaHD = (from s in db.HOAT_DONG
-                           where s.Hide == false
-                           select (s.MaHD)).ToList();
-                lstTenHD = (from s in db.HOAT_DONG
-                            where s.Hide == false
-                            select (s.TenHoatDong)).ToList();
+
+                if (dtpBD.Text == " " && dtpKT.Text == " ")
+                {
+                    lstMaHD = (from s in db.HOAT_DONG
+                               where s.Hide == false 
+                               select (s.MaHD)).ToList();
+                    lstTenHD = (from s in db.HOAT_DONG
+                                where s.Hide == false 
+                                select (s.TenHoatDong)).ToList();
+                }
+                else if (dtpBD.Text != " " && dtpKT.Text == " ")
+                {
+                    DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                    lstMaHD = (from s in db.HOAT_DONG
+                               where s.Hide == false  && s.NgayBatDau >= BD
+                               select (s.MaHD)).ToList();
+                    lstTenHD = (from s in db.HOAT_DONG
+                                where s.Hide == false  && s.NgayBatDau >= BD
+                                select (s.TenHoatDong)).ToList();
+                }
+                else if (dtpBD.Text == " " && dtpKT.Text != " ")
+                {
+                    DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                    lstMaHD = (from s in db.HOAT_DONG
+                               where s.Hide == false  && s.NgayKetThuc <= KT
+                               select (s.MaHD)).ToList();
+                    lstTenHD = (from s in db.HOAT_DONG
+                                where s.Hide == false && s.NgayKetThuc <= KT
+                                select (s.TenHoatDong)).ToList();
+                }
+                else if (dtpBD.Text != " " && dtpKT.Text != " ")
+                {
+                    DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                    DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                    lstMaHD = (from s in db.HOAT_DONG
+                               where s.Hide == false  && s.NgayBatDau >= BD && s.NgayKetThuc <= KT
+                               select (s.MaHD)).ToList();
+                    lstTenHD = (from s in db.HOAT_DONG
+                                where s.Hide == false && s.NgayBatDau >= BD && s.NgayKetThuc <= KT
+                                select (s.TenHoatDong)).ToList();
+                }
             }
             for (int j = 0; j < lstMaHD.Count; j++)
             {
