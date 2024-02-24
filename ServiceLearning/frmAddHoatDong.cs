@@ -13,6 +13,8 @@ using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Xml.Serialization;
 using TextBox = System.Windows.Forms.TextBox;
 using ComponentFactory.Krypton.Toolkit;
+using OfficeOpenXml;
+using System.IO;
 
 namespace ServiceLearning
 {
@@ -302,21 +304,70 @@ namespace ServiceLearning
                 return false;
             }
             else 
-            if (FindDuplicateMSSV())
+            if (FindDuplicateMSSV(txtMSSV.Text.Trim()))
             {
                 MessageBox.Show("MSSV Đang Bị Trùng!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false; 
             }else
             return true;
         }
-        public bool FindDuplicateMSSV()
+        public bool FindDuplicateMSSV(string MSSV)
         {
             foreach (DataGridViewRow row in dgvSinhVien.Rows)
             {
                 if (row == null) return false;
                 else
                 {
-                    if (row.Cells["MSSV"].Value.ToString() == txtMSSV.Text)
+                    if (row.Cells["MSSV"].Value.ToString().Trim() == MSSV)
+                    {
+                        return true;
+                    }
+                    else continue;
+                }
+            }
+            return false;
+        }
+        
+        public bool FindDuplicateGV(string MaGV)
+        {
+            foreach (DataGridViewRow row in dgv_GV.Rows)
+            {
+                if (row == null) return false;
+                else
+                {
+                    if (row.Cells["MaGV"].Value.ToString().Trim() == MaGV)
+                    {
+                        return true;
+                    }
+                    else continue;
+                }
+            }
+            return false;
+        }
+        public bool FindDuplicateDT(DataRow DT)
+        {
+            foreach (DataGridViewRow row in dgvDoiTac.Rows)
+            {
+                if (row == null) return false;
+                else
+                {
+                    if (row.Cells[0].Value.ToString().Trim() == DT[0].ToString().Trim() && row.Cells[1].Value.ToString().Trim() == DT[1].ToString().Trim() && row.Cells[2].Value.ToString().Trim() == DT[2].ToString().Trim() && row.Cells[3].Value.ToString().Trim() == DT[3].ToString().Trim())
+                    {
+                        return true;
+                    }
+                    else continue;
+                }
+            }
+            return false;
+        }
+        public bool FindDuplicateTT(DataRow DT)
+        {
+            foreach (DataGridViewRow row in dgvTaiTro.Rows)
+            {
+                if (row == null) return false;
+                else
+                {
+                    if (row.Cells[0].Value.ToString().Trim() == DT[0].ToString().Trim() && row.Cells[1].Value.ToString().Trim() == DT[1].ToString().Trim() && row.Cells[2].Value.ToString().Trim() == DT[2].ToString().Trim() && row.Cells[3].Value.ToString().Trim() == DT[3].ToString().Trim())
                     {
                         return true;
                     }
@@ -464,6 +515,11 @@ namespace ServiceLearning
         {
             foreach (DataGridViewRow dr in dgvDoiTac.Rows)
             {
+                DOI_TAC dtTemp = FindDTByName(dr.Cells["DT_Ten"].Value.ToString().Trim());
+                if (dtTemp != null) dr.Cells["ID_DB"].Value = dtTemp.ID_DoiTac;
+                else dr.Cells["ID_DB"].Value = -1;
+                //cho trường hợp nhập vào bằng import excel, ko cần ID, nếu ĐT đã có sẵn trong CSDL, tự điền lại ID của đối tác đó vào
+                //Nếu đối tác đó không có sẵn, add vào như bth
                 HD_DOITAC hD_DT = db.HD_DOITAC.Find(dr.Cells["ID_DB"].Value, hd.MaHD);
                 if (hD_DT == null)
                 {
@@ -516,6 +572,8 @@ namespace ServiceLearning
         {
             foreach (DataGridViewRow dr in dgvTaiTro.Rows)
             {
+                TAI_TRO dtTemp = FindTTByName(dr.Cells["TT_Name"].Value.ToString().Trim());
+                if (dtTemp != null) dr.Cells["TT_IDDB"].Value = dtTemp.ID_TaiTro;
                 HD_TAITRO hD_TT = db.HD_TAITRO.Find(dr.Cells["TT_IDDB"].Value, hd.MaHD);
                 if (hD_TT == null)
                 {
@@ -785,7 +843,7 @@ namespace ServiceLearning
                 using (Context db = new Context())
                 {
                     DOI_TAC dt = (from k in db.DOI_TAC
-                                  where (k.Hide == false && k.TenDoiTac == name)
+                                  where (k.Hide == false && k.TenDoiTac.Contains(name))
                                   select k).FirstOrDefault();
                     result = dt;
                 }
@@ -800,6 +858,7 @@ namespace ServiceLearning
             if (dt != null)
             {
                 DT_ID = dt.ID_DoiTac; //Lưu biến tạm để xử lý
+                txtDT_Ten.Text = dt.TenDoiTac;
                 txtDT_Ten.ReadOnly = true;
                 txtDT_Rep.Text = dt.DaiDien;
                 txtDT_SDT.Text = dt.SDT;
@@ -1027,6 +1086,395 @@ namespace ServiceLearning
             }
             else
                 return;
+        }
+
+        private void btnExportSV_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
+
+                        using (ExcelPackage excelPackage = new ExcelPackage())
+                        {
+                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(txtTenHD.Text);
+
+                            // Ghi header của DataGridView vào Excel
+                            for (int i = 1; i <= dgvSinhVien.Columns.Count; i++)
+                            {
+                                worksheet.Cells[1, i].Value = dgvSinhVien.Columns[i - 1].HeaderText;
+                                worksheet.Cells[1, i].Style.Font.Bold = true;
+                            }
+
+                            // Ghi dữ liệu từ DataGridView vào Excel
+                            for (int i = 1; i <= dgvSinhVien.Rows.Count; i++)
+                            {
+                                for (int j = 1; j <= dgvSinhVien.Columns.Count; j++)
+                                {
+                                    worksheet.Cells[i + 1, j].Value = dgvSinhVien.Rows[i - 1].Cells[j - 1].Value;
+                                }
+                            }
+                            worksheet.Cells.AutoFitColumns(0);
+                            excelPackage.SaveAs(excelFile);
+                            MessageBox.Show("Export thành công!");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi:\n\n " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnImportSV_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Title = "Chọn File nhập";
+            fileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    ImportSV(fileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Import không thành công!\n\n" + ex.Message);
+                }
+            }    
+        }
+        private void ImportSV(string path)
+        {
+            using (ExcelPackage excelPackage = new ExcelPackage(new FileInfo(path)))
+            {
+                ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets[0];
+                DataTable dt = new DataTable();
+                for (int i = excelWorksheet.Dimension.Start.Column; i <=  excelWorksheet.Dimension.End.Column; i++)
+                {
+                    dt.Columns.Add(excelWorksheet.Cells[1, i].Value.ToString().Trim());
+                }
+                for (int i = excelWorksheet.Dimension.Start.Row + 1; i <=  excelWorksheet.Dimension.End.Row; i++)
+                {
+                    List<string> listRow = new List<string>();
+                    for (int j = excelWorksheet.Dimension.Start.Column; j <= excelWorksheet.Dimension.End.Column; j++)
+                    {
+                        if (excelWorksheet.Cells[i, j].Value == null)
+                        {
+                            listRow.Add("");
+                            continue;
+                        }
+                        listRow.Add(excelWorksheet.Cells[i,j].Value.ToString().Trim());
+                    }
+                    dt.Rows.Add(listRow.ToArray());
+                }
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string MSSV = dr[0].ToString();
+                    if (FindDuplicateMSSV(MSSV)) continue;
+                    dgvSinhVien.Rows.Add(dr.ItemArray);
+
+                }
+            }
+        }
+
+        private void btnGVExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
+
+                        using (ExcelPackage excelPackage = new ExcelPackage())
+                        {
+                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(txtTenHD.Text);
+
+                            // Ghi header của DataGridView vào Excel
+                            for (int i = 1; i <= dgv_GV.Columns.Count; i++)
+                            {
+                                worksheet.Cells[1, i].Value = dgv_GV.Columns[i - 1].HeaderText;
+                                worksheet.Cells[1, i].Style.Font.Bold = true;
+                            }
+
+                            // Ghi dữ liệu từ DataGridView vào Excel
+                            for (int i = 1; i <= dgv_GV.Rows.Count; i++)
+                            {
+                                for (int j = 1; j <= dgv_GV.Columns.Count; j++)
+                                {
+                                    worksheet.Cells[i + 1, j].Value = dgv_GV.Rows[i - 1].Cells[j - 1].Value;
+                                }
+                            }
+                            worksheet.Cells.AutoFitColumns(0);
+                            excelPackage.SaveAs(excelFile);
+                            MessageBox.Show("Export thành công!");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi:\n\n " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnGVImport_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Title = "Chọn File nhập";
+            fileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    ImportGV(fileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Import không thành công!\n\n" + ex.Message);
+                }
+            }
+        }
+
+        private void ImportGV(string path)
+        {
+            using (ExcelPackage excelPackage = new ExcelPackage(new FileInfo(path)))
+            {
+                ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets[0];
+                DataTable dt = new DataTable();
+                for (int i = excelWorksheet.Dimension.Start.Column; i <= excelWorksheet.Dimension.End.Column; i++)
+                {
+                    dt.Columns.Add(excelWorksheet.Cells[1, i].Value.ToString().Trim());
+                }
+                for (int i = excelWorksheet.Dimension.Start.Row + 1; i <= excelWorksheet.Dimension.End.Row; i++)
+                {
+                    List<string> listRow = new List<string>();
+                    for (int j = excelWorksheet.Dimension.Start.Column; j <= excelWorksheet.Dimension.End.Column; j++)
+                    {
+                        if (excelWorksheet.Cells[i, j].Value == null)
+                        {
+                            listRow.Add("");
+                            continue;
+                        }
+                        listRow.Add(excelWorksheet.Cells[i, j].Value.ToString().Trim());
+                    }
+                    dt.Rows.Add(listRow.ToArray());
+                }
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string MGV = dr[0].ToString();
+                    if (FindDuplicateGV(MGV)) continue;
+                    dgv_GV.Rows.Add(dr.ItemArray);
+
+                }
+            }
+        }
+
+        private void btnDTExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
+
+                        using (ExcelPackage excelPackage = new ExcelPackage())
+                        {
+                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(txtTenHD.Text);
+
+                            // Ghi header của DataGridView vào Excel
+                            for (int i = 1; i <= dgvDoiTac.Columns.Count; i++)
+                            {
+                                worksheet.Cells[1, i].Value = dgvDoiTac.Columns[i - 1].HeaderText;
+                                worksheet.Cells[1, i].Style.Font.Bold = true;
+                            }
+
+                            // Ghi dữ liệu từ DataGridView vào Excel
+                            for (int i = 1; i <= dgvDoiTac.Rows.Count; i++)
+                            {
+                                for (int j = 1; j <= dgvDoiTac.Columns.Count; j++)
+                                {
+                                    worksheet.Cells[i + 1, j].Value = dgvDoiTac.Rows[i - 1].Cells[j - 1].Value;
+                                }
+                            }
+                            worksheet.Cells.AutoFitColumns(0);
+                            excelPackage.SaveAs(excelFile);
+                            MessageBox.Show("Export thành công!");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi:\n\n " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDTImport_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Title = "Chọn File nhập";
+            fileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    ImportDT(fileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Import không thành công!\n\n" + ex.Message);
+                }
+            }
+        }
+
+        private void ImportDT(string path)
+        {
+            using (ExcelPackage excelPackage = new ExcelPackage(new FileInfo(path)))
+            {
+                ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets[0];
+                DataTable dt = new DataTable();
+                for (int i = excelWorksheet.Dimension.Start.Column; i <= excelWorksheet.Dimension.End.Column; i++)
+                {
+                    dt.Columns.Add(excelWorksheet.Cells[1, i].Value.ToString().Trim());
+                }
+                for (int i = excelWorksheet.Dimension.Start.Row + 1; i <= excelWorksheet.Dimension.End.Row; i++)
+                {
+                    List<string> listRow = new List<string>();
+                    for (int j = excelWorksheet.Dimension.Start.Column; j <= excelWorksheet.Dimension.End.Column; j++)
+                    {
+                        if (excelWorksheet.Cells[i, j].Value == null)
+                        {
+                            listRow.Add("");
+                            continue;
+                        }
+                        listRow.Add(excelWorksheet.Cells[i, j].Value.ToString().Trim());
+                    }
+                    dt.Rows.Add(listRow.ToArray());
+                }
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (FindDuplicateDT(dr)) continue;
+                    dgvDoiTac.Rows.Add(dr.ItemArray);
+
+                }
+            }
+        }
+
+        private void btnTTExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
+
+                        using (ExcelPackage excelPackage = new ExcelPackage())
+                        {
+                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(txtTenHD.Text);
+
+                            // Ghi header của DataGridView vào Excel
+                            for (int i = 1; i <= dgvTaiTro.Columns.Count; i++)
+                            {
+                                worksheet.Cells[1, i].Value = dgvTaiTro.Columns[i - 1].HeaderText;
+                                worksheet.Cells[1, i].Style.Font.Bold = true;
+                            }
+
+                            // Ghi dữ liệu từ DataGridView vào Excel
+                            for (int i = 1; i <= dgvTaiTro.Rows.Count; i++)
+                            {
+                                for (int j = 1; j <= dgvTaiTro.Columns.Count; j++)
+                                {
+                                    worksheet.Cells[i + 1, j].Value = dgvTaiTro.Rows[i - 1].Cells[j - 1].Value;
+                                }
+                            }
+                            worksheet.Cells.AutoFitColumns(0);
+                            excelPackage.SaveAs(excelFile);
+                            MessageBox.Show("Export thành công!");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi:\n\n " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnTTImport_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Title = "Chọn File nhập";
+            fileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|Excel 2003 (*.xls)|*.xls";
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    ImportTT(fileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Import không thành công!\n\n" + ex.Message);
+                }
+            }
+        }
+
+        private void ImportTT(string path)
+        {
+            using (ExcelPackage excelPackage = new ExcelPackage(new FileInfo(path)))
+            {
+                ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets[0];
+                DataTable dt = new DataTable();
+                for (int i = excelWorksheet.Dimension.Start.Column; i <= excelWorksheet.Dimension.End.Column; i++)
+                {
+                    dt.Columns.Add(excelWorksheet.Cells[1, i].Value.ToString().Trim());
+                }
+                for (int i = excelWorksheet.Dimension.Start.Row + 1; i <= excelWorksheet.Dimension.End.Row; i++)
+                {
+                    List<string> listRow = new List<string>();
+                    for (int j = excelWorksheet.Dimension.Start.Column; j <= excelWorksheet.Dimension.End.Column; j++)
+                    {
+                        if (excelWorksheet.Cells[i, j].Value == null)
+                        {
+                            listRow.Add("");
+                            continue;
+                        }
+                        listRow.Add(excelWorksheet.Cells[i, j].Value.ToString().Trim());
+                    }
+                    dt.Rows.Add(listRow.ToArray());
+                }
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (FindDuplicateTT(dr)) continue;
+                    dgvTaiTro.Rows.Add(dr.ItemArray);
+
+                }
+            }
         }
     }
 }
