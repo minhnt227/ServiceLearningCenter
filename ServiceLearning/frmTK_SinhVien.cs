@@ -19,7 +19,6 @@ namespace ServiceLearning
         }
         private void frmTK_SinhVien_Load(object sender, EventArgs e)
         {
-            ThongkeSinhVien();
             LoadLoai();
             cmbKhoa.SelectedIndex = -1;
             DisplayCMBKhoa(cmbKhoa);
@@ -279,12 +278,17 @@ namespace ServiceLearning
             {
                 if (dgvSV.Rows[i].Cells[5].Value == " " || dgvSV.Rows[i].Cells[3].Value == " ")
                 {
+                    //Object stt = dgvSV.Rows[i].Cells[0].Value;
                     dgvSV.Rows.RemoveAt(dgvSV.Rows[i].Index);
                     i--;
                     n--;
-
+                   // dgvSV.Rows[i+1].Cells[0].Value = stt;
                 }
             }
+            for (int i=0;i<n-1;i++)
+            {
+                dgvSV.Rows[i].Cells[0].Value = i + 1;
+            }    
         }
         private void btnLoc_Click(object sender, EventArgs e)
         {
