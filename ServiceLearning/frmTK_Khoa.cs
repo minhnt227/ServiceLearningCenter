@@ -19,31 +19,51 @@ namespace ServiceLearning
         {
             InitializeComponent();
         }
-
+        public void LoadLoai()
+        {
+            cmbLoai.Items.Add("Dự án");
+            cmbLoai.Items.Add("Sự kiện");
+            cmbLoai.Items.Add("Môn học");
+        }
         private void frmTK_Khoa_Load(object sender, EventArgs e)
         {
+            LoadLoai();
+            dtpBD.CustomFormat = " ";
+            dtpKT.CustomFormat = " ";
+            ThongKeKhoa();
+            btnLoc.Enabled = false;
+        }
+        private void ThongKeKhoa()
+        {
+            this.dgvHD.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             try
             {
                 List<string> lstTenKhoa = new List<string>();
                 lstTenKhoa = db.KHOAs.Select(x => x.TenKhoa).ToList();
-
+                this.dgvHD.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                dgvHD.Columns.Add("STT", "STT");
+                dgvHD.Columns.Add("Hoạt động", "Hoạt động");
                 for (int i = 0; i < lstTenKhoa.Count; i++)
                 {
-                    dgvTK_1.Columns.Add(lstTenKhoa[i], lstTenKhoa[i]);
+                    dgvHD.Columns.Add(lstTenKhoa[i], lstTenKhoa[i]);
                 }
-                dgvTK_1.Columns.Add("Total", "Tổng");
+                dgvHD.Columns.Add("Total", "Tổng");
                 List<int> lstMaHD = new List<int>();
                 List<string> lstTenHD = new List<string>();
-                lstMaHD = db.HOAT_DONG.Select(x => x.MaHD).ToList();
-                lstTenHD = db.HOAT_DONG.Select(x => x.TenHoatDong).ToList();
+                lstMaHD = (from s in db.HOAT_DONG
+                           where s.Hide == false 
+                           select (s.MaHD)).ToList();
+                lstTenHD = (from s in db.HOAT_DONG
+                            where s.Hide == false
+                            select (s.TenHoatDong)).ToList();              
                 for (int j = 0; j < lstMaHD.Count; j++)
                 {
 
                     int MaHD = lstMaHD[j];
                     string TenHD = lstTenHD[j];
-                    dgvTK_1.Rows.Add();
-                    dgvTK_1.Rows[j].Cells[0].Value = j + 1;
-                    dgvTK_1.Rows[j].Cells[1].Value = TenHD;
+                    dgvHD.Rows.Add();
+                    dgvHD.Rows[j].Cells[0].Value = j + 1;
+                    dgvHD.Rows[j].Cells[1].Value = TenHD;
                     List<string> lstKhoa = new List<string>();
                     lstKhoa = db.KHOAs.Select(x => x.MaKhoa).ToList();
                     int total = 0;
@@ -59,10 +79,10 @@ namespace ServiceLearning
                         int tong = (from gv in db.SINH_VIEN
                                     where list.Contains(gv.MSSV)
                                     select gv.MSSV).ToList().Count;
-                        dgvTK_1.Rows[j].Cells[i + 2].Value = tong;
+                        dgvHD.Rows[j].Cells[i + 2].Value = tong;
                         total = total + tong;
                     }
-                    dgvTK_1.Rows[j].Cells[lstKhoa.Count + 2].Value = total;
+                    dgvHD.Rows[j].Cells[lstKhoa.Count + 2].Value = total;
                 }
             }
             catch (Exception ex)
@@ -70,53 +90,124 @@ namespace ServiceLearning
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
       
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            try
+            
+        }
+
+        private void cmbLoai_SelectedValueChanged(object sender, EventArgs e)
+        {
+            btnLoc.Enabled = true;
+        }
+
+        private void dtpBD_ValueChanged(object sender, EventArgs e)
+        {
+            dtpBD.CustomFormat = "yyyy-MM-dd";
+            btnLoc.Enabled = true;
+        }
+
+        private void dtpBD_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
             {
-                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                dtpBD.CustomFormat = " ";
+            }
+        }
+
+        private void dtpKT_ValueChanged(object sender, EventArgs e)
+        {
+            dtpKT.CustomFormat = "yyyy-MM-dd";
+            btnLoc.Enabled = true;
+        }
+
+        private void dtpKT_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
+            {
+                dtpKT.CustomFormat = " ";
+            }
+        }
+
+        private void btnLoc_Click(object sender, EventArgs e)
+        {
+            LocHoatDong();
+        }
+        private void LocHoatDong()
+        {
+            dgvHD.Columns.Clear(); 
+            dgvHD.Refresh();
+            this.dgvHD.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            List<string> lstTenKhoa = new List<string>();
+            lstTenKhoa = db.KHOAs.Select(x => x.TenKhoa).ToList();
+
+            dgvHD.Columns.Add("STT", "STT");
+            dgvHD.Columns.Add("Hoạt động", "Hoạt động");
+            for (int i = 0; i < lstTenKhoa.Count; i++)
+            {
+                dgvHD.Columns.Add(lstTenKhoa[i], lstTenKhoa[i]);
+            }
+            dgvHD.Columns.Add("Total", "Tổng");
+            List<int> lstMaHD = new List<int>();
+            List<string> lstTenHD = new List<string>();
+            if (cmbLoai.SelectedIndex != -1)
+            {
+                string loai = cmbLoai.SelectedItem.ToString();
+                lstMaHD = (from s in db.HOAT_DONG
+                           where s.Hide == false && s.Loai == loai
+                           select (s.MaHD)).ToList();
+                lstTenHD = (from s in db.HOAT_DONG
+                            where s.Hide == false && s.Loai == loai
+                            select (s.TenHoatDong)).ToList();
+            }
+            else
+            {
+                lstMaHD = (from s in db.HOAT_DONG
+                           where s.Hide == false
+                           select (s.MaHD)).ToList();
+                lstTenHD = (from s in db.HOAT_DONG
+                            where s.Hide == false
+                            select (s.TenHoatDong)).ToList();
+            }
+            for (int j = 0; j < lstMaHD.Count; j++)
+            {
+
+                int MaHD = lstMaHD[j];
+                string TenHD = lstTenHD[j];
+                dgvHD.Rows.Add();
+                dgvHD.Rows[j].Cells[0].Value = j + 1;
+                dgvHD.Rows[j].Cells[1].Value = TenHD;
+                List<string> lstKhoa = new List<string>();
+                lstKhoa = db.KHOAs.Select(x => x.MaKhoa).ToList();
+                int total = 0;
+                for (int i = 0; i < lstKhoa.Count; i++)
                 {
-                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
-                    saveFileDialog.FilterIndex = 2;
-                    saveFileDialog.RestoreDirectory = true;
-
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        FileInfo excelFile = new FileInfo(saveFileDialog.FileName);
-
-                        using (ExcelPackage excelPackage = new ExcelPackage())
-                        {
-                            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("KhoaData");
-
-                            // Ghi header của DataGridView vào Excel
-                            for (int i = 1; i <= dgvTK_1.Columns.Count; i++)
-                            {
-                                worksheet.Cells[1, i].Value = dgvTK_1.Columns[i - 1].HeaderText;
-                                worksheet.Cells[1, i].Style.Font.Bold = true;
-                            }
-
-                            // Ghi dữ liệu từ DataGridView vào Excel
-                            for (int i = 1; i <= dgvTK_1.Rows.Count; i++)
-                            {
-                                for (int j = 1; j <= dgvTK_1.Columns.Count; j++)
-                                {
-                                    worksheet.Cells[i + 1, j].Value = dgvTK_1.Rows[i - 1].Cells[j - 1].Value;
-                                }
-                            }
-
-                            excelPackage.SaveAs(excelFile);
-                            MessageBox.Show("Export thành công!");
-                        }
-                    }
+                    List<string> list = new List<string>();
+                    string maKhoa = lstKhoa[i];
+                    list = (from s in db.SINH_VIEN
+                            join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                            join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                            where (s.Khoa == maKhoa && b.MaHD == MaHD)
+                            select (s.MSSV)).ToList();
+                    int tong = (from gv in db.SINH_VIEN
+                                where list.Contains(gv.MSSV)
+                                select gv.MSSV).ToList().Count;
+                    dgvHD.Rows[j].Cells[i + 2].Value = tong;
+                    total = total + tong;
                 }
+                dgvHD.Rows[j].Cells[lstKhoa.Count + 2].Value = total;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Đã xảy ra lỗi trong quá trình export. Chi tiết lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        }
+        private void guna2PictureBox2_Click(object sender, EventArgs e)
+        {
+            cmbLoai.SelectedIndex = -1;
+            dtpBD.CustomFormat = " ";
+            dtpKT.CustomFormat = " ";
+            dgvHD.Columns.Clear();
+            dgvHD.Refresh();
+            ThongKeKhoa();
+            btnLoc.Enabled = false;
         }
     }
 }
