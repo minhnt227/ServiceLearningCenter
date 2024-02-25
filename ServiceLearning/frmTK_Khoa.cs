@@ -94,9 +94,60 @@ namespace ServiceLearning
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            
+            using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*" })
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    ToExcel(dgvHD, sfd.FileName);
+                }
         }
+        private void ToExcel(DataGridView dtg, string fileName)
+        {
+            Microsoft.Office.Interop.Excel.Application excel;
+            Microsoft.Office.Interop.Excel.Workbook workbook;
+            Microsoft.Office.Interop.Excel.Worksheet worksheet;
+            try
+            {
+                //Tạo đối tượng COM.
+                excel = new Microsoft.Office.Interop.Excel.Application();
+                excel.Visible = false;
+                excel.DisplayAlerts = false;
+                //tạo mới một Workbooks bằng phương thức add()
+                workbook = excel.Workbooks.Add(Type.Missing);
+                worksheet = (Microsoft.Office.Interop.Excel.Worksheet)workbook.Sheets["Sheet1"];
+                //đặt tên cho sheet
+                worksheet.Name = "Thống kê sinh viên";
 
+                // export header trong DataGridView
+                for (int i = 0; i < dtg.ColumnCount; i++)
+                {
+                    worksheet.Cells[1, i + 1] = dtg.Columns[i].HeaderText;
+                }
+                // export nội dung trong DataGridView
+                for (int i = 0; i < dtg.RowCount; i++)
+                {
+                    for (int j = 0; j < dtg.ColumnCount; j++)
+                    {
+                        worksheet.Cells[i + 2, j + 1] = dtg.Rows[i].Cells[j].Value;
+                    }
+                }
+                excel.Columns.AutoFit();
+                // sử dụng phương thức SaveAs() để lưu workbook với filename
+                workbook.SaveAs(fileName);
+                //đóng workbook
+                workbook.Close();
+                excel.Quit();
+                MessageBox.Show("Xuất dữ liệu ra Excel thành công!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                workbook = null;
+                worksheet = null;
+            }
+        }
         private void cmbLoai_SelectedValueChanged(object sender, EventArgs e)
         {
             btnLoc.Enabled = true;
