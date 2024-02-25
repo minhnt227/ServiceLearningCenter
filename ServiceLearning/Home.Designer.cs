@@ -233,7 +233,7 @@
             this.panel_Feedback.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.panel_Feedback.Name = "panel_Feedback";
             this.panel_Feedback.ShadowColor = System.Drawing.Color.Red;
-            this.panel_Feedback.Size = new System.Drawing.Size(1111, 684);
+            this.panel_Feedback.Size = new System.Drawing.Size(1130, 684);
             this.panel_Feedback.TabIndex = 5;
             this.panel_Feedback.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_Feedback_Paint);
             // 
@@ -384,6 +384,7 @@
             this.IsMdiContainer = true;
             this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "frmHome";
+            this.Text = "Quản lý hoạt động";
             this.Load += new System.EventHandler(this.Home_Load);
             this.panel_Menu.ResumeLayout(false);
             this.panel_Menu.PerformLayout();
