@@ -85,11 +85,12 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvTC.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvTC.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dgvTC.Location = new System.Drawing.Point(3, 120);
+            this.dgvTC.Location = new System.Drawing.Point(18, 100);
+            this.dgvTC.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvTC.Name = "dgvTC";
             this.dgvTC.ReadOnly = true;
             this.dgvTC.RowHeadersVisible = false;
-            this.dgvTC.Size = new System.Drawing.Size(833, 376);
+            this.dgvTC.Size = new System.Drawing.Size(819, 306);
             this.dgvTC.TabIndex = 6;
             this.dgvTC.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dgvTC.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -118,6 +119,7 @@
             this.stt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.stt.FillWeight = 30.45685F;
             this.stt.HeaderText = "STT";
+            this.stt.MinimumWidth = 6;
             this.stt.Name = "stt";
             this.stt.ReadOnly = true;
             this.stt.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -148,6 +150,7 @@
             this.DateBegin.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.DateBegin.FillWeight = 113.9086F;
             this.DateBegin.HeaderText = "Ngày bắt đầu";
+            this.DateBegin.MinimumWidth = 6;
             this.DateBegin.Name = "DateBegin";
             this.DateBegin.ReadOnly = true;
             this.DateBegin.Width = 91;
@@ -157,6 +160,7 @@
             this.Tong.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Tong.FillWeight = 113.9086F;
             this.Tong.HeaderText = "Tổng chi phí";
+            this.Tong.MinimumWidth = 6;
             this.Tong.Name = "Tong";
             this.Tong.ReadOnly = true;
             this.Tong.Width = 88;
@@ -165,6 +169,7 @@
             // 
             this.TK_TC_uef.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.TK_TC_uef.HeaderText = "UEF";
+            this.TK_TC_uef.MinimumWidth = 6;
             this.TK_TC_uef.Name = "TK_TC_uef";
             this.TK_TC_uef.ReadOnly = true;
             this.TK_TC_uef.Width = 65;
@@ -172,17 +177,20 @@
             // TaiTro
             // 
             this.TaiTro.HeaderText = "Tài trợ";
+            this.TaiTro.MinimumWidth = 6;
             this.TaiTro.Name = "TaiTro";
             this.TaiTro.ReadOnly = true;
             // 
             // Khac
             // 
             this.Khac.HeaderText = "Khác";
+            this.Khac.MinimumWidth = 6;
             this.Khac.Name = "Khac";
             this.Khac.ReadOnly = true;
             // 
             // btnExport
             // 
+            this.btnExport.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnExport.BorderRadius = 5;
             this.btnExport.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.btnExport.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
@@ -200,6 +208,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.groupBox1.Controls.Add(this.btnLoc);
             this.groupBox1.Controls.Add(this.guna2PictureBox2);
             this.groupBox1.Controls.Add(this.label4);

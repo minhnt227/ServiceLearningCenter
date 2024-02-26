@@ -78,10 +78,7 @@ namespace ServiceLearning
         }
         private void ThongKeTaiChinh()
         {
-            List<int> MaHD = new List<int>();
-            MaHD =  (from s in db.TAI_CHINH
-                     where s.ID_TaiChinh == ID
-                     select (s.Khac)).ToList();
+            
         }
         private void btn_Export(object sender, EventArgs e)
         {
