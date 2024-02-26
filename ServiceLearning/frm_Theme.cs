@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace ServiceLearning
 {
@@ -16,11 +17,37 @@ namespace ServiceLearning
         {
             InitializeComponent();
         }
+        Context db = new Context();
+        public void LoadLoai()
+        {
+            cmbLoai.Items.Add("Dự án");
+            cmbLoai.Items.Add("Sự kiện");
+            cmbLoai.Items.Add("Môn học");
+        }
+        public void LoadLoai(string loai)
+        {
 
+            var lst = from s in db.HOAT_DONG
+                      where s.Loai == loai
+                      select new
+                      {
+                          MaHD = s.MaHD,
+                          TenHoatDong = s.TenHoatDong,
+                          Loai = s.Loai,
+                          NgayBatDau = s.NgayBatDau,
+                          NgayKetThuc = s.NgayKetThuc,
+                          CreatedDate = s.CreatedDate
+                      };
+            dgv_HoatDong.DataSource = lst.ToList();
+            FormatGridView();
+
+        }
         private void frm_Theme_Load(object sender, EventArgs e)
         {
             // Gọi hàm để load dữ liệu hoạt động vào DataGridView
+            LoadLoai();
             LoadDataToDGV_HoatDong();
+            btnLoc.Enabled = false;
         }
 
         private void LoadDataToDGV_HoatDong()
@@ -43,15 +70,18 @@ namespace ServiceLearning
                 dgv_HoatDong.DataSource = hoatDongData.ToList();
 
                 // Đổi tên tiêu đề của các cột
-                dgv_HoatDong.Columns["MaHD"].HeaderText = "Mã Hoạt Động";
-                dgv_HoatDong.Columns["TenHoatDong"].HeaderText = "Tên Hoạt Động";
-                dgv_HoatDong.Columns["Loai"].HeaderText = "Loại";
-                dgv_HoatDong.Columns["NgayBatDau"].HeaderText = "Ngày Bắt Đầu";
-                dgv_HoatDong.Columns["NgayKetThuc"].HeaderText = "Ngày Kết Thúc";
-                dgv_HoatDong.Columns["CreatedDate"].HeaderText = "Ngày Tạo";
+                FormatGridView();
             }
         }
-
+        public void FormatGridView()
+        {
+            dgv_HoatDong.Columns["MaHD"].HeaderText = "Mã Hoạt Động";
+            dgv_HoatDong.Columns["TenHoatDong"].HeaderText = "Tên Hoạt Động";
+            dgv_HoatDong.Columns["Loai"].HeaderText = "Loại";
+            dgv_HoatDong.Columns["NgayBatDau"].HeaderText = "Ngày Bắt Đầu";
+            dgv_HoatDong.Columns["NgayKetThuc"].HeaderText = "Ngày Kết Thúc";
+            dgv_HoatDong.Columns["CreatedDate"].HeaderText = "Ngày Tạo";
+        }
 
         private void guna2Panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -150,10 +180,330 @@ namespace ServiceLearning
             frmAddHoatDong fm = new frmAddHoatDong();
             fm.ShowDialog();
         }
-
-        private void dgv_HoatDong_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void LoadTen_Loai(string ten, string loai)
         {
+            var lst = from s in db.HOAT_DONG
+                      where s.TenHoatDong.Contains(ten) && s.Loai == loai
+                      select new
+                      {
+                          MaHD = s.MaHD,
+                          TenHoatDong = s.TenHoatDong,
+                          Loai = s.Loai,
+                          NgayBatDau = s.NgayBatDau,
+                          NgayKetThuc = s.NgayKetThuc,
+                          CreatedDate = s.CreatedDate
+                      };
+            dgv_HoatDong.DataSource = lst.ToList();
+            FormatGridView();
+        }
+        
 
+        private void btnLoc_Click_1(object sender, EventArgs e)
+        {
+            if (cmbLoai.SelectedIndex != -1)
+            {
+                if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text == " " && dtpNgayKT.Text == " ")
+                {
+                    string loai = cmbLoai.SelectedItem.ToString();
+                    LoadLoai(loai);
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text == " " && dtpNgayKT.Text == " ")
+                {
+                    string ten = txtSearch.Text;
+                    string loai = cmbLoai.SelectedItem.ToString();
+                    LoadTen_Loai(ten, loai);
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
+                {
+                    string loai = cmbLoai.SelectedItem.ToString();
+                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where  s.Loai == loai && s.NgayBatDau>=BD
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
+                {
+                    string loai = cmbLoai.SelectedItem.ToString();
+                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where s.Loai == loai && s.NgayKetThuc <=KT
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }    
+                else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
+                {
+                    string ten = txtSearch.Text;
+                    string loai = cmbLoai.SelectedItem.ToString();
+                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where s.Loai == loai && s.NgayBatDau >= BD && s.TenHoatDong.Contains(ten)
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }  
+                else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
+                {
+                    string ten = txtSearch.Text;
+                    string loai = cmbLoai.SelectedItem.ToString();
+                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where s.Loai == loai && s.NgayKetThuc <= KT && s.TenHoatDong.Contains(ten)
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }   
+                else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
+                {
+                    string loai = cmbLoai.SelectedItem.ToString();
+                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where s.Loai == loai && s.NgayBatDau >= BD && s.NgayKetThuc <= KT 
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }    
+                else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
+                {
+                    string ten = txtSearch.Text;
+                    string loai = cmbLoai.SelectedItem.ToString();
+                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where s.Loai == loai && s.NgayBatDau >= BD && s.NgayKetThuc <= KT && s.TenHoatDong.Contains(ten)
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }    
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text == " " && dtpNgayKT.Text == " ")
+                {
+                    LoadDataToDGV_HoatDong();
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text == " " && dtpNgayKT.Text == " ")
+                {
+                    string ten = txtSearch.Text;
+                    var lst = from s in db.HOAT_DONG
+                              where s.TenHoatDong.Contains(ten)
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
+                {
+                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where  s.NgayBatDau >= BD
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
+                {
+                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where  s.NgayKetThuc <= KT
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
+                {
+                    string ten = txtSearch.Text;
+                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where s.NgayBatDau >= BD && s.TenHoatDong.Contains(ten)
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
+                {
+                    string ten = txtSearch.Text;
+                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where s.NgayKetThuc <= KT && s.TenHoatDong.Contains(ten)
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
+                {
+                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where s.NgayBatDau >= BD && s.NgayKetThuc <= KT
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }
+                else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
+                {
+                    string ten = txtSearch.Text;
+                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    var lst = from s in db.HOAT_DONG
+                              where  s.NgayBatDau >= BD && s.NgayKetThuc <= KT && s.TenHoatDong.Contains(ten)
+                              select new
+                              {
+                                  MaHD = s.MaHD,
+                                  TenHoatDong = s.TenHoatDong,
+                                  Loai = s.Loai,
+                                  NgayBatDau = s.NgayBatDau,
+                                  NgayKetThuc = s.NgayKetThuc,
+                                  CreatedDate = s.CreatedDate
+                              };
+                    dgv_HoatDong.DataSource = lst.ToList();
+                    FormatGridView();
+                }
+            }    
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            btnLoc.Enabled = true;
+        }
+        private void cmbLoai_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnLoc.Enabled = true;
+        }
+        private void dtpNgayBD_ValueChanged(object sender, EventArgs e)
+        {
+            dtpNgayBD.CustomFormat = "yyyy-MM-dd";
+            btnLoc.Enabled = true;
+        }
+
+        private void dtpNgayBD_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
+            {
+                dtpNgayBD.CustomFormat = " ";
+            }
+        }
+
+        private void dtpNgayKT_ValueChanged(object sender, EventArgs e)
+        {
+            dtpNgayKT.CustomFormat = "yyyy-MM-dd";
+            btnLoc.Enabled = true;
+        }
+
+        private void dtpNgayKT_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
+            {
+                dtpNgayKT.CustomFormat = " ";
+            }
+        }
+
+        private void guna2PictureBox1_Click(object sender, EventArgs e)
+        {
+            txtSearch.Text = "";
+            cmbLoai.SelectedIndex = -1;
+            dtpNgayBD.CustomFormat = " ";
+            dtpNgayKT.CustomFormat = " ";
+            LoadDataToDGV_HoatDong();
+            btnLoc.Enabled = false;
         }
     }
 }
