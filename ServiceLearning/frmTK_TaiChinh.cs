@@ -20,65 +20,58 @@ namespace ServiceLearning
         {
             InitializeComponent();
         }
-
+        public void Display()
+        {
+            var lst = from s in db.TAI_CHINH
+                      join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                      where s.Hide == false
+                      group s by s.MaHD into g
+                      let maxID = g.Max(x => x.ID_TaiChinh)
+                      from s in g
+                      where s.ID_TaiChinh == maxID
+                      join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                      select new
+                      {
+                          TenHoatDong = b.TenHoatDong,
+                          Loai = b.Loai,
+                          NgayBatDau = b.NgayBatDau,
+                          TongChiPhi = s.UEF + s.TaiTro,
+                          UEF = s.UEF,
+                          Taitro = s.TaiTro,
+                          Khac = s.Khac
+                      };
+            dgvTC.DataSource = lst.ToList();
+            FormatGridView();
+        }
+        public void FormatGridView()
+        {
+            dgvTC.Columns["TenHoatDong"].HeaderText = "Tên Hoạt Động";
+            dgvTC.Columns["Loai"].HeaderText = "Loại";
+            dgvTC.Columns["NgayBatDau"].DefaultCellStyle.Format = "dd-MM-yyyy";
+            dgvTC.Columns["NgayBatDau"].HeaderText = "Ngày Bắt Đầu";
+            dgvTC.Columns["TongChiPhi"].HeaderText = "Tổng chi phí";
+            dgvTC.Columns["UEF"].HeaderText = "UEF";
+            dgvTC.Columns["Taitro"].HeaderText = "Tài trợ";
+            dgvTC.Columns["Khac"].HeaderText = "Khác";
+        }
+        public void LoadLoai()
+        {
+            cmbLoai.Items.Add("Dự án");
+            cmbLoai.Items.Add("Sự kiện");
+            cmbLoai.Items.Add("Môn học");
+        }
         private void frmTK_TaiChinh_Load(object sender, EventArgs e)
         {
             try
             {
-                List<int> lstID = new List<int>();
-                lstID = db.TAI_CHINH.Select(x => x.ID_TaiChinh).ToList();
-                for (int j = 0; j < lstID.Count; j++)
-                {
-                    dgvTC.Rows.Add();
-                    dgvTC.Rows[j].Cells[0].Value = j + 1;
-                    int ID = lstID[j];
-                    List<int?> MaHD = (from s in db.TAI_CHINH
-                                         where s.ID_TaiChinh == ID
-                                         select (s.MaHD)).ToList();
-                    int MHD = (int)MaHD[0];
-                    List<string> loai = (from s in db.HOAT_DONG
-                                         where s.MaHD == MHD
-                                         select (s.Loai)).ToList();
-                    dgvTC.Rows[j].Cells[1].Value = loai[0];
-
-                    List<string> TenHD = (from s in db.HOAT_DONG
-                                          where s.MaHD == MHD
-                                          select (s.TenHoatDong)).ToList();
-                    dgvTC.Rows[j].Cells[2].Value = TenHD[0];
-
-
-                    List<DateTime?> thoigian = (from s in db.HOAT_DONG
-                                                where s.MaHD == MHD
-                                                select (s.NgayBatDau)).ToList();
-                    dgvTC.Rows[j].Cells[3].Value = thoigian[0];
-
-                    List<decimal?> UEF = (from s in db.TAI_CHINH
-                                          where s.ID_TaiChinh == ID
-                                          select (s.UEF)).ToList();
-                    dgvTC.Rows[j].Cells[5].Value = UEF[0];
-
-                    List<decimal?> taitro = (from s in db.TAI_CHINH
-                                             where s.ID_TaiChinh == ID
-                                             select (s.TaiTro)).ToList();
-                    dgvTC.Rows[j].Cells[6].Value = taitro[0];
-                    int tong = (int)UEF[0] + (int)taitro[0];
-                    dgvTC.Rows[j].Cells[4].Value = tong;
-                    List<string> khac = (from s in db.TAI_CHINH
-                                         where s.ID_TaiChinh == ID
-                                         select (s.Khac)).ToList();
-                    dgvTC.Rows[j].Cells[7].Value = khac[0];
-
-
-                }
+                LoadLoai();
+                Display();
+                btnLoc.Enabled = false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        private void ThongKeTaiChinh()
-        {
-            
         }
         private void btn_Export(object sender, EventArgs e)
         {
@@ -151,29 +144,95 @@ namespace ServiceLearning
             }
         }
 
-        private void dtpKT_ValueChanged(object sender, EventArgs e)
-        {
-            dtpKT.CustomFormat = "yyyy-MM-dd";
-            btnLoc.Enabled = true;
-        }
-
-        private void dtpKT_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)
-            {
-                dtpKT.CustomFormat = " ";
-            }
-        }
+       
 
         private void guna2PictureBox2_Click(object sender, EventArgs e)
         {
+            cmbLoai.SelectedIndex = -1;
             dtpBD.CustomFormat = " ";
-            dtpKT.CustomFormat = " ";
-            dgvTC.Rows.Clear();
-            dgvTC.Refresh();
-            //ThongKeTaiTro();
-            //Xoa();
+            Display();
             btnLoc.Enabled = false;
         }
+
+        private void cmbLoai_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnLoc.Enabled = true;
+        }
+
+        private void btnLoc_Click(object sender, EventArgs e)
+        {
+            if (cmbLoai.SelectedIndex != -1 && dtpBD.Text==" ") 
+            {
+                string loai = cmbLoai.SelectedItem.ToString();
+                var lst = from s in db.TAI_CHINH
+                          join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                          where s.Hide == false
+                          group s by s.MaHD into g
+                          let maxID = g.Max(x => x.ID_TaiChinh)
+                          from s in g
+                          join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                          where s.ID_TaiChinh ==maxID && b.Loai == loai
+                          select new
+                          {
+                              TenHoatDong = b.TenHoatDong,
+                              Loai = b.Loai,
+                              NgayBatDau = b.NgayBatDau,
+                              TongChiPhi = s.UEF + s.TaiTro,
+                              UEF = s.UEF,
+                              Taitro = s.TaiTro,
+                              Khac = s.Khac
+                          };
+                dgvTC.DataSource = lst.ToList();
+            }
+            else if (cmbLoai.SelectedIndex == -1 && dtpBD.Text != " ")
+            {
+                DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                var lst = from s in db.TAI_CHINH
+                          join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                          where s.Hide == false
+                          group s by s.MaHD into g
+                          let maxID = g.Max(x => x.ID_TaiChinh)
+                          from s in g
+                          join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                          where s.ID_TaiChinh == maxID && b.NgayBatDau >= BD
+                          select new
+                          {
+                              TenHoatDong = b.TenHoatDong,
+                              Loai = b.Loai,
+                              NgayBatDau = b.NgayBatDau,
+                              TongChiPhi = s.UEF + s.TaiTro,
+                              UEF = s.UEF,
+                              Taitro = s.TaiTro,
+                              Khac = s.Khac
+                          };
+                dgvTC.DataSource = lst.ToList();
+            }   
+            else if (cmbLoai.SelectedIndex != -1 && dtpBD.Text != " ")
+            {
+                string loai = cmbLoai.SelectedItem.ToString();
+                DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                var lst = from s in db.TAI_CHINH
+                          join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                          where s.Hide == false
+                          group s by s.MaHD into g
+                          let maxID = g.Max(x => x.ID_TaiChinh)
+                          from s in g
+                          join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                          where s.ID_TaiChinh == maxID && b.NgayBatDau >= BD && b.Loai == loai
+                          select new
+                          {
+                              TenHoatDong = b.TenHoatDong,
+                              Loai = b.Loai,
+                              NgayBatDau = b.NgayBatDau,
+                              TongChiPhi = s.UEF + s.TaiTro,
+                              UEF = s.UEF,
+                              Taitro = s.TaiTro,
+                              Khac = s.Khac
+                          };
+                dgvTC.DataSource = lst.ToList();
+            }
+            FormatGridView();
+        }
+        
     }
 }
