@@ -42,16 +42,26 @@ namespace ServiceLearning
         }
         private void LoadDataToCbKhoa()
         {
-            using (Context dbContext = new Context())
+            try
             {
-                // Lấy danh sách các khoa từ cơ sở dữ liệu
-                var listKhoa = dbContext.KHOAs.Select(k => k.MaKhoa).ToList();
-
-                // Gán danh sách vào DataSource của ComboBox
-                cbKhoa.DataSource = listKhoa;
-
-                // Optional: Gán giá trị mặc định nếu cần
-                // cbKhoa.SelectedIndex = 0;
+                using (Context db = new Context())
+                {
+                    var khoa = from k in db.KHOAs
+                               where (k.Hide == false)
+                               select new
+                               {
+                                   MaKH = k.MaKhoa,
+                                   Ten = k.TenKhoa,
+                               };
+                    cbKhoa.DataSource = khoa.ToList();
+                    cbKhoa.DisplayMember = "Ten";
+                    cbKhoa.ValueMember = "MaKH";
+                    cbKhoa.SelectedIndex = -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error Loading Khoa:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void AddDataToGiangVien(string maGV, string hoTenLot, string ten, string khoa)
@@ -91,7 +101,8 @@ namespace ServiceLearning
                                             MaGV = gv.MaGV,
                                             HoTenLot = gv.HoTenLot,
                                             Ten = gv.Ten,
-                                            Khoa = gv.Khoa
+                                            Khoa = gv.Khoa,
+                                            TenKhoa = gv.KHOA1.TenKhoa,
                                         };
 
                     // Gán dữ liệu cho DataGridView dgv_GiangVien
@@ -101,7 +112,8 @@ namespace ServiceLearning
                     dgv_GiangVien.Columns["MaGV"].HeaderText = "Mã Giảng Viên";
                     dgv_GiangVien.Columns["HoTenLot"].HeaderText = "Họ Tên Lót";
                     dgv_GiangVien.Columns["Ten"].HeaderText = "Tên";
-                    dgv_GiangVien.Columns["Khoa"].HeaderText = "Khoa";
+                    dgv_GiangVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                    dgv_GiangVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
                 }
             }
             catch (Exception ex)
@@ -126,7 +138,7 @@ namespace ServiceLearning
             string maGV = txtMaGv.Text.Trim();
             string hoTenLot = txtHoTenLot.Text.Trim();
             string ten = txtName.Text.Trim();
-            string khoa = cbKhoa.Text;
+            string khoa = cbKhoa.SelectedValue.ToString().Trim();
 
             // Kiểm tra xem MaGV có tồn tại không
             using (Context dbContext = new Context())
@@ -166,11 +178,13 @@ namespace ServiceLearning
                 string maGV = selectedRow.Cells["MaGV"].Value.ToString();
                 string hoTenLot = selectedRow.Cells["HoTenLot"].Value.ToString();
                 string ten = selectedRow.Cells["Ten"].Value.ToString();
+                string khoa = selectedRow.Cells["Khoa"].Value.ToString();
 
                 // Hiển thị thông tin lên các TextBox
                 txtMaGv.Text = maGV;
                 txtHoTenLot.Text = hoTenLot;
                 txtName.Text = ten;
+                cbKhoa.SelectedValue = khoa;
             }
         }
 
@@ -180,7 +194,7 @@ namespace ServiceLearning
             string maGV = txtMaGv.Text.Trim();
             string hoTenLot = txtHoTenLot.Text.Trim();
             string ten = txtName.Text.Trim();
-            string khoa = cbKhoa.Text.Trim();
+            string khoa = cbKhoa.SelectedValue.ToString().Trim();
 
             using (Context dbContext = new Context())
             {
