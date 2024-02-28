@@ -69,7 +69,7 @@ namespace ServiceLearning
             if (ValidateSV())
             {     
                 // Lưu dữ liệu vào cơ sở dữ liệu
-                AddDataToDatabase(txtMSSV.Text, txtName.Text, cbKhoa.Text);
+                AddDataToDatabase(txtMSSV.Text, txtName.Text, cbKhoa.SelectedValue.ToString().Trim());
                 //Load db
                 LoadDataToDGV();
 
@@ -89,7 +89,8 @@ namespace ServiceLearning
             {
                 MSSV = mssv,
                 HoTen = hoTen,
-                Khoa = khoa
+                Khoa = khoa,
+                Hide = false,
                
                 // Nếu có thêm các trường khác, hãy thêm vào đây
             };
@@ -107,11 +108,32 @@ namespace ServiceLearning
         }
         private void LoadMaKhoaToComboBox()
         {
-            // Lấy danh sách mã khoa từ bảng KHOA
+            /*// Lấy danh sách mã khoa từ bảng KHOA
             var maKhoaList = dbContext.KHOAs.Select(k => k.MaKhoa).ToList();
 
             // Gán danh sách mã khoa vào ComboBox
-            cbKhoa.DataSource = maKhoaList;
+            cbKhoa.DataSource = maKhoaList;*/
+            try
+            {
+                using (Context db = new Context())
+                {
+                    var khoa = from k in db.KHOAs
+                               where (k.Hide == false)
+                               select new
+                               {
+                                   MaKH = k.MaKhoa,
+                                   Ten = k.TenKhoa,
+                               };
+                    cbKhoa.DataSource = khoa.ToList();
+                    cbKhoa.DisplayMember = "Ten";
+                    cbKhoa.ValueMember = "MaKH";
+                    cbKhoa.SelectedIndex = -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error Loading Khoa:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void LoadDataToDGV()
         {
@@ -125,7 +147,8 @@ namespace ServiceLearning
                                        {
                                            MSSV = sv.MSSV,
                                            HoTen = sv.HoTen,
-                                           Khoa = sv.Khoa
+                                           Khoa = sv.Khoa,
+                                           TenKhoa = sv.KHOA1.TenKhoa,
                                        };
 
                     // Gán dữ liệu cho DataGridView dgvSinhVien
@@ -134,7 +157,8 @@ namespace ServiceLearning
                     // Đổi tên tiêu đề của các cột
                     dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
                     dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                    dgvSinhVien.Columns["Khoa"].HeaderText = "Khoa";
+                    dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                    dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
                 }
             }
             catch (Exception ex)
@@ -161,7 +185,8 @@ namespace ServiceLearning
             // Lấy thông tin từ các TextBox và ComboBox
             string mssv = txtMSSV.Text;
             string hoTen = txtName.Text;
-            string khoa = cbKhoa.Text;
+            string khoa = cbKhoa.SelectedValue.ToString().Trim();
+            string tenkhoa = cbKhoa.Text;
 
             // Kiểm tra xem MSSV có tồn tại trong cơ sở dữ liệu không
             SINH_VIEN sinhVienToUpdate = dbContext.SINH_VIEN.FirstOrDefault(sv => sv.MSSV == mssv);
@@ -176,6 +201,8 @@ namespace ServiceLearning
                 dbContext.SaveChanges();
 
                 MessageBox.Show("Cập nhật thông tin sinh viên thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDataToDGV();
+
             }
             else
             {
@@ -300,7 +327,7 @@ namespace ServiceLearning
                 txtMSSV.Text = mssv;
                 txtName.Text = hoTen;
                 // Chọn giá trị trong ComboBox
-                if (cbKhoa.Items.Contains(khoa))
+                /*if (cbKhoa.Items.Contains(khoa))
                 {
                     cbKhoa.SelectedItem = khoa;
                 }
@@ -309,7 +336,14 @@ namespace ServiceLearning
                     // Nếu giá trị không tồn tại trong ComboBox, thêm nó vào
                     cbKhoa.Items.Add(khoa);
                     cbKhoa.SelectedItem = khoa;
-                }
+                }*/
+                cbKhoa.SelectedValue = khoa;
+                /* else
+                 {
+                     // Nếu giá trị không tồn tại trong ComboBox, thêm nó vào
+                     cbKhoa.Items.Add(khoa);
+                     cbKhoa.SelectedValue = khoa;
+                 }*/
             }
         }
 
