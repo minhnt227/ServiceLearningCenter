@@ -15,7 +15,7 @@ namespace ServiceLearning
 
         [Key]
         [Column(Order = 1)]
-        [StringLength(10)]
+        [StringLength(50)]
         public string MaGV { get; set; }
 
         [StringLength(50)]

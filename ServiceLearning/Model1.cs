@@ -58,7 +58,7 @@ namespace ServiceLearning
 
             modelBuilder.Entity<GIANG_VIEN>()
                 .Property(e => e.MaGV)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<GIANG_VIEN>()
                 .Property(e => e.Khoa)
@@ -82,7 +82,7 @@ namespace ServiceLearning
 
             modelBuilder.Entity<HD_GIANGVIEN>()
                 .Property(e => e.MaGV)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<HD_SINHVIEN>()
                 .Property(e => e.MSSV)
@@ -128,7 +128,7 @@ namespace ServiceLearning
 
             modelBuilder.Entity<PHU_TRACH>()
                 .Property(e => e.MaGV)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<SINH_VIEN>()
                 .Property(e => e.MSSV)

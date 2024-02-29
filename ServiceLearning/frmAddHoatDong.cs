@@ -327,16 +327,24 @@ namespace ServiceLearning
             }
             return false;
         }
-        
-        public bool FindDuplicateGV(string MaGV)
+        //Cập nhật dgv_GV và trả về kết quả
+        //Nếu không cập nhật được/không tìm thấy hàng nào với mã GV đã cho, trả về false
+        //Nếu cập nhật thành công, return true
+        //MaGV,HoTenLot,Ten,GVKhoa,GV_Role,GVKHoa_DB
+        public bool Updatedgv_GV(DataRow GV)
         {
             foreach (DataGridViewRow row in dgv_GV.Rows)
             {
                 if (row == null) return false;
                 else
                 {
-                    if (row.Cells["MaGV"].Value.ToString().Trim() == MaGV)
+                    if (row.Cells["MaGV"].Value.ToString().Trim() == GV[0].ToString())
                     {
+                        row.Cells["HoTenLot"].Value = GV[1].ToString();
+                        row.Cells["Ten"].Value = GV[2].ToString();
+                        row.Cells["GVKhoa"].Value = GV[3].ToString();
+                        row.Cells["GV_Role"].Value = GV[4].ToString();
+                        row.Cells["GVKHoa_DB"].Value = GV[5].ToString();
                         return true;
                     }
                     else continue;
@@ -344,6 +352,29 @@ namespace ServiceLearning
             }
             return false;
         }
+        //MSSV,HoTenSV,Khoa,Role,Notes_SV,DB_Khoa
+        public bool UpdateDgv_SV(DataRow SV)
+        {
+            foreach (DataGridViewRow row in dgvSinhVien.Rows)
+            {
+                if (row == null) return false;
+                else
+                {
+                    if (row.Cells["MSSV"].Value.ToString().Trim() == SV[0].ToString().Trim())
+                    {
+                        row.Cells["HoTenSV"].Value = SV[1].ToString().Trim();
+                        row.Cells["Khoa"].Value = SV[2].ToString().Trim();
+                        row.Cells["Role"].Value = SV[3].ToString().Trim();
+                        row.Cells["Notes_SV"].Value = SV[4].ToString().Trim();
+                        row.Cells["DB_Khoa"].Value = SV[5].ToString().Trim();
+                        return true;
+                    }
+                    else continue;
+                }
+            }
+            return false;
+        }
+
         public bool FindDuplicateDT(DataRow DT)
         {
             foreach (DataGridViewRow row in dgvDoiTac.Rows)
@@ -977,6 +1008,23 @@ namespace ServiceLearning
             catch { return null; }
         }
 
+        private KHOA FindKhoaByName(string name)
+        {
+            try
+            {
+                KHOA result = new KHOA();
+                using (Context db = new Context())
+                {
+                    KHOA tt = (from s in db.KHOAs
+                                  where s.TenKhoa.Contains(name) && s.Hide == false
+                                  select s).FirstOrDefault();
+                    result = tt;
+                }
+                return result;
+            }
+            catch { return null; }
+        }
+
         private void btnTT_Find_Click(object sender, EventArgs e)
         {
             TAI_TRO tt = FindTTByName(txtTT_Name.Text);
@@ -1177,8 +1225,11 @@ namespace ServiceLearning
                 }
                 foreach (DataRow dr in dt.Rows)
                 {
-                    string MSSV = dr[0].ToString();
-                    if (FindDuplicateMSSV(MSSV)) continue;
+                    //fill mã khoa
+                    KHOA temp = FindKhoaByName(dr[2].ToString().Trim());
+                    dr[5] = temp.MaKhoa;
+                    //so từng hàng trong file excel với bảng dgv hiện tại, nếu trùng, cập nhật, không trùng, thêm vào dgv
+                    if (UpdateDgv_SV(dr)) continue;
                     dgvSinhVien.Rows.Add(dr.ItemArray);
 
                 }
@@ -1275,8 +1326,11 @@ namespace ServiceLearning
                 }
                 foreach (DataRow dr in dt.Rows)
                 {
-                    string MGV = dr[0].ToString();
-                    if (FindDuplicateGV(MGV)) continue;
+                    //fill mã khoa
+                    KHOA temp = FindKhoaByName(dr[3].ToString().Trim());
+                    dr[5] = temp.MaKhoa;
+                    //so từng hàng trong file excel với bảng dgv hiện tại, nếu trùng, cập nhật, không trùng, thêm vào dgv
+                    if (Updatedgv_GV(dr)) continue;
                     dgv_GV.Rows.Add(dr.ItemArray);
 
                 }

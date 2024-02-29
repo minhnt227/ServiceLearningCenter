@@ -181,7 +181,6 @@
       <DependentUpon>Home.cs</DependentUpon>
     </Compile>
     <Compile Include="KHOA.cs" />
-    <Compile Include="Model1.cs" />
     <Compile Include="frmAddHangMuc.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -194,6 +193,7 @@
     <Compile Include="frm_DoiTac_Details.Designer.cs">
       <DependentUpon>frm_DoiTac_Details.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model1.cs" />
     <Compile Include="PHU_TRACH.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
