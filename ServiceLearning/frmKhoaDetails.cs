@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using Microsoft.Office.Interop.Excel;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -154,6 +155,7 @@ namespace ServiceLearning
                     dgvKhoa.Columns["SDT"].HeaderText = "Số Điện Thoại";
                     dgvKhoa.Columns["Email"].HeaderText = "Email";
                     dgvKhoa.Columns["NgayThanhLap"].HeaderText = "Ngày Thành Lập";
+                    dgvKhoa.Columns["NgayThanhLap"].DefaultCellStyle.Format = "dd/MM/yyyy";
                 }
             }
             catch (Exception ex)
@@ -198,11 +200,17 @@ namespace ServiceLearning
 
                             for (int row = 2; row <= worksheet.Dimension.Rows; row++)
                             {
-                                string maKhoa = worksheet.Cells[row, 1].Value?.ToString();
-                                string tenKhoa = worksheet.Cells[row, 2].Value?.ToString();
-                                string sdt = worksheet.Cells[row, 3].Value?.ToString();
-                                string email = worksheet.Cells[row, 4].Value?.ToString();
-                                DateTime? ngayThanhLap = worksheet.Cells[row, 5].Value as DateTime?;
+                                string maKhoa   = worksheet.Cells[row, 1].Value?.ToString();
+                                string tenKhoa  = worksheet.Cells[row, 2].Value?.ToString();
+                                string sdt      = worksheet.Cells[row, 3].Value?.ToString();
+                                string email    = worksheet.Cells[row, 4].Value?.ToString();
+                                var dayTemp     = worksheet.Cells[row, 5].Value.ToString();
+                                DateTime ngayThanhLap = new DateTime();
+                                if (dayTemp != null)
+                                {
+                                    ngayThanhLap = DateTime.ParseExact(dayTemp,"dd/MM/yyyy",null);
+                                }
+                                else ngayThanhLap = DateTime.Now;
 
                                 if (!string.IsNullOrEmpty(maKhoa) && !string.IsNullOrEmpty(tenKhoa))
                                 {
@@ -271,6 +279,7 @@ namespace ServiceLearning
                         if (existingKhoa == null)
                         {
                             // Add new KHOA
+                            khoa.Hide = false;
                             db.KHOAs.Add(khoa);
                         }
                         else
@@ -280,6 +289,7 @@ namespace ServiceLearning
                             existingKhoa.SDT = khoa.SDT;
                             existingKhoa.Email = khoa.Email;
                             existingKhoa.NgayThanhLap = khoa.NgayThanhLap;
+                            existingKhoa.Hide = false;
                         }
                     }
 
@@ -322,11 +332,12 @@ namespace ServiceLearning
                         int row = 2;
                         foreach (DataGridViewRow dgvRow in dgvKhoa.Rows)
                         {
+                            DateTime NTL = (DateTime)dgvRow.Cells["NgayThanhLap"].Value;
                             worksheet.Cells[row, 1].Value = dgvRow.Cells["MaKhoa"].Value?.ToString();
                             worksheet.Cells[row, 2].Value = dgvRow.Cells["TenKhoa"].Value?.ToString();
                             worksheet.Cells[row, 3].Value = dgvRow.Cells["SDT"].Value?.ToString();
                             worksheet.Cells[row, 4].Value = dgvRow.Cells["Email"].Value?.ToString();
-                            worksheet.Cells[row, 5].Value = dgvRow.Cells["NgayThanhLap"].Value as DateTime?;
+                            worksheet.Cells[row, 5].Value = NTL.ToString("dd/MM/yyyy");
 
                             row++;
                         }
