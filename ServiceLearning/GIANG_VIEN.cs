@@ -25,7 +25,7 @@ namespace ServiceLearning
         [StringLength(50)]
         public string Ten { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string Khoa { get; set; }
 
         public bool? Hide { get; set; }

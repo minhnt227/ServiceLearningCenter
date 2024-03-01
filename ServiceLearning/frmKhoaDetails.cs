@@ -38,6 +38,7 @@ namespace ServiceLearning
         }
         private void AddNewKh()
         {
+            if (txtMaKh.Text.Length <= 0) { return; }
             try
             {
                 using (Context db = new Context())
@@ -63,6 +64,7 @@ namespace ServiceLearning
 
         private void EditKh()
         {
+            if (txtMaKh.Text.Length <= 0) { return; }
             try
             {
                 using (Context db = new Context())
@@ -124,15 +126,7 @@ namespace ServiceLearning
                 }
         }
 
-        private void guna2Button1_Click_1(object sender, EventArgs e)
-        {
-            Close();
-        }
 
-        private void dgvSinhVien_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
         private void LoadDataToDGV_Khoa()
         {
             try
@@ -141,6 +135,7 @@ namespace ServiceLearning
                 {
                     // Truy vấn LINQ để lấy dữ liệu từ bảng KHOA
                     var khoaData = from khoa in dbContext.KHOAs
+                                   where khoa.Hide == false
                                    select new
                                    {
                                        MaKhoa = khoa.MaKhoa,
@@ -352,5 +347,50 @@ namespace ServiceLearning
             }
         }
 
+        private void dgvKhoa_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow selectedKhoa = dgvKhoa.SelectedRows[0];
+            if (selectedKhoa != null)
+            {
+                string Ma = selectedKhoa.Cells["MaKhoa"].Value?.ToString();
+                string Ten = selectedKhoa.Cells["TenKhoa"].Value?.ToString();
+                string sdt = selectedKhoa.Cells["SDT"].Value?.ToString();
+                string email = selectedKhoa.Cells["Email"].Value?.ToString();
+                dtpKhBegin.Text = selectedKhoa.Cells["NgayThanhLap"].Value.ToString();
+
+                txtMaKh.Text = Ma;
+                txtTenK.Text = Ten;
+                txtSdtK.Text = sdt;
+                txtEmailK.Text = email;
+            }
+        }
+
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            EditKh();
+            LoadDataToDGV_Khoa();
+        }
+
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+            if (txtMaKh.Text.Length <= 0) { return; }
+            try
+            {
+                using (Context db = new Context())
+                {
+                    KHOA KH = db.KHOAs.Find(txtMaKh.Text);
+                    if (KH == null)
+                        return;
+                    KH.Hide = true;
+                    db.Entry(KH).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    LoadDataToDGV_Khoa();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi, xin hãy báo lại với admin \n\n*****************************************\n\n " + ex.Message.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

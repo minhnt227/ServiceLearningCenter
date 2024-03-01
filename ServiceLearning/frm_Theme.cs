@@ -28,7 +28,7 @@ namespace ServiceLearning
         {
 
             var lst = from s in db.HOAT_DONG
-                      where s.Loai == loai
+                      where s.Loai == loai && s.Hide == false
                       select new
                       {
                           MaHD = s.MaHD,
@@ -56,6 +56,7 @@ namespace ServiceLearning
             {
                 // Truy vấn LINQ để lấy dữ liệu từ bảng HOAT_DONG
                 var hoatDongData = from hoatDong in dbContext.HOAT_DONG
+                                   where hoatDong.Hide == false
                                    select new
                                    {
                                        MaHD = hoatDong.MaHD,
@@ -67,7 +68,7 @@ namespace ServiceLearning
                                    };
 
                 // Gán dữ liệu cho DataGridView dgv_HoatDong
-                dgv_HoatDong.DataSource = hoatDongData.ToList();
+                dgv_HoatDong.DataSource = hoatDongData.Take(1000).ToList();
 
                 // Đổi tên tiêu đề của các cột
                 FormatGridView();
@@ -123,10 +124,11 @@ namespace ServiceLearning
                 if (dgv_HoatDong.SelectedRows.Count > 0)
                 {
                     // Lấy giá trị MaHD từ dòng được chọn
+                    string tenHD = dgv_HoatDong.SelectedRows[0].Cells["TenHoatDong"].Value.ToString();
                     int maHD = (int)dgv_HoatDong.SelectedRows[0].Cells["MaHD"].Value;
 
                     // Hiển thị hộp thoại xác nhận
-                    DialogResult result = MessageBox.Show($"Bạn có chắc chắn muốn xóa hoạt động có mã {maHD} không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = MessageBox.Show($"Bạn có chắc chắn muốn xóa {tenHD} không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     // Xác nhận xóa nếu người dùng nhấn Yes
                     if (result == DialogResult.Yes)
@@ -161,7 +163,8 @@ namespace ServiceLearning
                 if (hoatDongToDelete != null)
                 {
                     // Xóa hoạt động từ DbSet và lưu vào cơ sở dữ liệu
-                    dbContext.HOAT_DONG.Remove(hoatDongToDelete);
+                    hoatDongToDelete.Hide = true;
+                    dbContext.Entry(hoatDongToDelete).State = System.Data.Entity.EntityState.Modified;
                     dbContext.SaveChanges();
                 }
             }

@@ -37,7 +37,7 @@ namespace ServiceLearning
         {
             var result = from dt in db.DOI_TAC
                              //join
-                             //where
+                             where dt.Hide == false
                          select new { a = dt.TenDoiTac, b = dt.DaiDien, c = dt.Email, d = dt.SDT, e = dt.ID_DoiTac };
 
             guna2DataGridView1.DataSource = result.ToList();
@@ -76,7 +76,8 @@ namespace ServiceLearning
         {
             id = Convert.ToInt32(guna2DataGridView1.CurrentRow.Cells["e"].Value);
             DOI_TAC = db.DOI_TAC.Find(id);
-            db.DOI_TAC.Remove(DOI_TAC);
+            DOI_TAC.Hide = true;
+            db.Entry(DOI_TAC).State = EntityState.Modified; 
             db.SaveChanges();
             Load();
         }
@@ -152,7 +153,7 @@ namespace ServiceLearning
                             worksheet.Cells[i + 1, j].Value = guna2DataGridView1.Rows[i - 1].Cells[j - 1].Value;
                         }
                     }
-
+                    worksheet.Cells.AutoFitColumns();
                     // Lưu file Excel
                     using (SaveFileDialog saveFileDialog = new SaveFileDialog())
                     {
@@ -218,6 +219,24 @@ namespace ServiceLearning
             }
         }
 
+        private void guna2DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow selectedRow = guna2DataGridView1.Rows[e.RowIndex];
 
+                // Lấy giá trị từ cột tương ứng trong dòng được chọn
+                string TenDT = selectedRow.Cells["a"].Value.ToString();
+                string Daidien = selectedRow.Cells["b"].Value.ToString();
+                string email = selectedRow.Cells["c"].Value.ToString();
+                string sdt = selectedRow.Cells["d"].Value.ToString();
+
+                // Hiển thị thông tin lên các TextBox
+                txtName.Text = TenDT;
+                txtRep.Text = Daidien;
+                txtMail.Text = email;
+                txtPhone.Text = sdt;
+            }
+        }
     }
 }

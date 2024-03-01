@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using Guna.UI2.WinForms;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace ServiceLearning
 {
@@ -146,24 +148,28 @@ namespace ServiceLearning
                 {
                     // Truy vấn LINQ để lấy dữ liệu từ bảng TAI_TRO
                     var taiTroData = from taiTro in db.TAI_TRO
+                                     where taiTro.Hide == false
                                      select new
                                      {
-                                         //ID_TaiTro = taiTro.ID_TaiTro,
                                          TenTaiTro = taiTro.TenTaiTro,
                                          DaiDien = taiTro.DaiDien,
                                          SDT = taiTro.SDT,
-                                         Email = taiTro.Email
-                                     };
+                                         Email = taiTro.Email,
+                                         ID_TaiTro = taiTro.ID_TaiTro,
 
-                    // Gán dữ liệu cho DataGridView dgv_TaiTro
-                    dgv_TaiTro.DataSource = taiTroData.ToList();
+
+                                     };
+                    if (taiTroData == null) { return; }
+                    // Gán dữ liệu cho DataGridView dgv_TaiTro (Gioi han 1000 du lieu dau tien)
+                    dgv_TaiTro.DataSource = taiTroData.Take(1000).ToList();
 
                     // Đổi tên tiêu đề của các cột
-                    //dgv_TaiTro.Columns["ID_TaiTro"].HeaderText = "ID Tài Trợ";
                     dgv_TaiTro.Columns["TenTaiTro"].HeaderText = "Tên Tài Trợ";
                     dgv_TaiTro.Columns["DaiDien"].HeaderText = "Người Đại Diện";
                     dgv_TaiTro.Columns["SDT"].HeaderText = "Số Điện Thoại";
                     dgv_TaiTro.Columns["Email"].HeaderText = "Email";
+                    dgv_TaiTro.Columns["ID_TaiTro"].HeaderText = "ID Tài Trợ";
+
                 }
             }
             catch (Exception ex)
@@ -192,10 +198,10 @@ namespace ServiceLearning
             using (Context db = new Context())
             {
                 var taiTroData = from taiTro in db.TAI_TRO
-                                 where taiTro.TenTaiTro.Contains(searchKeyword) ||
+                                 where (taiTro.TenTaiTro.Contains(searchKeyword) ||
                                        taiTro.DaiDien.Contains(searchKeyword) ||
                                        taiTro.SDT.Contains(searchKeyword) ||
-                                       taiTro.Email.Contains(searchKeyword)
+                                       taiTro.Email.Contains(searchKeyword) )&& taiTro.Hide == false
                                  select new
                                  {
                                      ID_TaiTro = taiTro.ID_TaiTro,
@@ -312,7 +318,7 @@ namespace ServiceLearning
                                 worksheet.Cells[row + 2, col + 1].Value = dgv_TaiTro.Rows[row].Cells[col].Value?.ToString();
                             }
                         }
-
+                        worksheet.Cells.AutoFitColumns();
                         package.Save();
                     }
 
@@ -323,6 +329,58 @@ namespace ServiceLearning
                     MessageBox.Show($"Lỗi: {ex.Message}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void guna2Button4_Click(object sender, EventArgs e)
+        {
+            LoadDataToDGV_TaiTro();
+        }
+
+        private void guna2Button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (Context db = new Context())
+                {
+                    TAI_TRO TT = db.TAI_TRO.Find(IDtt);
+                    if (TT == null)
+                        return;
+                    TT.Hide = true;
+                    db.Entry(TT).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    LoadDataToDGV_TaiTro();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã xảy ra lỗi, xin hãy báo lại với admin \n\n*****************************************\n\n " + ex.Message.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dgv_TaiTro_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow selectedRow = dgv_TaiTro.Rows[e.RowIndex];
+
+                // Lấy giá trị từ cột tương ứng trong dòng được chọn
+                string TenTT = selectedRow.Cells["TenTaiTro"].Value.ToString();
+                string Daidien = selectedRow.Cells["DaiDien"].Value.ToString();
+                string email = selectedRow.Cells["Email"].Value.ToString();
+                string sdt = selectedRow.Cells["SDT"].Value.ToString();
+
+                // Hiển thị thông tin lên các TextBox
+                IDtt = int.Parse(selectedRow.Cells["ID_TaiTro"].Value.ToString().Trim());
+                txtTT_name.Text = TenTT;
+                txtTT_rep.Text = Daidien;
+                txtTT_email.Text = email;
+                txtTT_sdt.Text = sdt;
+            }
+        }
+
+        private void btnSuaTT_Click(object sender, EventArgs e)
+        {
+            EditTT();
         }
     }
 }

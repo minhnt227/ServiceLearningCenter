@@ -92,6 +92,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context.cs" />
     <Compile Include="DANHGIA_DETAILS.cs" />
     <Compile Include="DANH_GIA.cs" />
     <Compile Include="DOI_TAC.cs" />
@@ -193,7 +194,6 @@
     <Compile Include="frm_DoiTac_Details.Designer.cs">
       <DependentUpon>frm_DoiTac_Details.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model1.cs" />
     <Compile Include="PHU_TRACH.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

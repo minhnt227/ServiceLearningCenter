@@ -143,6 +143,7 @@ namespace ServiceLearning
                 {
                     // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
                     var sinhVienData = from sv in dbContext.SINH_VIEN
+                                       where (sv.Hide == false)
                                        select new
                                        {
                                            MSSV = sv.MSSV,
@@ -152,7 +153,7 @@ namespace ServiceLearning
                                        };
 
                     // Gán dữ liệu cho DataGridView dgvSinhVien
-                    dgvSinhVien.DataSource = sinhVienData.ToList();
+                    dgvSinhVien.DataSource = sinhVienData.Take(1000).ToList();
 
                     // Đổi tên tiêu đề của các cột
                     dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
@@ -286,30 +287,6 @@ namespace ServiceLearning
             dbContext.SaveChanges();
         }
 
-        private void dgvSinhVien_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            // Kiểm tra xem có dòng được chọn trong dgvSinhVien không
-            if (dgvSinhVien.SelectedRows.Count > 0)
-            {
-                // Lấy thông tin Sinh viên từ dòng được chọn
-                DataGridViewRow selectedRow = dgvSinhVien.SelectedRows[0];
-
-                // Lấy thông tin từ dòng được chọn
-                string mssv = selectedRow.Cells["MSSV"].Value.ToString();
-                string hoTen = selectedRow.Cells["HoTen"].Value.ToString();
-                string khoa = selectedRow.Cells["Khoa"].Value.ToString();
-
-                // Hiển thị thông tin trong các TextBox và ComboBox
-                txtMSSV.Text = mssv;
-                txtName.Text = hoTen;
-                cbKhoa.Text = khoa;
-            }
-            else
-            {
-                MessageBox.Show("Vui lòng chọn sinh viên cần xem thông tin.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
 
         private void dgvSinhVien_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
@@ -326,24 +303,7 @@ namespace ServiceLearning
                 // Hiển thị thông tin trong các TextBox và ComboBox
                 txtMSSV.Text = mssv;
                 txtName.Text = hoTen;
-                // Chọn giá trị trong ComboBox
-                /*if (cbKhoa.Items.Contains(khoa))
-                {
-                    cbKhoa.SelectedItem = khoa;
-                }
-                else
-                {
-                    // Nếu giá trị không tồn tại trong ComboBox, thêm nó vào
-                    cbKhoa.Items.Add(khoa);
-                    cbKhoa.SelectedItem = khoa;
-                }*/
                 cbKhoa.SelectedValue = khoa;
-                /* else
-                 {
-                     // Nếu giá trị không tồn tại trong ComboBox, thêm nó vào
-                     cbKhoa.Items.Add(khoa);
-                     cbKhoa.SelectedValue = khoa;
-                 }*/
             }
         }
 
@@ -384,19 +344,15 @@ namespace ServiceLearning
             {
 
                     // Lấy danh sách sinh viên cần xóa
-                    List<SINH_VIEN> sinhVienListToDelete = dbContext.SINH_VIEN.Where(sv => sv.MSSV == mssv).ToList();
+                    SINH_VIEN sinhVienToDelete = dbContext.SINH_VIEN.Where(sv => sv.MSSV == mssv).FirstOrDefault();
 
-                    // Kiểm tra và xóa từng sinh viên trong danh sách
-                    foreach (SINH_VIEN sinhVienToDelete in sinhVienListToDelete)
-                    {
-                        dbContext.SINH_VIEN.Remove(sinhVienToDelete);
-                    }
-
-                    // Lưu thay đổi vào cơ sở dữ liệu
-                    dbContext.SaveChanges();
+                        sinhVienToDelete.Hide = true;
+                dbContext.Entry(sinhVienToDelete).State = System.Data.Entity.EntityState.Modified;
+                // Lưu thay đổi vào cơ sở dữ liệu
+                dbContext.SaveChanges();
 
                     MessageBox.Show("Xóa sinh viên thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                LoadDataToDGV();
             }
         }
 
@@ -441,7 +397,7 @@ namespace ServiceLearning
                                     worksheet.Cells[row + 2, col + 1].Value = dgvSinhVien.Rows[row].Cells[col].Value;
                                 }
                             }
-
+                            worksheet.Cells.AutoFitColumns();
                             // Save the Excel package to the selected file
                             package.SaveAs(new FileInfo(filePath));
 
@@ -499,7 +455,7 @@ namespace ServiceLearning
                             // Show the matching student's information in TextBoxes and ComboBox
                             txtMSSV.Text = row.Cells["MSSV"].Value.ToString();
                             txtName.Text = row.Cells["HoTen"].Value.ToString();
-                            cbKhoa.Text = row.Cells["Khoa"].Value.ToString();
+                            cbKhoa.SelectedValue = row.Cells["Khoa"].Value.ToString();
 
                             // Stop searching after the first match (remove this line if you want to highlight multiple matches)
                             break;

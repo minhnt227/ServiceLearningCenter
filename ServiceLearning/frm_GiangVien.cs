@@ -96,6 +96,7 @@ namespace ServiceLearning
                 {
                     // Truy vấn LINQ để lấy dữ liệu từ bảng GIANG_VIEN
                     var giangVienData = from gv in db.GIANG_VIEN
+                                        where gv.Hide == false
                                         select new
                                         {
                                             MaGV = gv.MaGV,
@@ -240,8 +241,8 @@ namespace ServiceLearning
                     if (existingGV != null)
                     {
                         // Xóa giảng viên từ DbSet
-                        dbContext.GIANG_VIEN.Remove(existingGV);
-
+                        existingGV.Hide = true;
+                        dbContext.Entry(existingGV).State = System.Data.Entity.EntityState.Modified;
                         // Lưu thay đổi vào cơ sở dữ liệu
                         dbContext.SaveChanges();
 
@@ -392,7 +393,7 @@ namespace ServiceLearning
                                     worksheet.Cells[row + 2, col + 1].Value = dgv_GiangVien.Rows[row].Cells[col].Value;
                                 }
                             }
-
+                            worksheet.Cells.AutoFitColumns();
                             // Save the Excel package to the selected file
                             package.SaveAs(new FileInfo(filePath));
 
