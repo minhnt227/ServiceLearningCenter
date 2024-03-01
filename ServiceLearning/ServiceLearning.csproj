@@ -313,7 +313,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon\photos_icon_156733.ico" />
-    <Content Include="script.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework">
