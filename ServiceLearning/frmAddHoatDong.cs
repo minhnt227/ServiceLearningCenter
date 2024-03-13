@@ -253,6 +253,7 @@ namespace ServiceLearning
             { //MSSV,HoTenSV,Khoa,Role,Notes_SV,DB_Khoa, DB_Role
                 dgvSinhVien.Rows.Add(txtMSSV.Text, txtSVHoTen.Text, cbKhoa.Text, cbRole.Text, txtSVNotes.Text, cbKhoa.SelectedValue, cbRole.SelectedValue);
                 clearSVFields();
+                lblSV_TotalNumber.Text = dgvSinhVien.RowCount.ToString();
             }
             else return;
         }
@@ -418,6 +419,7 @@ namespace ServiceLearning
             clearSVFields();
             if (dgvSinhVien.Rows.Count == 0 || dgvSinhVien.CurrentRow.Index < 0) return;  
             dgvSinhVien.Rows.RemoveAt(dgvSinhVien.CurrentRow.Index);
+            lblSV_TotalNumber.Text = dgvSinhVien.RowCount.ToString();
         }
 
         private bool frmValidate()
@@ -701,6 +703,7 @@ namespace ServiceLearning
             { 
                 dgv_GV.Rows.Add(txtMaGV.Text, txtGVHoTenLot.Text, txtTenGV.Text, cbGV_Khoa.Text,cbGV_Role.Text , cbGV_Khoa.SelectedValue);
                 ClearGVFields();
+                lblGV_TotalNumber.Text = dgv_GV.RowCount.ToString();
             }
             else return;
         }
@@ -797,6 +800,7 @@ namespace ServiceLearning
             ClearGVFields();
             if (dgv_GV.Rows.Count == 0 || dgv_GV.CurrentRow.Index < 0) return;
             dgv_GV.Rows.RemoveAt(dgv_GV.CurrentRow.Index);
+            lblGV_TotalNumber.Text = dgv_GV.RowCount.ToString();
         }
 
         private void AddOrUpdateHD_GV(HOAT_DONG hd, Context db)
@@ -1197,7 +1201,8 @@ namespace ServiceLearning
                 {
                     MessageBox.Show("Import không thành công!\n\n" + ex.Message);
                 }
-            }    
+            }
+            lblSV_TotalNumber.Text = dgvSinhVien.RowCount.ToString();
         }
         private void ImportSV(string path)
         {
@@ -1225,8 +1230,36 @@ namespace ServiceLearning
                 }
                 foreach (DataRow dr in dt.Rows)
                 {
+                    string nameTemp = dr[2].ToString().Trim();
                     //fill mã khoa
-                    KHOA temp = FindKhoaByName(dr[2].ToString().Trim());
+                    KHOA temp = FindKhoaByName(nameTemp);
+                    if(temp == null)
+                    {
+                        DialogResult d = MessageBox.Show("Khoa "+nameTemp +" chưa được tạo, bạn có muốn tạo khoa này?", "Chưa tồn tại khoa", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+
+                        if (d == DialogResult.Yes)
+                        {
+                            //Tao makhoa tu dong
+                            string MaKhoa = string.Join(string.Empty, nameTemp.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])) ;
+                            temp = new KHOA();
+                            temp.MaKhoa = MaKhoa;
+                            temp.TenKhoa = nameTemp;
+                            temp.Hide = false;
+                            try
+                            {
+                                using (Context db = new Context())
+                                {
+                                    db.KHOAs.Add(temp);
+                                    db.SaveChanges();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Lỗi khi tạo khoa mới, vui lòng liên hệ admin", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        else continue;
+                    }    
                     dr[5] = temp.MaKhoa;
                     //so từng hàng trong file excel với bảng dgv hiện tại, nếu trùng, cập nhật, không trùng, thêm vào dgv
                     if (UpdateDgv_SV(dr)) continue;
@@ -1235,6 +1268,7 @@ namespace ServiceLearning
                 }
             }
         }
+
 
         private void btnGVExport_Click(object sender, EventArgs e)
         {
@@ -1298,6 +1332,7 @@ namespace ServiceLearning
                     MessageBox.Show("Import không thành công!\n\n" + ex.Message);
                 }
             }
+            lblGV_TotalNumber.Text = dgv_GV.RowCount.ToString();
         }
 
         private void ImportGV(string path)
@@ -1529,6 +1564,16 @@ namespace ServiceLearning
 
                 }
             }
+        }
+
+        private void label34_Click(object sender, EventArgs e)
+        {
+            lblSV_TotalNumber.Text = dgvSinhVien.RowCount.ToString();
+        }
+
+        private void label35_Click(object sender, EventArgs e)
+        {
+            lblGV_TotalNumber.Text = dgv_GV.RowCount.ToString();
         }
     }
 }
