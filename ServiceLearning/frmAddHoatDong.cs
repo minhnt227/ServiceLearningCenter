@@ -1240,7 +1240,7 @@ namespace ServiceLearning
                         if (d == DialogResult.Yes)
                         {
                             //Tao makhoa tu dong
-                            string MaKhoa = string.Join(string.Empty, nameTemp.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])) ;
+                            string MaKhoa = string.Join(string.Empty, nameTemp.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])).ToUpper() ;
                             temp = new KHOA();
                             temp.MaKhoa = MaKhoa;
                             temp.TenKhoa = nameTemp;
@@ -1255,7 +1255,7 @@ namespace ServiceLearning
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show("Lỗi khi tạo khoa mới, vui lòng liên hệ admin", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("Lỗi khi tạo khoa mới, vui lòng liên hệ admin\n\n"+ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                         else continue;

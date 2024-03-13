@@ -417,13 +417,47 @@ namespace ServiceLearning
         {
             // Get the search keyword from txtMSSV
             string searchKeyword = txtMSSV.Text.Trim();
-
+            string MaKhoa = (string)cbKhoa.SelectedValue;
             // Check if the search keyword is empty
-            if (string.IsNullOrEmpty(searchKeyword))
+            if (string.IsNullOrEmpty(searchKeyword)&& string.IsNullOrEmpty(MaKhoa))
             {
                 MessageBox.Show("Please enter a search keyword.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            if(!string.IsNullOrEmpty(MaKhoa))
+            {
+                try
+                {
+                    using (Context dbContext = new Context())
+                    {
+                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                        var sinhVienData = from sv in dbContext.SINH_VIEN
+                                           where (sv.Hide == false && sv.Khoa == MaKhoa)
+                                           select new
+                                           {
+                                               MSSV = sv.MSSV,
+                                               HoTen = sv.HoTen,
+                                               Khoa = sv.Khoa,
+                                               TenKhoa = sv.KHOA1.TenKhoa,
+                                           };
+
+                        // Gán dữ liệu cho DataGridView dgvSinhVien
+                        dgvSinhVien.DataSource = sinhVienData.ToList();
+
+                        // Đổi tên tiêu đề của các cột
+                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Hiển thị thông báo lỗi chi tiết
+                    MessageBox.Show("Đã xảy ra lỗi khi tải dữ liệu Sinh Viên.\n\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                return;
+            }    
 
             // Clear the selection in the DataGridView
             dgvSinhVien.ClearSelection();
