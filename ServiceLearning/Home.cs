@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,6 +20,30 @@ namespace ServiceLearning
         public frmHome()
         {
             InitializeComponent();
+            WebClient webClient = new WebClient();
+            var client = new WebClient();
+            if (!(webClient.DownloadString("https://drive.google.com/file/d/1dlsAdBBJNmSkXciUkK8JZnQ6VYq-w3Gy/view?usp=drive_link").Contains("2.0.0")))
+            {
+               // if (MessageBox.Show("A new update is available! Do you want to download it?", "Demo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        if (File.Exists(@".\ServiceLearningSetup.msi")) { File.Delete(@".\ServiceLearningSetup.msi"); }
+                        client.DownloadFile("https://drive.google.com/file/d/14Ci57INKIG8hoEUhQ8bx0jXbFVPOBOOX/view?usp=drive_link", @"ServiceLearningSetup.zip");
+                        string zipPath = @".\ServiceLearningSetup.zip";
+                        string extractPath = @".\";
+                        ZipFile.ExtractToDirectory(zipPath, extractPath);
+                        Process process = new Process();
+                        process.StartInfo.FileName = "msiexec.exe";
+                        process.StartInfo.Arguments = string.Format("/i ServiceLearningSetup.msi");
+                        this.Close();
+                        process.Start();
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
         }
         private void container(object _form)
         {
