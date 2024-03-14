@@ -50,7 +50,7 @@ namespace ServiceLearning
             this.dgvSV.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             List<string> lstMaSV = new List<string>();
             List<string> lstHoTenSV = new List<string>();
-            lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).ToList();
+            lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).Take(1000).ToList();
             lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).ToList();
             for (int j = 0; j < lstMaSV.Count; j++)
             {

@@ -21,7 +21,7 @@ namespace ServiceLearning
         }
         public void DisplayCMBKhoa(ComboBox a)
         {
-            var kh = db.KHOAs.Select(s => s);
+            var kh = db.KHOAs.Where(s=>s.Hide == false).Select(s => s);
             a.DataSource = kh.ToList();
             a.ValueMember = "MaKhoa";
             a.DisplayMember = "TenKhoa";
@@ -49,9 +49,9 @@ namespace ServiceLearning
                 List<string> lstMaGV = new List<string>();
                 List<string> lstTenGV = new List<string>();
                 List<string> lstHoTenLotGV = new List<string>();
-                lstMaGV = db.GIANG_VIEN.Select(x => x.MaGV).ToList();
-                lstTenGV = db.GIANG_VIEN.Select(x => x.Ten).ToList();
-                lstHoTenLotGV = db.GIANG_VIEN.Select(x => x.HoTenLot).ToList();
+                lstMaGV = db.GIANG_VIEN.Where(x=>x.Hide == false).Select(x => x.MaGV).ToList();
+                lstTenGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.Ten).ToList();
+                lstHoTenLotGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.HoTenLot).ToList();
                 for (int j = 0; j < lstMaGV.Count; j++)
                 {
                     string MaGV = lstMaGV[j];
@@ -63,7 +63,7 @@ namespace ServiceLearning
                     dgvGV.Rows[j].Cells[2].Value = HoTenLotGV;
                     dgvGV.Rows[j].Cells[3].Value = tenGV;
                     List<string> khoa = (from s in db.GIANG_VIEN
-                                         where s.MaGV == MaGV
+                                         where s.MaGV == MaGV && s.Hide == false
                                          select (s.KHOA1.TenKhoa)).ToList();
                     dgvGV.Rows[j].Cells[4].Value = khoa[0];
                     List<int> lstMaHD = new List<int>();

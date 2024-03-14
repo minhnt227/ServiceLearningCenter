@@ -52,6 +52,7 @@ namespace ServiceLearning
                     LoadHD_TC(hD);
                     btnAddHD.Text = "Sửa Hoạt Động";
                     isCreate = false;
+
                 }
             }
             catch (Exception ex)
@@ -80,6 +81,9 @@ namespace ServiceLearning
                     LoadHD_DT(hD);
                     LoadHD_TT(hD);
                     LoadHD_TC(hD);
+                    lblSV_TotalNumber.Text = dgvSinhVien.Rows.Count.ToString();
+                    lblGV_TotalNumber.Text = dgv_GV.Rows.Count.ToString();
+
                     foreach (Control g in panel1.Controls)
                     {
                         if (g is GroupBox)
@@ -284,7 +288,6 @@ namespace ServiceLearning
             dgvSinhVien.CurrentRow.Cells["Role"].Value = cbRole.Text;
             dgvSinhVien.CurrentRow.Cells["Notes_SV"].Value = txtSVNotes.Text;
             dgvSinhVien.CurrentRow.Cells["DB_Khoa"].Value = cbKhoa.SelectedValue;
-            dgvSinhVien.CurrentRow.Cells["DB_Role"].Value = cbRole.SelectedValue;
             clearSVFields();
         }
         public void clearSVFields()

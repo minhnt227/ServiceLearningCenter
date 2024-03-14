@@ -39,7 +39,7 @@ namespace ServiceLearning
             try
             {
                 List<string> lstTenKhoa = new List<string>();
-                lstTenKhoa = db.KHOAs.Select(x => x.TenKhoa).ToList();
+                lstTenKhoa = db.KHOAs.Where(x=>x.Hide == false).Select(x => x.TenKhoa).ToList();
                 this.dgvHD.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
                 dgvHD.Columns.Add("STT", "STT");
                 dgvHD.Columns.Add("Hoạt động", "Hoạt động");
