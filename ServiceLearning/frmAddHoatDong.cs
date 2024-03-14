@@ -165,7 +165,7 @@ namespace ServiceLearning
             txtTC_TieuDe.Text = Latest.TieuDe;
             txtTC_Khac.Text = Latest.Khac;
             numUEF.Value = Latest.UEF == null? 0 : (decimal)Latest.UEF;
-            numTaiTro.Value = Latest.TaiTro == null ? 0 : (decimal)Latest.UEF;
+            numTaiTro.Value = Latest.TaiTro == null ? 0 : (decimal)Latest.TaiTro;
         }
 
         private void frmAddHoatDong_Load(object sender, EventArgs e)
@@ -1238,7 +1238,7 @@ namespace ServiceLearning
                     KHOA temp = FindKhoaByName(nameTemp);
                     if(temp == null)
                     {
-                        DialogResult d = MessageBox.Show("Khoa "+nameTemp +" chưa được tạo, bạn có muốn tạo khoa này?", "Chưa tồn tại khoa", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+                        DialogResult d = MessageBox.Show("Đơn vị "+nameTemp + " chưa được tạo, bạn có muốn tạo mới không?\n\n\n Chú ý: Đơn vị tạo tự động sẽ có ngày thành lập là ngày được tạo", "Chưa tồn tại đơn vị", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
 
                         if (d == DialogResult.Yes)
                         {
@@ -1366,7 +1366,36 @@ namespace ServiceLearning
                 foreach (DataRow dr in dt.Rows)
                 {
                     //fill mã khoa
-                    KHOA temp = FindKhoaByName(dr[3].ToString().Trim());
+                    string nameTemp = dr[3].ToString().Trim();
+                    KHOA temp = FindKhoaByName(nameTemp);
+                    if (temp == null)
+                    {
+                        DialogResult d = MessageBox.Show("Đơn vị " + nameTemp + " chưa được tạo, bạn có muốn tạo mới không?\n Chú ý: Đơn vị tạo tự động sẽ có ngày thành lập là ngày được tạo", "Chưa tồn tại đơn vị", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+
+                        if (d == DialogResult.Yes)
+                        {
+                            //Tao makhoa tu dong
+                            string MaKhoa = string.Join(string.Empty, nameTemp.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])).ToUpper();
+                            temp = new KHOA();
+                            temp.MaKhoa = MaKhoa;
+                            temp.TenKhoa = nameTemp;
+                            temp.NgayThanhLap = DateTime.Now;
+                            temp.Hide = false;
+                            try
+                            {
+                                using (Context db = new Context())
+                                {
+                                    db.KHOAs.Add(temp);
+                                    db.SaveChanges();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Lỗi khi tạo khoa mới, vui lòng liên hệ admin\n\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        else continue;
+                    }
                     dr[5] = temp.MaKhoa;
                     //so từng hàng trong file excel với bảng dgv hiện tại, nếu trùng, cập nhật, không trùng, thêm vào dgv
                     if (Updatedgv_GV(dr)) continue;

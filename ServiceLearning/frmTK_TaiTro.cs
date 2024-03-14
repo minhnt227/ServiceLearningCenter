@@ -39,8 +39,8 @@ namespace ServiceLearning
                 this.dgvTT.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
                 List<string> lstTenTaiTro = new List<string>();
                 List<int> IDTaiTro = new List<int>();
-                lstTenTaiTro = db.TAI_TRO.Select(x => x.TenTaiTro).ToList();
-                IDTaiTro = db.TAI_TRO.Select(x => x.ID_TaiTro).ToList();
+                lstTenTaiTro = db.TAI_TRO.Where(x=>x.Hide == false).Select(x => x.TenTaiTro).ToList();
+                IDTaiTro = db.TAI_TRO.Where(x => x.Hide == false).Select(x => x.ID_TaiTro).ToList();
                 for (int j = 0; j < IDTaiTro.Count; j++)
                 {
                     string TenDT = lstTenTaiTro[j];
@@ -71,14 +71,14 @@ namespace ServiceLearning
                         string TenHD = "- ";
                         int MaHD = lstMaHD[0];
                         List<string> NameHD = (from s in db.HOAT_DONG
-                                               where s.MaHD == MaHD
+                                               where s.MaHD == MaHD && s.Hide == false
                                                select (s.TenHoatDong)).ToList();
                         TenHD = TenHD + NameHD[0];
                         for (int i = 1; i < lstMaHD.Count; i++)
                         {
                             MaHD = lstMaHD[i];
                             List<string> TenHoat = (from s in db.HOAT_DONG
-                                                    where s.MaHD == MaHD
+                                                    where s.MaHD == MaHD && s.Hide == false
                                                     select (s.TenHoatDong)).ToList();
                             TenHD = TenHD + "\n- " + TenHoat[0];
                         }
@@ -219,8 +219,8 @@ namespace ServiceLearning
                 this.dgvTT.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
                 List<string> lstTenTaiTro = new List<string>();
                 List<int> IDTaiTro = new List<int>();
-                lstTenTaiTro = db.TAI_TRO.Select(x => x.TenTaiTro).ToList();
-                IDTaiTro = db.TAI_TRO.Select(x => x.ID_TaiTro).ToList();
+                lstTenTaiTro = db.TAI_TRO.Where(x => x.Hide == false).Select(x => x.TenTaiTro).ToList();
+                IDTaiTro = db.TAI_TRO.Where(x => x.Hide == false).Select(x => x.ID_TaiTro).ToList();
                 for (int j = 0; j < IDTaiTro.Count; j++)
                 {
                     string TenDT = lstTenTaiTro[j];
@@ -283,14 +283,14 @@ namespace ServiceLearning
                         string TenHD = "- ";
                         int MaHD = lstMaHD[0];
                         List<string> NameHD = (from s in db.HOAT_DONG
-                                               where s.MaHD == MaHD
+                                               where s.MaHD == MaHD && s.Hide == false
                                                select (s.TenHoatDong)).ToList();
                         TenHD = TenHD + NameHD[0];
                         for (int i = 1; i < lstMaHD.Count; i++)
                         {
                             MaHD = lstMaHD[i];
                             List<string> TenHoat = (from s in db.HOAT_DONG
-                                                    where s.MaHD == MaHD
+                                                    where s.MaHD == MaHD && s.Hide == false
                                                     select (s.TenHoatDong)).ToList();
                             TenHD = TenHD + "\n- " + TenHoat[0];
                         }

@@ -37,8 +37,8 @@ namespace ServiceLearning
                 this.dgvDT.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
                 List<string> lstTenDoiTac = new List<string>();
                 List<int> IDDoiTac = new List<int>();
-                lstTenDoiTac = db.DOI_TAC.Select(x => x.TenDoiTac).ToList();
-                IDDoiTac = db.DOI_TAC.Select(x => x.ID_DoiTac).ToList();
+                lstTenDoiTac = db.DOI_TAC.Where(x => x.Hide == false).Select(x => x.TenDoiTac).ToList();
+                IDDoiTac = db.DOI_TAC.Where(x => x.Hide == false).Select(x => x.ID_DoiTac).ToList();
                 for (int j = 0; j < IDDoiTac.Count; j++)
                 {
                     string TenDT = lstTenDoiTac[j];
@@ -217,8 +217,8 @@ namespace ServiceLearning
                 this.dgvDT.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
                 List<string> lstTenDoiTac = new List<string>();
                 List<int> IDDoiTac = new List<int>();
-                lstTenDoiTac = db.DOI_TAC.Select(x => x.TenDoiTac).ToList();
-                IDDoiTac = db.DOI_TAC.Select(x => x.ID_DoiTac).ToList();
+                lstTenDoiTac = db.DOI_TAC.Where(x => x.Hide == false).Select(x => x.TenDoiTac).ToList();
+                IDDoiTac = db.DOI_TAC.Where(x => x.Hide == false).Select(x => x.ID_DoiTac).ToList();
                 for (int j = 0; j < IDDoiTac.Count; j++)
                 {
                     string TenDT = lstTenDoiTac[j];
@@ -280,14 +280,14 @@ namespace ServiceLearning
                         string TenHD = "- ";
                         int MaHD = lstMaHD[0];
                         List<string> NameHD = (from s in db.HOAT_DONG
-                                               where s.MaHD == MaHD
+                                               where s.MaHD == MaHD && s.Hide == false
                                                select (s.TenHoatDong)).ToList();
                         TenHD = TenHD + NameHD[0];
                         for (int i = 1; i < lstMaHD.Count; i++)
                         {
                             MaHD = lstMaHD[i];
                             List<string> TenHoat = (from s in db.HOAT_DONG
-                                                    where s.MaHD == MaHD
+                                                    where s.MaHD == MaHD && s.Hide == false
                                                     select (s.TenHoatDong)).ToList();
                             TenHD = TenHD + "\n- " + TenHoat[0];
                         }

@@ -65,7 +65,7 @@ namespace ServiceLearning
                     dgvHD.Rows[j].Cells[0].Value = j + 1;
                     dgvHD.Rows[j].Cells[1].Value = TenHD;
                     List<string> lstKhoa = new List<string>();
-                    lstKhoa = db.KHOAs.Select(x => x.MaKhoa).ToList();
+                    lstKhoa = db.KHOAs.Where(x => x.Hide == false).Select(x => x.MaKhoa).ToList();
                     int total = 0;
                     for (int i = 0; i < lstKhoa.Count; i++)
                     {
@@ -191,7 +191,7 @@ namespace ServiceLearning
             dgvHD.Refresh();
             this.dgvHD.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             List<string> lstTenKhoa = new List<string>();
-            lstTenKhoa = db.KHOAs.Select(x => x.TenKhoa).ToList();
+            lstTenKhoa = db.KHOAs.Where(x=>x.Hide == false).Select(x => x.TenKhoa).ToList();
 
             dgvHD.Columns.Add("STT", "STT");
             dgvHD.Columns.Add("Hoạt động", "Hoạt động");
@@ -299,7 +299,7 @@ namespace ServiceLearning
                 dgvHD.Rows[j].Cells[0].Value = j + 1;
                 dgvHD.Rows[j].Cells[1].Value = TenHD;
                 List<string> lstKhoa = new List<string>();
-                lstKhoa = db.KHOAs.Select(x => x.MaKhoa).ToList();
+                lstKhoa = db.KHOAs.Where(x => x.Hide == false).Select(x => x.MaKhoa).ToList();
                 int total = 0;
                 for (int i = 0; i < lstKhoa.Count; i++)
                 {

@@ -32,7 +32,6 @@ namespace ServiceLearning
         {   
             cmbKhoa.SelectedIndex = -1;
             DisplayCMBKhoa(cmbKhoa);    
-            DisplayCMBKhoa(cmbKhoa);
             dtpBD.CustomFormat = " ";
             dtpKT.CustomFormat = " ";
             ThongKeGiangVien();
@@ -77,14 +76,14 @@ namespace ServiceLearning
                         string TenHD = "- ";
                         int MaHD = lstMaHD[0];
                         List<string> NameHD = (from s in db.HOAT_DONG
-                                               where s.MaHD == MaHD
+                                               where s.MaHD == MaHD && s.Hide == false
                                                select (s.TenHoatDong)).ToList();
                         TenHD = TenHD + NameHD[0];
                         for (int i = 1; i < lstMaHD.Count; i++)
                         {
                             MaHD = lstMaHD[i];
                             List<string> TenHoat = (from s in db.HOAT_DONG
-                                                    where s.MaHD == MaHD
+                                                    where s.MaHD == MaHD && s.Hide == false 
                                                     select (s.TenHoatDong)).ToList();
                             TenHD = TenHD + "\n- " + TenHoat[0];
                         }
@@ -233,8 +232,8 @@ namespace ServiceLearning
                 List<string> lstMaGV = new List<string>();
                 List<string> lstTenGV = new List<string>();
                 List<string> lstHoTenLotGV = new List<string>();
-                lstMaGV = db.GIANG_VIEN.Select(x => x.MaGV).ToList();
-                lstTenGV = db.GIANG_VIEN.Select(x => x.Ten).ToList();
+                lstMaGV = db.GIANG_VIEN.Where(x=>x.Hide == false).Select(x => x.MaGV).ToList();
+                lstTenGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.Ten).ToList();
                 lstHoTenLotGV = db.GIANG_VIEN.Select(x => x.HoTenLot).ToList();
                 for (int j = 0; j < lstMaGV.Count; j++)
                 {
@@ -306,14 +305,14 @@ namespace ServiceLearning
                         string TenHD = "- ";
                         int MaHD = lstMaHD[0];
                         List<string> NameHD = (from s in db.HOAT_DONG
-                                               where s.MaHD == MaHD
+                                               where s.MaHD == MaHD && s.Hide == false
                                                select (s.TenHoatDong)).ToList();
                         TenHD = TenHD + NameHD[0];
                         for (int i = 1; i < lstMaHD.Count; i++)
                         {
                             MaHD = lstMaHD[i];
                             List<string> TenHoat = (from s in db.HOAT_DONG
-                                                    where s.MaHD == MaHD
+                                                    where s.MaHD == MaHD && s.Hide == false
                                                     select (s.TenHoatDong)).ToList();
                             TenHD = TenHD + "\n- " + TenHoat[0];
                         }
