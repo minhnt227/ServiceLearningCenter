@@ -24,7 +24,7 @@ namespace ServiceLearning
         {
             var lst = from s in db.TAI_CHINH
                       join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                      where s.Hide == false
+                      where s.Hide == false && b.Hide == false
                       group s by s.MaHD into g
                       let maxID = g.Max(x => x.ID_TaiChinh)
                       from s in g
@@ -168,7 +168,7 @@ namespace ServiceLearning
                 {
                     var lst = from s in db.TAI_CHINH
                               join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false
+                              where s.Hide == false && b.Hide == false
                               group s by s.MaHD into g
                               let maxID = g.Max(x => x.ID_TaiChinh)
                               from s in g
@@ -191,7 +191,7 @@ namespace ServiceLearning
                     DateTime BD = Convert.ToDateTime(dtpBD.Text);
                     var lst = from s in db.TAI_CHINH
                               join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false
+                              where s.Hide == false && b.Hide == false
                               group s by s.MaHD into g
                               let maxID = g.Max(x => x.ID_TaiChinh)
                               from s in g
@@ -214,7 +214,7 @@ namespace ServiceLearning
                     DateTime KT = Convert.ToDateTime(dtpKT.Text);
                     var lst = from s in db.TAI_CHINH
                               join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false
+                              where s.Hide == false && b.Hide == false
                               group s by s.MaHD into g
                               let maxID = g.Max(x => x.ID_TaiChinh)
                               from s in g
@@ -238,7 +238,7 @@ namespace ServiceLearning
                     DateTime KT = Convert.ToDateTime(dtpKT.Text);
                     var lst = from s in db.TAI_CHINH
                               join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false
+                              where s.Hide == false && b.Hide == false
                               group s by s.MaHD into g
                               let maxID = g.Max(x => x.ID_TaiChinh)
                               from s in g
@@ -263,7 +263,7 @@ namespace ServiceLearning
                 {
                     var lst = from s in db.TAI_CHINH
                               join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false
+                              where s.Hide == false && b.Hide == false
                               group s by s.MaHD into g
                               let maxID = g.Max(x => x.ID_TaiChinh)
                               from s in g
@@ -286,7 +286,7 @@ namespace ServiceLearning
                     DateTime BD = Convert.ToDateTime(dtpBD.Text);
                     var lst = from s in db.TAI_CHINH
                               join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false
+                              where s.Hide == false && b.Hide == false
                               group s by s.MaHD into g
                               let maxID = g.Max(x => x.ID_TaiChinh)
                               from s in g
@@ -309,7 +309,7 @@ namespace ServiceLearning
                     DateTime KT = Convert.ToDateTime(dtpKT.Text);
                     var lst = from s in db.TAI_CHINH
                               join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false
+                              where s.Hide == false && b.Hide == false
                               group s by s.MaHD into g
                               let maxID = g.Max(x => x.ID_TaiChinh)
                               from s in g
@@ -333,7 +333,7 @@ namespace ServiceLearning
                     DateTime KT = Convert.ToDateTime(dtpKT.Text);
                     var lst = from s in db.TAI_CHINH
                               join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false
+                              where s.Hide == false && b.Hide == false
                               group s by s.MaHD into g
                               let maxID = g.Max(x => x.ID_TaiChinh)
                               from s in g
