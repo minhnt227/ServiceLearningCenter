@@ -61,6 +61,8 @@ namespace ServiceLearning
                         else
                             continue;
                     }
+                    lblGV_TotalNumber.Text = dgv_GV.Rows.Count.ToString();
+                    lblSV_TotalNumber.Text = dgvSinhVien.Rows.Count.ToString();
                 }
             }
             catch (Exception ex)

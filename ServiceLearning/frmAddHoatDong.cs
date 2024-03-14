@@ -1244,6 +1244,7 @@ namespace ServiceLearning
                             temp = new KHOA();
                             temp.MaKhoa = MaKhoa;
                             temp.TenKhoa = nameTemp;
+                            temp.NgayThanhLap = DateTime.Now;
                             temp.Hide = false;
                             try
                             {
