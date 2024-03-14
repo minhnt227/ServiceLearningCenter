@@ -20,6 +20,7 @@ namespace ServiceLearning
         private void frmTK_SinhVien_Load(object sender, EventArgs e)
         {
             LoadLoai();
+            txtSearch.Text = "";
             cmbKhoa.SelectedIndex = -1;
             DisplayCMBKhoa(cmbKhoa);
             dtpBD.CustomFormat = " ";
@@ -51,7 +52,7 @@ namespace ServiceLearning
             List<string> lstMaSV = new List<string>();
             List<string> lstHoTenSV = new List<string>();
             lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).Take(1000).ToList();
-            lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).ToList();
+            lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).Take(1000).ToList();
             for (int j = 0; j < lstMaSV.Count; j++)
             {
                 string MaSV = lstMaSV[j];
@@ -118,8 +119,17 @@ namespace ServiceLearning
                 this.dgvSV.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
                 List<string> lstMaSV = new List<string>();
                 List<string> lstHoTenSV = new List<string>();
-                lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).ToList();
-                lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).ToList();
+                if (string.IsNullOrEmpty(txtSearch.Text) != true)
+                {
+                    string mssv = txtSearch.Text;
+                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.MSSV).Take(1000).ToList();
+                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.HoTen).Take(1000).ToList();
+                }
+                else
+                {
+                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).Take(1000).ToList();
+                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).Take(1000).ToList();
+                }
                 for (int j = 0; j < lstMaSV.Count; j++)
                 {
                     string MaSV = lstMaSV[j];
@@ -128,107 +138,105 @@ namespace ServiceLearning
                     dgvSV.Rows[j].Cells[0].Value = j + 1;
                     dgvSV.Rows[j].Cells[1].Value = MaSV;
                     dgvSV.Rows[j].Cells[2].Value = HoTenSV;
-                    if (cmbKhoa.SelectedIndex != -1)
+                    if(cmbKhoa.SelectedIndex != -1)
                     {
-                        string khoa = cmbKhoa.SelectedValue.ToString();
-                        // MessageBox.Show(khoa);
-                        List<string> Khoa = (from s in db.SINH_VIEN
+                       string khoa = cmbKhoa.SelectedValue.ToString();
+                       // MessageBox.Show(khoa);
+                       List<string> Khoa = (from s in db.SINH_VIEN
                                              join b in db.KHOAs on s.Khoa equals b.MaKhoa
                                              where s.MSSV == MaSV && b.Hide == false && s.Khoa == khoa
                                              select (b.TenKhoa)).ToList();
-                        if (Khoa.Count == 0) { dgvSV.Rows[j].Cells[3].Value = " "; }
-                        else dgvSV.Rows[j].Cells[3].Value = Khoa[0];
+                       if (Khoa.Count == 0) { dgvSV.Rows[j].Cells[3].Value = " "; }
+                       else dgvSV.Rows[j].Cells[3].Value = Khoa[0];
                     }
                     else
                     {
-                        List<string> Khoa = (from s in db.SINH_VIEN
+                       List<string> Khoa = (from s in db.SINH_VIEN
                                              join b in db.KHOAs on s.Khoa equals b.MaKhoa
                                              where s.MSSV == MaSV && b.Hide == false
                                              select (b.TenKhoa)).ToList();
-                        dgvSV.Rows[j].Cells[3].Value = Khoa[0];
+                       dgvSV.Rows[j].Cells[3].Value = Khoa[0];
                     }
                     List<int> lstMaHD = new List<int>();
                     if (cmbLoai.SelectedIndex == -1 && dtpBD.Text == " " && dtpKT.Text == " ")
                     {
-                        lstMaHD = (from s in db.SINH_VIEN
-                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where s.MSSV == MaSV && c.Hide == false
-                                   select (c.MaHD)).ToList();
+                            lstMaHD = (from s in db.SINH_VIEN
+                                       join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                                       join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                                       where s.MSSV == MaSV && c.Hide == false 
+                                       select (c.MaHD)).ToList();
                     }
                     else if (cmbLoai.SelectedIndex != -1 && dtpBD.Text == " " && dtpKT.Text == " ")
                     {
-                        string loai = cmbLoai.SelectedItem.ToString();
-                        lstMaHD = (from s in db.SINH_VIEN
-                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where s.MSSV == MaSV && c.Hide == false && c.Loai == loai
-                                   select (c.MaHD)).ToList();
+                            string loai = cmbLoai.SelectedItem.ToString();
+                            lstMaHD = (from s in db.SINH_VIEN
+                                       join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                                       join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                                       where s.MSSV == MaSV && c.Hide == false && c.Loai == loai
+                                       select (c.MaHD)).ToList();
                     }
                     else if (cmbLoai.SelectedIndex != -1 && dtpBD.Text != " " && dtpKT.Text == " ")
                     {
-                        string loai = cmbLoai.SelectedItem.ToString();
-                        DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                        lstMaHD = (from s in db.SINH_VIEN
-                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD && c.Loai == loai
-                                   select (c.MaHD)).ToList();
+                            string loai = cmbLoai.SelectedItem.ToString();
+                            DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                            lstMaHD = (from s in db.SINH_VIEN
+                                       join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                                       join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                                       where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD && c.Loai == loai
+                                       select (c.MaHD)).ToList();
                     }
                     else if (cmbLoai.SelectedIndex != -1 && dtpBD.Text == " " && dtpKT.Text != " ")
                     {
-                        string loai = cmbLoai.SelectedItem.ToString();
-                        DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                        lstMaHD = (from s in db.SINH_VIEN
-                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where s.MSSV == MaSV && c.Hide == false && c.NgayKetThuc <= KT && c.Loai == loai
-                                   select (c.MaHD)).ToList();
+                            string loai = cmbLoai.SelectedItem.ToString();
+                            DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                            lstMaHD = (from s in db.SINH_VIEN
+                                       join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                                       join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                                       where s.MSSV == MaSV && c.Hide == false && c.NgayKetThuc <= KT && c.Loai == loai
+                                       select (c.MaHD)).ToList();
                     }
                     else if (cmbLoai.SelectedIndex == -1 && dtpBD.Text != " " && dtpKT.Text == " ")
                     {
-                        DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                        lstMaHD = (from s in db.SINH_VIEN
-                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD
-                                   select (c.MaHD)).ToList();
+                            DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                            lstMaHD = (from s in db.SINH_VIEN
+                                       join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                                       join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                                       where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD
+                                       select (c.MaHD)).ToList();
                     }
                     else if (cmbLoai.SelectedIndex == -1 && dtpBD.Text == " " && dtpKT.Text != " ")
                     {
-                        DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                        lstMaHD = (from s in db.SINH_VIEN
-                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where s.MSSV == MaSV && c.Hide == false && c.NgayKetThuc <= KT
-                                   select (c.MaHD)).ToList();
+                            DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                            lstMaHD = (from s in db.SINH_VIEN
+                                       join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                                       join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                                       where s.MSSV == MaSV && c.Hide == false && c.NgayKetThuc <= KT
+                                       select (c.MaHD)).ToList();
                     }
                     else if (cmbLoai.SelectedIndex == -1 && dtpBD.Text != " " && dtpKT.Text != " ")
                     {
-                        
-                        DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                        DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                        // MessageBox.Show(BD.ToString());
-                        lstMaHD = (from s in db.SINH_VIEN
-                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD && c.NgayKetThuc <= KT 
-                                   select (c.MaHD)).ToList();
+
+                            DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                            DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                            // MessageBox.Show(BD.ToString());
+                            lstMaHD = (from s in db.SINH_VIEN
+                                       join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                                       join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                                       where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD && c.NgayKetThuc <= KT
+                                       select (c.MaHD)).ToList();
                     }
                     else if (cmbLoai.SelectedIndex != -1 && dtpBD.Text != " " && dtpKT.Text != " ")
                     {
-                        string loai = cmbLoai.SelectedItem.ToString();
-                        DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                        DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                        // MessageBox.Show(BD.ToString());
-                        lstMaHD = (from s in db.SINH_VIEN
-                                   join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD && c.NgayKetThuc <= KT && c.Loai == loai
-                                   select (c.MaHD)).ToList();
+                            string loai = cmbLoai.SelectedItem.ToString();
+                            DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                            DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                            // MessageBox.Show(BD.ToString());
+                            lstMaHD = (from s in db.SINH_VIEN
+                                       join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                                       join c in db.HOAT_DONG on b.MaHD equals c.MaHD
+                                       where s.MSSV == MaSV && c.Hide == false && c.NgayBatDau >= BD && c.NgayKetThuc <= KT && c.Loai == loai
+                                       select (c.MaHD)).ToList();
                     }
-
-
                     if (lstMaHD.Count == 0)
                     {
                         dgvSV.Rows[j].Cells[4].Value = " ";
@@ -337,6 +345,7 @@ namespace ServiceLearning
         private void guna2PictureBox2_Click(object sender, EventArgs e)
         {
             cmbLoai.SelectedIndex = -1;
+            txtSearch.Text = "";
             dtpBD.CustomFormat = " ";
             dtpKT.CustomFormat = " ";
             cmbKhoa.SelectedIndex = -1;
@@ -412,6 +421,11 @@ namespace ServiceLearning
                 workbook = null;
                 worksheet = null;
             }
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            btnLoc.Enabled = true;
         }
     }
 }
