@@ -39,8 +39,8 @@ namespace ServiceLearning
                 this.dgvTT.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
                 List<string> lstTenTaiTro = new List<string>();
                 List<int> IDTaiTro = new List<int>();
-                lstTenTaiTro = db.TAI_TRO.Where(x=>x.Hide == false).Select(x => x.TenTaiTro).ToList();
-                IDTaiTro = db.TAI_TRO.Where(x => x.Hide == false).Select(x => x.ID_TaiTro).ToList();
+                lstTenTaiTro = db.TAI_TRO.Where(x=>x.Hide == false).Select(x => x.TenTaiTro).Take(200).ToList();
+                IDTaiTro = db.TAI_TRO.Where(x => x.Hide == false).Select(x => x.ID_TaiTro).Take(200).ToList();
                 for (int j = 0; j < IDTaiTro.Count; j++)
                 {
                     string TenDT = lstTenTaiTro[j];

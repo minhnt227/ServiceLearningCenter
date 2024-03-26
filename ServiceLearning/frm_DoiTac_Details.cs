@@ -74,12 +74,20 @@ namespace ServiceLearning
 
         private void guna2Button3_Click(object sender, EventArgs e)
         {
-            id = Convert.ToInt32(guna2DataGridView1.CurrentRow.Cells["e"].Value);
-            DOI_TAC = db.DOI_TAC.Find(id);
-            DOI_TAC.Hide = true;
-            db.Entry(DOI_TAC).State = EntityState.Modified; 
-            db.SaveChanges();
-            Load();
+            if (guna2DataGridView1.SelectedRows.Count > 0)
+            {
+                if (MessageBox.Show($"Bạn có chắc chắn muốn xóa Đối tác {guna2DataGridView1.SelectedRows[0].Cells["a"].Value.ToString()} không?", "Xác nhận xóa", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    id = Convert.ToInt32(guna2DataGridView1.CurrentRow.Cells["e"].Value);
+                    DOI_TAC = db.DOI_TAC.Find(id);
+                    DOI_TAC.Hide = true;
+                    db.Entry(DOI_TAC).State = EntityState.Modified;
+                    db.SaveChanges();
+                    Load();
+                }
+                else
+                    return;
+            }
         }
 
         private void guna2Panel2_Paint(object sender, PaintEventArgs e)

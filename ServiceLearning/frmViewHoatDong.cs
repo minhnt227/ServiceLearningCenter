@@ -116,7 +116,7 @@ namespace ServiceLearning
             txtTC_TieuDe.Text = Latest.TieuDe;
             txtTC_Khac.Text = Latest.Khac;
             numUEF.Value = Latest.UEF == null? 0 : (decimal)Latest.UEF;
-            numTaiTro.Value = Latest.TaiTro == null ? 0 : (decimal)Latest.UEF;
+            numTaiTro.Value = Latest.TaiTro == null ? 0 : (decimal)Latest.TaiTro;
         }
 
         private void btnExit_Click(object sender, EventArgs e)

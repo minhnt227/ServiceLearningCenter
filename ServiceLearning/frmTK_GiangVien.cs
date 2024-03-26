@@ -48,9 +48,9 @@ namespace ServiceLearning
                 List<string> lstMaGV = new List<string>();
                 List<string> lstTenGV = new List<string>();
                 List<string> lstHoTenLotGV = new List<string>();
-                lstMaGV = db.GIANG_VIEN.Where(x=>x.Hide == false).Select(x => x.MaGV).ToList();
-                lstTenGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.Ten).ToList();
-                lstHoTenLotGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.HoTenLot).ToList();
+                lstMaGV = db.GIANG_VIEN.Where(x=>x.Hide == false).Select(x => x.MaGV).Take(200).ToList();
+                lstTenGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.Ten).Take(200).ToList();
+                lstHoTenLotGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.HoTenLot).Take(200).ToList();
                 for (int j = 0; j < lstMaGV.Count; j++)
                 {
                     string MaGV = lstMaGV[j];

@@ -154,7 +154,8 @@ namespace ServiceLearning
                         MaGV = maGV,
                         HoTenLot = hoTenLot,
                         Ten = ten,
-                        Khoa = khoa
+                        Khoa = khoa,
+                        Hide = false
                     };
 
                     dbContext.GIANG_VIEN.Add(newGV);
@@ -208,6 +209,7 @@ namespace ServiceLearning
                     existingGV.HoTenLot = hoTenLot;
                     existingGV.Ten = ten;
                     existingGV.Khoa = khoa;
+                    existingGV.Hide = false;
 
                     dbContext.SaveChanges();
 
@@ -226,41 +228,47 @@ namespace ServiceLearning
 
         private void guna2Button3_Click(object sender, EventArgs e)
         {
-            // Kiểm tra xem có dòng được chọn trong dgv_GiangVien không
+                // Kiểm tra xem có dòng được chọn trong dgv_GiangVien không
             if (dgv_GiangVien.SelectedRows.Count > 0)
             {
-                // Lấy MaGV của giảng viên được chọn
-                string maGV = dgv_GiangVien.SelectedRows[0].Cells["MaGV"].Value.ToString();
-
-                // Thực hiện xóa giảng viên trong cơ sở dữ liệu
-                using (Context dbContext = new Context())
+                if (MessageBox.Show("Bạn có muốn xóa giảng viên " + dgv_GiangVien.SelectedRows[0].Cells["Ten"].Value.ToString() + " - Mã " + dgv_GiangVien.SelectedRows[0].Cells["MaGV"].Value.ToString() + " không?", "Xác nhận xóa", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    // Lấy giảng viên cần xóa
-                    GIANG_VIEN existingGV = dbContext.GIANG_VIEN.Find(maGV);
+                    // Lấy MaGV của giảng viên được chọn
+                    string maGV = dgv_GiangVien.SelectedRows[0].Cells["MaGV"].Value.ToString();
 
-                    if (existingGV != null)
+                    // Thực hiện xóa giảng viên trong cơ sở dữ liệu
+                    using (Context dbContext = new Context())
                     {
-                        // Xóa giảng viên từ DbSet
-                        existingGV.Hide = true;
-                        dbContext.Entry(existingGV).State = System.Data.Entity.EntityState.Modified;
-                        // Lưu thay đổi vào cơ sở dữ liệu
-                        dbContext.SaveChanges();
+                        // Lấy giảng viên cần xóa
+                        GIANG_VIEN existingGV = dbContext.GIANG_VIEN.Find(maGV);
 
-                        MessageBox.Show("Xóa giảng viên thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (existingGV != null)
+                        {
+                            // Xóa giảng viên từ DbSet
+                            existingGV.Hide = true;
+                            dbContext.Entry(existingGV).State = System.Data.Entity.EntityState.Modified;
+                            // Lưu thay đổi vào cơ sở dữ liệu
+                            dbContext.SaveChanges();
 
-                        // Cập nhật lại DataGridView sau khi xóa giảng viên
-                        LoadDataToDGV_GiangVien();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Không tìm thấy giảng viên để xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("Xóa giảng viên thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // Cập nhật lại DataGridView sau khi xóa giảng viên
+                            LoadDataToDGV_GiangVien();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy giảng viên để xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
                 }
+                else
+                    return;
             }
             else
             {
                 MessageBox.Show("Vui lòng chọn giảng viên cần xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
         }
 
         private void btn_importGV(object sender, EventArgs e)

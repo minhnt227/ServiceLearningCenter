@@ -20,6 +20,7 @@ namespace ServiceLearning
 {
     public partial class frmAddHoatDong : Form
     {
+        private int id;
         public bool isCreate = true;
         public int DT_ID = -1;
         public int TT_ID = -1;
@@ -31,6 +32,7 @@ namespace ServiceLearning
         }
         public void LoadFormUpdate(int idHD)
         {
+            id = idHD;
             try
             {
                 LoadKhoaCB();
@@ -443,15 +445,19 @@ namespace ServiceLearning
         }
         private void btnAddHD_Click(object sender, EventArgs e)
         {
+            
             //Validate Here()
             if (!frmValidate())
                 return;
+            else if (!isCreate)
+                DeleteAllMembers();
             else
                 SaveHDToDB();
            // else return;
         }
         private void SaveHDToDB()
         {
+
             try
             {
                 using (Context db = new Context())
@@ -1607,6 +1613,46 @@ namespace ServiceLearning
         private void label35_Click(object sender, EventArgs e)
         {
             lblGV_TotalNumber.Text = dgv_GV.RowCount.ToString();
+        }
+
+        private void DeleteAllMembers()
+        {
+            try 
+            {
+                using (Context db = new Context())
+                {
+                    HOAT_DONG hD = db.HOAT_DONG.Find(id);
+                    List<HD_SINHVIEN> SVList = hD.HD_SINHVIEN.ToList();
+                    foreach (HD_SINHVIEN SV in SVList)
+                    {
+                        db.HD_SINHVIEN.Remove(SV);
+                    }
+
+                    List<HD_GIANGVIEN> List = hD.HD_GIANGVIEN.ToList();
+                    foreach (HD_GIANGVIEN GV in List)
+                    {
+                        db.HD_GIANGVIEN.Remove(GV);
+                    }
+
+
+                    List<HD_DOITAC> DTList = hD.HD_DOITAC.ToList();
+                    foreach (HD_DOITAC DT in DTList)
+                    {
+                        db.HD_DOITAC.Remove(DT);
+                    }
+                    List<HD_TAITRO> TTList = hD.HD_TAITRO.ToList();
+                    foreach (HD_TAITRO TT in TTList)
+                    {
+                        db.HD_TAITRO.Remove(TT);
+                    }
+
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show("error while DeleteAllMembers() \n\n" + ex.Message);
+            }
         }
     }
 }

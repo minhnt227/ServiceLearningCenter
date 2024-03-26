@@ -160,8 +160,8 @@ namespace ServiceLearning
 
                                      };
                     if (taiTroData == null) { return; }
-                    // Gán dữ liệu cho DataGridView dgv_TaiTro (Gioi han 1000 du lieu dau tien)
-                    dgv_TaiTro.DataSource = taiTroData.Take(1000).ToList();
+                    // Gán dữ liệu cho DataGridView dgv_TaiTro (Gioi han 200 du lieu dau tien)
+                    dgv_TaiTro.DataSource = taiTroData.Take(200).ToList();
 
                     // Đổi tên tiêu đề của các cột
                     dgv_TaiTro.Columns["TenTaiTro"].HeaderText = "Tên Tài Trợ";
@@ -338,22 +338,31 @@ namespace ServiceLearning
 
         private void guna2Button6_Click(object sender, EventArgs e)
         {
-            try
+            if (dgv_TaiTro.SelectedRows.Count > 0)
             {
-                using (Context db = new Context())
+                IDtt = (int)dgv_TaiTro.SelectedRows[0].Cells["ID_TaiTro"].Value;
+                if (MessageBox.Show($"Bạn có chắc chắn muốn xóa nhà tài trợ {dgv_TaiTro.SelectedRows[0].Cells["TenTaiTro"].Value.ToString()} không?", "Xác nhận xóa", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    TAI_TRO TT = db.TAI_TRO.Find(IDtt);
-                    if (TT == null)
-                        return;
-                    TT.Hide = true;
-                    db.Entry(TT).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                    LoadDataToDGV_TaiTro();
+                    try
+                    {
+                        using (Context db = new Context())
+                        {
+                            TAI_TRO TT = db.TAI_TRO.Find(IDtt);
+                            if (TT == null)
+                                return;
+                            TT.Hide = true;
+                            db.Entry(TT).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                            LoadDataToDGV_TaiTro();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Đã xảy ra lỗi, xin hãy báo lại với admin \n\n*****************************************\n\n " + ex.Message.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Đã xảy ra lỗi, xin hãy báo lại với admin \n\n*****************************************\n\n " + ex.Message.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    return;
             }
         }
 

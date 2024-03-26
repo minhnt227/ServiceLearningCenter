@@ -51,8 +51,8 @@ namespace ServiceLearning
             this.dgvSV.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             List<string> lstMaSV = new List<string>();
             List<string> lstHoTenSV = new List<string>();
-            lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).Take(1000).ToList();
-            lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).Take(1000).ToList();
+            lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).Take(200).ToList();
+            lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).Take(200).ToList();
             for (int j = 0; j < lstMaSV.Count; j++)
             {
                 string MaSV = lstMaSV[j];
@@ -122,13 +122,13 @@ namespace ServiceLearning
                 if (string.IsNullOrEmpty(txtSearch.Text) != true)
                 {
                     string mssv = txtSearch.Text;
-                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.MSSV).Take(1000).ToList();
-                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.HoTen).Take(1000).ToList();
+                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.MSSV).Take(200).ToList();
+                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.HoTen).Take(200).ToList();
                 }
                 else
                 {
-                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).Take(1000).ToList();
-                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).Take(1000).ToList();
+                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).Take(200).ToList();
+                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).Take(200).ToList();
                 }
                 for (int j = 0; j < lstMaSV.Count; j++)
                 {

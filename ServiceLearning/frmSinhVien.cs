@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using OfficeOpenXml;
 using System.IO;
 using System.Collections.Generic;
+using Guna.UI2.WinForms;
+
 namespace ServiceLearning
 {
     public partial class frmSinhVien : Form
@@ -153,7 +155,7 @@ namespace ServiceLearning
                                        };
 
                     // Gán dữ liệu cho DataGridView dgvSinhVien
-                    dgvSinhVien.DataSource = sinhVienData.Take(1000).ToList();
+                    dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
 
                     // Đổi tên tiêu đề của các cột
                     dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
@@ -309,33 +311,38 @@ namespace ServiceLearning
 
         private void guna2Button3_Click(object sender, EventArgs e)
         {
-            try
+            if (MessageBox.Show($"Bạn có chắc chắn muốn xóa sinh viên {dgvSinhVien.SelectedRows[0].Cells["MSSV"].Value.ToString()} không?", "Xác nhận xóa", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                // Kiểm tra xem có dòng được chọn trong dgvSinhVien không
-                if (dgvSinhVien.SelectedRows.Count > 0)
-            {
-                // Lặp qua các dòng được chọn và xóa sinh viên khỏi cơ sở dữ liệu
-                foreach (DataGridViewRow selectedRow in dgvSinhVien.SelectedRows)
+                try
                 {
-                    // Lấy thông tin từ dòng được chọn
-                    string mssv = selectedRow.Cells["MSSV"].Value.ToString();
+                    // Kiểm tra xem có dòng được chọn trong dgvSinhVien không
+                    if (dgvSinhVien.SelectedRows.Count > 0)
+                    {
+                        // Lặp qua các dòng được chọn và xóa sinh viên khỏi cơ sở dữ liệu
+                        foreach (DataGridViewRow selectedRow in dgvSinhVien.SelectedRows)
+                        {
+                            // Lấy thông tin từ dòng được chọn
+                            string mssv = selectedRow.Cells["MSSV"].Value.ToString();
 
-                    // Xóa sinh viên từ cơ sở dữ liệu
-                    DeleteSinhVien(mssv);
+                            // Xóa sinh viên từ cơ sở dữ liệu
+                            DeleteSinhVien(mssv);
+                        }
+
+                        // Cập nhật lại dgvSinhVien sau khi xóa sinh viên
+                        LoadDataToDGV();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Vui lòng chọn sinh viên cần xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
-
-                // Cập nhật lại dgvSinhVien sau khi xóa sinh viên
-                LoadDataToDGV();
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi xóa sinh viên: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
-            {
-                MessageBox.Show("Vui lòng chọn sinh viên cần xóa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi xóa sinh viên: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                return;
         }
 
         private void DeleteSinhVien(string mssv)

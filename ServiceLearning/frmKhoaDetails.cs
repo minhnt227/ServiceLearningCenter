@@ -384,23 +384,32 @@ namespace ServiceLearning
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (txtMaKh.Text.Length <= 0) { return; }
-            try
+            if (dgvKhoa.SelectedRows.Count > 0)
             {
-                using (Context db = new Context())
+                if (MessageBox.Show($"Bạn có chắc chắn muốn xóa khoa {dgvKhoa.SelectedRows[0].Cells["TenKhoa"].Value.ToString()} không?", "Xác nhận xóa", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    KHOA KH = db.KHOAs.Find(txtMaKh.Text);
-                    if (KH == null)
-                        return;
-                    KH.Hide = true;
-                    db.Entry(KH).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                    LoadDataToDGV_Khoa();
+
+                    if (txtMaKh.Text.Length <= 0) { return; }
+                    try
+                    {
+                        using (Context db = new Context())
+                        {
+                            KHOA KH = db.KHOAs.Find(txtMaKh.Text);
+                            if (KH == null)
+                                return;
+                            KH.Hide = true;
+                            db.Entry(KH).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                            LoadDataToDGV_Khoa();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Đã xảy ra lỗi, xin hãy báo lại với admin \n\n*****************************************\n\n " + ex.Message.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Đã xảy ra lỗi, xin hãy báo lại với admin \n\n*****************************************\n\n " + ex.Message.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    return;
             }
         }
     }
