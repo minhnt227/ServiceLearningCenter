@@ -445,12 +445,15 @@ namespace ServiceLearning
         }
         private void btnAddHD_Click(object sender, EventArgs e)
         {
-            
+
             //Validate Here()
             if (!frmValidate())
                 return;
             else if (!isCreate)
+            {
                 DeleteAllMembers();
+                SaveHDToDB();
+            }
             else
                 SaveHDToDB();
            // else return;
@@ -525,7 +528,7 @@ namespace ServiceLearning
                         db.Entry(SVList).State = EntityState.Modified;
                         db.SaveChanges();
                     }
-                }  
+            }  
         }
         private void AddOrUpdateSV(HD_SINHVIEN lst, Context db, DataGridViewRow dr)
         {
