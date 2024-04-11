@@ -68,7 +68,7 @@ namespace ServiceLearning
                     List<int> lstMaHD = new List<int>();
                     lstMaHD = (from s in db.GIANG_VIEN
                                join b in db.HD_GIANGVIEN on s.MaGV equals b.MaGV
-                               where s.MaGV == MaGV
+                               where s.MaGV == MaGV && b.HOAT_DONG.Hide == false
                                select (b.MaHD)).ToList();
                     if (lstMaHD.Count == 0) dgvGV.Rows[j].Cells[5].Value = " ";
                     else
@@ -234,7 +234,7 @@ namespace ServiceLearning
                 List<string> lstHoTenLotGV = new List<string>();
                 lstMaGV = db.GIANG_VIEN.Where(x=>x.Hide == false).Select(x => x.MaGV).ToList();
                 lstTenGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.Ten).ToList();
-                lstHoTenLotGV = db.GIANG_VIEN.Select(x => x.HoTenLot).ToList();
+                lstHoTenLotGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.HoTenLot).ToList();
                 for (int j = 0; j < lstMaGV.Count; j++)
                 {
                     string MaGV = lstMaGV[j];
@@ -248,7 +248,7 @@ namespace ServiceLearning
                     if (cmbKhoa.SelectedIndex == -1)
                     { 
                         List<string> khoa = (from s in db.GIANG_VIEN
-                                             where s.MaGV == MaGV
+                                             where s.MaGV == MaGV && s.Hide == false
                                              select (s.KHOA1.TenKhoa)).ToList();
                         dgvGV.Rows[j].Cells[4].Value = khoa[0];
                     }
@@ -257,7 +257,7 @@ namespace ServiceLearning
                         string makhoa = cmbKhoa.SelectedValue.ToString();
                         //MessageBox.Show(makhoa);
                         List<string> khoa = (from s in db.GIANG_VIEN
-                                             where s.MaGV == MaGV && s.Khoa == makhoa
+                                             where s.MaGV == MaGV && s.Khoa == makhoa && s.Hide == false
                                              select (s.KHOA1.TenKhoa)).ToList();
                         if (khoa.Count == 0) { dgvGV.Rows[j].Cells[4].Value = " "; }
                         else dgvGV.Rows[j].Cells[4].Value = khoa[0];
@@ -267,7 +267,7 @@ namespace ServiceLearning
                     {
                         lstMaHD = (from s in db.GIANG_VIEN
                                    join b in db.HD_GIANGVIEN on s.MaGV equals b.MaGV 
-                                   where s.MaGV == MaGV
+                                   where s.MaGV == MaGV && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     else if (dtpBD.Text != " " && dtpKT.Text == " ")
@@ -276,7 +276,7 @@ namespace ServiceLearning
                         lstMaHD = (from s in db.GIANG_VIEN
                                    join b in db.HD_GIANGVIEN on s.MaGV equals b.MaGV
                                    join d in db.HOAT_DONG on b.MaHD equals d.MaHD
-                                   where s.MaGV == MaGV && d.NgayBatDau >= BD
+                                   where s.MaGV == MaGV && d.NgayBatDau >= BD && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     else if (dtpBD.Text == " " && dtpKT.Text != " ")
@@ -285,7 +285,7 @@ namespace ServiceLearning
                         lstMaHD = (from s in db.GIANG_VIEN
                                    join b in db.HD_GIANGVIEN on s.MaGV equals b.MaGV
                                    join d in db.HOAT_DONG on b.MaHD equals d.MaHD
-                                   where s.MaGV == MaGV && d.NgayKetThuc <=KT
+                                   where s.MaGV == MaGV && d.NgayKetThuc <= KT && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
 
                     }
@@ -296,7 +296,7 @@ namespace ServiceLearning
                         lstMaHD = (from s in db.GIANG_VIEN
                                    join b in db.HD_GIANGVIEN on s.MaGV equals b.MaGV
                                    join d in db.HOAT_DONG on b.MaHD equals d.MaHD
-                                   where s.MaGV == MaGV && d.NgayBatDau >=BD && d.NgayKetThuc<= KT
+                                   where s.MaGV == MaGV && d.NgayBatDau >= BD && d.NgayKetThuc <= KT && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     if (lstMaHD.Count == 0) dgvGV.Rows[j].Cells[5].Value = " ";

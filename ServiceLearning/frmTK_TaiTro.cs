@@ -63,7 +63,7 @@ namespace ServiceLearning
                     List<int> lstMaHD = new List<int>();
                     lstMaHD = (from s in db.TAI_TRO
                                join b in db.HD_TAITRO on s.ID_TaiTro equals b.ID_TaiTro
-                               where b.ID_TaiTro == id
+                               where b.ID_TaiTro == id && b.HOAT_DONG.Hide == false
                                select (b.MaHD)).ToList();
                     if (lstMaHD.Count == 0) dgvTT.Rows[j].Cells[5].Value = "";
                     else
@@ -245,7 +245,7 @@ namespace ServiceLearning
                     {
                         lstMaHD = (from s in db.TAI_TRO
                                    join b in db.HD_TAITRO on s.ID_TaiTro equals b.ID_TaiTro
-                                   where b.ID_TaiTro == id
+                                   where b.ID_TaiTro == id && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     else if (dtpBD.Text != " " && dtpKT.Text == " ")
@@ -254,7 +254,7 @@ namespace ServiceLearning
                         lstMaHD = (from s in db.TAI_TRO
                                    join b in db.HD_TAITRO on s.ID_TaiTro equals b.ID_TaiTro
                                    join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where b.ID_TaiTro == id && c.NgayBatDau >= BD
+                                   where b.ID_TaiTro == id && c.NgayBatDau >= BD && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     else if (dtpBD.Text == " " && dtpKT.Text != " ")
@@ -263,7 +263,7 @@ namespace ServiceLearning
                         lstMaHD = (from s in db.TAI_TRO
                                    join b in db.HD_TAITRO on s.ID_TaiTro equals b.ID_TaiTro
                                    join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where b.ID_TaiTro == id && c.NgayKetThuc <= KT
+                                   where b.ID_TaiTro == id && c.NgayKetThuc <= KT && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     else if (dtpBD.Text != " " && dtpKT.Text != " ")
@@ -273,7 +273,7 @@ namespace ServiceLearning
                         lstMaHD = (from s in db.TAI_TRO
                                    join b in db.HD_TAITRO on s.ID_TaiTro equals b.ID_TaiTro
                                    join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where b.ID_TaiTro == id && c.NgayBatDau >= BD && c.NgayKetThuc <= KT
+                                   where b.ID_TaiTro == id && c.NgayBatDau >= BD && c.NgayKetThuc <= KT && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
 

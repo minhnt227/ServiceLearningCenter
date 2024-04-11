@@ -47,21 +47,21 @@ namespace ServiceLearning
                     dgvDT.Rows[j].Cells[0].Value = j + 1;
                     dgvDT.Rows[j].Cells[1].Value = TenDT;
                     List<string> nguoidaidien = (from s in db.DOI_TAC
-                                                 where s.ID_DoiTac == id
+                                                 where s.ID_DoiTac == id && s.Hide == false
                                                  select (s.DaiDien)).ToList();
                     dgvDT.Rows[j].Cells[2].Value = nguoidaidien[0];
                     List<string> SDT = (from s in db.DOI_TAC
-                                        where s.ID_DoiTac == id
+                                        where s.ID_DoiTac == id && s.Hide == false
                                         select (s.SDT)).ToList();
                     dgvDT.Rows[j].Cells[3].Value = SDT[0];
                     List<string> email = (from s in db.DOI_TAC
-                                          where s.ID_DoiTac == id
+                                          where s.ID_DoiTac == id && s.Hide == false
                                           select (s.Email)).ToList();
                     dgvDT.Rows[j].Cells[4].Value = email[0];
                     List<int> lstMaHD = new List<int>();
                     lstMaHD = (from s in db.DOI_TAC
                                join b in db.HD_DOITAC on s.ID_DoiTac equals b.ID_DoiTac
-                               where b.ID_DoiTac == id
+                               where b.ID_DoiTac == id && b.HOAT_DONG.Hide == false
                                select (b.MaHD)).ToList();
                     if (lstMaHD.Count == 0) dgvDT.Rows[j].Cells[5].Value = " ";
                     else
@@ -69,14 +69,14 @@ namespace ServiceLearning
                         string TenHD = "- ";
                         int MaHD = lstMaHD[0];
                         List<string> NameHD = (from s in db.HOAT_DONG
-                                               where s.MaHD == MaHD
+                                               where s.MaHD == MaHD && s.Hide == false
                                                select (s.TenHoatDong)).ToList();
                         TenHD = TenHD + NameHD[0];
                         for (int i = 1; i < lstMaHD.Count; i++)
                         {
                             MaHD = lstMaHD[i];
                             List<string> TenHoat = (from s in db.HOAT_DONG
-                                                    where s.MaHD == MaHD
+                                                    where s.MaHD == MaHD && s.Hide == false
                                                     select (s.TenHoatDong)).ToList();
                             TenHD = TenHD + "\n- " + TenHoat[0];
                         }
@@ -227,23 +227,23 @@ namespace ServiceLearning
                     dgvDT.Rows[j].Cells[0].Value = j + 1;
                     dgvDT.Rows[j].Cells[1].Value = TenDT;
                     List<string> nguoidaidien = (from s in db.DOI_TAC
-                                                 where s.ID_DoiTac == id
+                                                 where s.ID_DoiTac == id && s.Hide == false
                                                  select (s.DaiDien)).ToList();
                     dgvDT.Rows[j].Cells[2].Value = nguoidaidien[0];
                     List<string> SDT = (from s in db.DOI_TAC
-                                        where s.ID_DoiTac == id
+                                        where s.ID_DoiTac == id && s.Hide == false
                                         select (s.SDT)).ToList();
                     dgvDT.Rows[j].Cells[3].Value = SDT[0];
                     List<string> email = (from s in db.DOI_TAC
-                                          where s.ID_DoiTac == id
+                                          where s.ID_DoiTac == id && s.Hide == false
                                           select (s.Email)).ToList();
                     dgvDT.Rows[j].Cells[4].Value = email[0];
                     List<int> lstMaHD = new List<int>();
                     if (dtpBD.Text == " " && dtpKT.Text == " ")
                     {
                         lstMaHD = (from s in db.DOI_TAC
-                                   join b in db.HD_DOITAC on s.ID_DoiTac equals b.ID_DoiTac
-                                   where b.ID_DoiTac == id
+                                   join b in db.HD_DOITAC on s.ID_DoiTac equals b.ID_DoiTac 
+                                   where b.ID_DoiTac == id && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     else if (dtpBD.Text != " " && dtpKT.Text == " ")
@@ -252,7 +252,7 @@ namespace ServiceLearning
                         lstMaHD = (from s in db.DOI_TAC
                                    join b in db.HD_DOITAC on s.ID_DoiTac equals b.ID_DoiTac
                                    join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where b.ID_DoiTac == id && c.NgayBatDau >= BD
+                                   where b.ID_DoiTac == id && c.NgayBatDau >= BD && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     else if (dtpBD.Text == " " && dtpKT.Text != " ")
@@ -261,7 +261,7 @@ namespace ServiceLearning
                         lstMaHD = (from s in db.DOI_TAC
                                    join b in db.HD_DOITAC on s.ID_DoiTac equals b.ID_DoiTac
                                    join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where b.ID_DoiTac == id && c.NgayKetThuc <=KT
+                                   where b.ID_DoiTac == id && c.NgayKetThuc <= KT && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     else if (dtpBD.Text != " " && dtpKT.Text != " ")
@@ -271,7 +271,7 @@ namespace ServiceLearning
                         lstMaHD = (from s in db.DOI_TAC
                                    join b in db.HD_DOITAC on s.ID_DoiTac equals b.ID_DoiTac
                                    join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where b.ID_DoiTac == id && c.NgayBatDau >= BD && c.NgayKetThuc <= KT
+                                   where b.ID_DoiTac == id && c.NgayBatDau >= BD && c.NgayKetThuc <= KT && b.HOAT_DONG.Hide == false
                                    select (b.MaHD)).ToList();
                     }
                     if (lstMaHD.Count == 0) dgvDT.Rows[j].Cells[5].Value = " ";
