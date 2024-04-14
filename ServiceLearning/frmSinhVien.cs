@@ -171,10 +171,10 @@ namespace ServiceLearning
                     dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
 
                     //// Đổi tên tiêu đề của các cột
-                    //dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                    //dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                    //dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                    //dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                    dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                    dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                    dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
                 }
             }
             catch (Exception ex)
@@ -442,13 +442,227 @@ namespace ServiceLearning
         {
             // Get the search keyword from txtboxes
 
-            string Mssv = txtMSSV.Text.ToString().Trim();
-            string hoTen = txtName.Text.Trim();
-            string MaKhoa = cbKhoa.SelectedValue.ToString().Trim();
+
             // Check if the search keyword is empty
-            if (string.IsNullOrEmpty(Mssv) && string.IsNullOrEmpty(hoTen) && string.IsNullOrEmpty(MaKhoa))
+            if (string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
             {
                 MessageBox.Show("Vui lòng nhập dữ liệu để tìm", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
+                {
+                    using (Context dbContext = new Context())
+                    {
+                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                        var sinhVienData = from sv in dbContext.SINH_VIEN
+                                           where (sv.Hide == false)
+                                           select new
+                                           {
+                                               MSSV = sv.MSSV,
+                                               HoTen = sv.HoTen,
+                                               Khoa = sv.Khoa,
+                                               TenKhoa = sv.KHOA1.TenKhoa,
+                                           };
+
+                        // Gán dữ liệu cho DataGridView dgvSinhVien
+                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
+
+                        //// Đổi tên tiêu đề của các cột
+                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    }
+                }    
+                else if (!string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
+                {
+                    string Mssv = txtMSSV.Text;
+                    using (Context dbContext = new Context())
+                    {
+                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                        var sinhVienData = from sv in dbContext.SINH_VIEN
+                                           where (sv.Hide == false) && sv.MSSV == Mssv
+                                           select new
+                                           {
+                                               MSSV = sv.MSSV,
+                                               HoTen = sv.HoTen,
+                                               Khoa = sv.Khoa,
+                                               TenKhoa = sv.KHOA1.TenKhoa,
+                                           };
+
+                        // Gán dữ liệu cho DataGridView dgvSinhVien
+                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
+
+                        //// Đổi tên tiêu đề của các cột
+                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    }
+                }  
+                else if (string.IsNullOrEmpty(txtMSSV.Text) && !string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
+                {
+                    string hoTen = txtName.Text;
+                    using (Context dbContext = new Context())
+                    {
+                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                        var sinhVienData = from sv in dbContext.SINH_VIEN
+                                           where (sv.Hide == false) && sv.HoTen == hoTen
+                                           select new
+                                           {
+                                               MSSV = sv.MSSV,
+                                               HoTen = sv.HoTen,
+                                               Khoa = sv.Khoa,
+                                               TenKhoa = sv.KHOA1.TenKhoa,
+                                           };
+
+                        // Gán dữ liệu cho DataGridView dgvSinhVien
+                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
+
+                        //// Đổi tên tiêu đề của các cột
+                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    }
+                }
+                else if (string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex != -1)
+                {
+                    string MaKhoa = cbKhoa.SelectedValue.ToString();
+                    using (Context dbContext = new Context())
+                    {
+                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                        var sinhVienData = from sv in dbContext.SINH_VIEN
+                                           where (sv.Hide == false) && sv.Khoa == MaKhoa
+                                           select new
+                                           {
+                                               MSSV = sv.MSSV,
+                                               HoTen = sv.HoTen,
+                                               Khoa = sv.Khoa,
+                                               TenKhoa = sv.KHOA1.TenKhoa,
+                                           };
+
+                        // Gán dữ liệu cho DataGridView dgvSinhVien
+                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
+
+                        //// Đổi tên tiêu đề của các cột
+                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    }
+                }
+                else if (!string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex != -1)
+                {
+                    string Mssv = txtMSSV.Text;
+                    string MaKhoa = cbKhoa.SelectedValue.ToString();
+                    using (Context dbContext = new Context())
+                    {
+                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                        var sinhVienData = from sv in dbContext.SINH_VIEN
+                                           where (sv.Hide == false) && sv.Khoa == MaKhoa && sv.MSSV == Mssv
+                                           select new
+                                           {
+                                               MSSV = sv.MSSV,
+                                               HoTen = sv.HoTen,
+                                               Khoa = sv.Khoa,
+                                               TenKhoa = sv.KHOA1.TenKhoa,
+                                           };
+
+                        // Gán dữ liệu cho DataGridView dgvSinhVien
+                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
+
+                        //// Đổi tên tiêu đề của các cột
+                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    }
+                }
+                else if (string.IsNullOrEmpty(txtMSSV.Text) && !string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex != -1)
+                {
+                    //string Mssv = txtMSSV.Text;
+                    string hoTen = txtName.Text;
+                    string MaKhoa = cbKhoa.SelectedValue.ToString();
+                    using (Context dbContext = new Context())
+                    {
+                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                        var sinhVienData = from sv in dbContext.SINH_VIEN
+                                           where (sv.Hide == false) && sv.Khoa == MaKhoa &&  sv.HoTen == hoTen
+                                           select new
+                                           {
+                                               MSSV = sv.MSSV,
+                                               HoTen = sv.HoTen,
+                                               Khoa = sv.Khoa,
+                                               TenKhoa = sv.KHOA1.TenKhoa,
+                                           };
+
+                        // Gán dữ liệu cho DataGridView dgvSinhVien
+                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
+
+                        //// Đổi tên tiêu đề của các cột
+                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    }
+                }
+                else if (!string.IsNullOrEmpty(txtMSSV.Text) && !string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
+                {
+                    string Mssv = txtMSSV.Text;
+                    string hoTen = txtName.Text;
+                    using (Context dbContext = new Context())
+                    {
+                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                        var sinhVienData = from sv in dbContext.SINH_VIEN
+                                           where (sv.Hide == false) && sv.MSSV == Mssv && sv.HoTen == hoTen
+                                           select new
+                                           {
+                                               MSSV = sv.MSSV,
+                                               HoTen = sv.HoTen,
+                                               Khoa = sv.Khoa,
+                                               TenKhoa = sv.KHOA1.TenKhoa,
+                                           };
+
+                        // Gán dữ liệu cho DataGridView dgvSinhVien
+                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
+
+                        //// Đổi tên tiêu đề của các cột
+                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    }
+                }
+                else if (!string.IsNullOrEmpty(txtMSSV.Text) && !string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex != -1)
+                {
+                    string Mssv = txtMSSV.Text;
+                    string hoTen = txtName.Text;
+                    string MaKhoa = cbKhoa.SelectedValue.ToString();
+                    using (Context dbContext = new Context())
+                    {
+                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                        var sinhVienData = from sv in dbContext.SINH_VIEN
+                                           where (sv.Hide == false) && sv.MSSV == Mssv && sv.HoTen == hoTen && sv.Khoa==MaKhoa
+                                           select new
+                                           {
+                                               MSSV = sv.MSSV,
+                                               HoTen = sv.HoTen,
+                                               Khoa = sv.Khoa,
+                                               TenKhoa = sv.KHOA1.TenKhoa,
+                                           };
+
+                        // Gán dữ liệu cho DataGridView dgvSinhVien
+                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
+
+                        //// Đổi tên tiêu đề của các cột
+                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    }
+                }    
             }
         }
 
