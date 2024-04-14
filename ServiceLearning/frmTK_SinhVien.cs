@@ -31,7 +31,7 @@ namespace ServiceLearning
         }
         public void DisplayCMBKhoa(ComboBox a)
         {
-            var kh = db.KHOAs.Select(s => s);
+            var kh = db.KHOAs.Select(s => s).Where(s=>s.Hide == false);
             a.DataSource = kh.ToList();
             a.ValueMember = "MaKhoa";
             a.DisplayMember = "TenKhoa";
@@ -49,61 +49,39 @@ namespace ServiceLearning
             dgvSV.Rows.Clear();
             dgvSV.Refresh();
             this.dgvSV.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            //List<string> lstMaSV = new List<string>();
-            //List<string> lstHoTenSV = new List<string>();
+
             List<SINH_VIEN> lstSV = new List<SINH_VIEN>();
-            //lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).Take(200).ToList();
-            //lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).Take(200).ToList();
-            lstSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x).Take(200).ToList();
-            for (int j = 0; j < lstSV.Count; j++)
+            using (Context db = new Context())
             {
-                //string MaSV = lstMaSV[j];
-                //string HoTenSV = lstHoTenSV[j];
-                SINH_VIEN SV = lstSV[j];
-                dgvSV.Rows.Add();
-                dgvSV.Rows[j].Cells[0].Value = j + 1;
-                dgvSV.Rows[j].Cells[1].Value = SV.MSSV;
-                dgvSV.Rows[j].Cells[2].Value = SV.HoTen;
-                dgvSV.Rows[j].Cells[3].Value = SV.KHOA1.TenKhoa;
-                List<int> lstMaHD = new List<int>();
-                //lstMaHD = (from s in db.SINH_VIEN
-                //           join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
-                //           join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                //           where s.MSSV == MaSV && c.Hide == false
-                //           select (c.MaHD)).ToList();
-                if (SV.HD_SINHVIEN.Count == 0)
+            lstSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x).Take(200).ToList();
+                for (int j = 0; j < lstSV.Count; j++)
                 {
-                    dgvSV.Rows[j].Cells[4].Value = " ";
-                    dgvSV.Rows[j].Cells[5].Value = " ";
-                }
-                else
-                {
-                    lstMaHD = SV.HD_SINHVIEN.Where(hd => hd.HOAT_DONG.Hide == false).Select(hd => hd.MaHD).ToList();
-                    string vaitro = "- ";
-                    string TenHD = "- ";
-                    //int MaHD = lstMaHD[0];
-                    List<string> lstvaitro = SV.HD_SINHVIEN.Where(hd => hd.HOAT_DONG.Hide == false).Select(hd => hd.VaiTro).ToList();
 
-                    vaitro = vaitro + lstvaitro[0];
-                    List<string> NameHD = SV.HD_SINHVIEN.Where(hd => hd.HOAT_DONG.Hide == false).Select(hd => hd.HOAT_DONG.TenHoatDong).ToList();
-
-                    TenHD = TenHD + NameHD[0];
-                    for (int i = 1; i < lstMaHD.Count; i++)
+                    SINH_VIEN SV = lstSV[j];
+                    dgvSV.Rows.Add();
+                    dgvSV.Rows[j].Cells[0].Value = j + 1;
+                    dgvSV.Rows[j].Cells[1].Value = SV.MSSV;
+                    dgvSV.Rows[j].Cells[2].Value = SV.HoTen;
+                    dgvSV.Rows[j].Cells[3].Value = SV.KHOA1.TenKhoa;
+                    List<int> lstMaHD = new List<int>();
+                    List<HD_SINHVIEN> lstHD = new List<HD_SINHVIEN>();
+                    if (SV.HD_SINHVIEN.Count == 0)
                     {
-                        //MaHD = lstMaHD[i];
-                        //List<string> TenVai = (from s in db.HOAT_DONG
-                        //                       join b in db.HD_SINHVIEN on s.MaHD equals b.MaHD
-                        //                       where s.MaHD == MaHD && b.MSSV == MaSV && s.Hide == false
-                        //                       select (b.VaiTro)).ToList();
-                        //vaitro = vaitro + "\n- " + TenVai[0];
-                        vaitro = vaitro + "\n- " + lstvaitro[i];
-                        //List<string> TenHoat = (from s in db.HOAT_DONG
-                        //                        where s.MaHD == MaHD && s.Hide == false
-                        //                        select (s.TenHoatDong)).ToList();
-                        TenHD = TenHD + "\n- " + NameHD[i];
+                        dgvSV.Rows[j].Cells[4].Value = " ";
+                        dgvSV.Rows[j].Cells[5].Value = " ";
                     }
-                    dgvSV.Rows[j].Cells[4].Value = vaitro;
-                    dgvSV.Rows[j].Cells[5].Value = TenHD;
+                    else
+                    {
+                        lstHD = SV.HD_SINHVIEN.Where(x=>x.HOAT_DONG.Hide == false).ToList();
+                        string vaitro = "- ";
+                        string TenHD = "- ";
+
+                        vaitro = vaitro + String.Join("\n- ", lstHD.Select(x => x.VaiTro));
+                        TenHD = TenHD + String.Join("\n- ", lstHD.Select(x => x.HOAT_DONG.TenHoatDong));
+
+                        dgvSV.Rows[j].Cells[4].Value = vaitro;
+                        dgvSV.Rows[j].Cells[5].Value = TenHD;
+                    }
                 }
             }
             

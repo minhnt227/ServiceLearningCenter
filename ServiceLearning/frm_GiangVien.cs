@@ -39,6 +39,7 @@ namespace ServiceLearning
             // Lấy dữ liệu từ bảng GIANG_VIEN và hiển thị trong dgv_GiangVien
             LoadDataToDGV_GiangVien();
             LoadDataToCbKhoa();
+            LoadAutoComGV();
         }
         private void LoadDataToCbKhoa()
         {
@@ -465,6 +466,10 @@ namespace ServiceLearning
             }
         }
 
+        private void LoadAutoComGV()
+        {
+
+        }
 
     }
 }

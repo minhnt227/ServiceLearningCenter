@@ -63,6 +63,26 @@ namespace ServiceLearning.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _1485969921_5_refresh_78908 {
+            get {
+                object obj = ResourceManager.GetObject("1485969921-5-refresh_78908", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap emblemsynchronizing_93485 {
+            get {
+                object obj = ResourceManager.GetObject("emblemsynchronizing_93485", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_create {
             get {
                 object obj = ResourceManager.GetObject("icons8-create", resourceCulture);

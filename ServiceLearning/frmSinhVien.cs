@@ -86,20 +86,31 @@ namespace ServiceLearning
 
         private void AddDataToDatabase(string mssv, string hoTen, string khoa)
         {
-            // Tạo một đối tượng SINH_VIEN mới
-            SINH_VIEN newSinhVien = new SINH_VIEN
+            mssv = mssv.Trim(); hoTen = hoTen.Trim();
+            try
             {
-                MSSV = mssv,
-                HoTen = hoTen,
-                Khoa = khoa,
-                Hide = false,
-               
-                // Nếu có thêm các trường khác, hãy thêm vào đây
-            };
+                using (Context dbContext = new Context())
+                {
+                    // Tạo một đối tượng SINH_VIEN mới
+                    SINH_VIEN newSinhVien = new SINH_VIEN
+                    {
+                        MSSV = mssv,
+                        HoTen = hoTen,
+                        Khoa = khoa,
+                        Hide = false,
 
-            // Thêm đối tượng mới vào DbSet và lưu vào cơ sở dữ liệu
-            dbContext.SINH_VIEN.Add(newSinhVien);
-            dbContext.SaveChanges();
+                        // Nếu có thêm các trường khác, hãy thêm vào đây
+                    };
+
+                    // Thêm đối tượng mới vào DbSet và lưu vào cơ sở dữ liệu
+                    dbContext.SINH_VIEN.Add(newSinhVien);
+                    dbContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed when AddDataToDatabase.\n**Detail**\n\n" + ex.Message,"Error, Contact Min đẹp trai");
+            }
         }
 
         private void frmSinhVien_Load(object sender, EventArgs e)
@@ -107,6 +118,8 @@ namespace ServiceLearning
             // Load dữ liệu vào DataGridView
             LoadDataToDGV();
             LoadMaKhoaToComboBox();
+            LoadAutoComplete();
+            btnTimSV.Enabled = false;
         }
         private void LoadMaKhoaToComboBox()
         {
@@ -157,11 +170,11 @@ namespace ServiceLearning
                     // Gán dữ liệu cho DataGridView dgvSinhVien
                     dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
 
-                    // Đổi tên tiêu đề của các cột
-                    dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                    dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                    dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                    dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    //// Đổi tên tiêu đề của các cột
+                    //dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
+                    //dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
+                    //dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
+                    //dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
                 }
             }
             catch (Exception ex)
@@ -185,31 +198,41 @@ namespace ServiceLearning
 
         private void btnSVEdit_Click(object sender, EventArgs e)
         {
-            // Lấy thông tin từ các TextBox và ComboBox
-            string mssv = txtMSSV.Text;
-            string hoTen = txtName.Text;
-            string khoa = cbKhoa.SelectedValue.ToString().Trim();
-            string tenkhoa = cbKhoa.Text;
-
-            // Kiểm tra xem MSSV có tồn tại trong cơ sở dữ liệu không
-            SINH_VIEN sinhVienToUpdate = dbContext.SINH_VIEN.FirstOrDefault(sv => sv.MSSV == mssv);
-
-            if (sinhVienToUpdate != null)
+            try
             {
-                // Cập nhật thông tin sinh viên
-                sinhVienToUpdate.HoTen = hoTen;
-                sinhVienToUpdate.Khoa = khoa;
+                using (Context dbContext = new Context())
+                {
+                    // Lấy thông tin từ các TextBox và ComboBox
+                    string mssv = txtMSSV.Text;
+                    string hoTen = txtName.Text;
+                    string khoa = cbKhoa.SelectedValue.ToString().Trim();
+                    string tenkhoa = cbKhoa.Text;
 
-                // Lưu thay đổi vào cơ sở dữ liệu
-                dbContext.SaveChanges();
+                    // Kiểm tra xem MSSV có tồn tại trong cơ sở dữ liệu không
+                    SINH_VIEN sinhVienToUpdate = dbContext.SINH_VIEN.FirstOrDefault(sv => sv.MSSV == mssv);
 
-                MessageBox.Show("Cập nhật thông tin sinh viên thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadDataToDGV();
+                    if (sinhVienToUpdate != null)
+                    {
+                        // Cập nhật thông tin sinh viên
+                        sinhVienToUpdate.HoTen = hoTen;
+                        sinhVienToUpdate.Khoa = khoa;
 
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        dbContext.SaveChanges();
+
+                        MessageBox.Show("Cập nhật thông tin sinh viên thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadDataToDGV();
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy sinh viên cần cập nhật.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Không tìm thấy sinh viên cần cập nhật.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Failed when btnSVEdit_Click.\n**Detail**\n\n" + ex.Message, "Error, Contact Min đẹp trai");
             }
         }
 
@@ -365,11 +388,6 @@ namespace ServiceLearning
 
 
 
-        private void guna2Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void btn_Export(object sender, EventArgs e)
         {
             // Create SaveFileDialog to choose the location to save the Excel file
@@ -422,108 +440,84 @@ namespace ServiceLearning
 
         private void btn_Find(object sender, EventArgs e)
         {
-            // Get the search keyword from txtMSSV
-            string searchKeyword = txtMSSV.Text.Trim();
-            string MaKhoa = (string)cbKhoa.SelectedValue;
+            // Get the search keyword from txtboxes
+
+            string Mssv = txtMSSV.Text.ToString().Trim();
+            string hoTen = txtName.Text.Trim();
+            string MaKhoa = cbKhoa.SelectedValue.ToString().Trim();
             // Check if the search keyword is empty
-            if (string.IsNullOrEmpty(searchKeyword)&& string.IsNullOrEmpty(MaKhoa))
+            if (string.IsNullOrEmpty(Mssv) && string.IsNullOrEmpty(hoTen) && string.IsNullOrEmpty(MaKhoa))
             {
-                MessageBox.Show("Please enter a search keyword.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            if(!string.IsNullOrEmpty(MaKhoa))
-            {
-                try
-                {
-                    using (Context dbContext = new Context())
-                    {
-                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
-                        var sinhVienData = from sv in dbContext.SINH_VIEN
-                                           where (sv.Hide == false && sv.Khoa == MaKhoa)
-                                           select new
-                                           {
-                                               MSSV = sv.MSSV,
-                                               HoTen = sv.HoTen,
-                                               Khoa = sv.Khoa,
-                                               TenKhoa = sv.KHOA1.TenKhoa,
-                                           };
-
-                        // Gán dữ liệu cho DataGridView dgvSinhVien
-                        dgvSinhVien.DataSource = sinhVienData.ToList();
-
-                        // Đổi tên tiêu đề của các cột
-                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Hiển thị thông báo lỗi chi tiết
-                    MessageBox.Show("Đã xảy ra lỗi khi tải dữ liệu Sinh Viên.\n\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                return;
-            }    
-
-            // Clear the selection in the DataGridView
-            dgvSinhVien.ClearSelection();
-
-            bool matchFound = false;
-
-            // Iterate through each row in the DataGridView
-            foreach (DataGridViewRow row in dgvSinhVien.Rows)
-            {
-                // Iterate through each cell in the row
-                foreach (DataGridViewCell cell in row.Cells)
-                {
-                    // Null check for cell value
-                    if (cell.Value != null)
-                    {
-                        string cellValue = cell.Value.ToString();
-
-                        // Case-insensitive search using IndexOf
-                        if (cellValue.IndexOf(searchKeyword, StringComparison.OrdinalIgnoreCase) >= 0)
-                        {
-                            // Highlight the matching row
-                            row.Selected = true;
-
-                            // Scroll to the matching row
-                            dgvSinhVien.FirstDisplayedScrollingRowIndex = row.Index;
-
-                            matchFound = true;
-
-                            // Show the matching student's information in TextBoxes and ComboBox
-                            txtMSSV.Text = row.Cells["MSSV"].Value.ToString();
-                            txtName.Text = row.Cells["HoTen"].Value.ToString();
-                            cbKhoa.SelectedValue = row.Cells["Khoa"].Value.ToString();
-
-                            // Stop searching after the first match (remove this line if you want to highlight multiple matches)
-                            break;
-                        }
-                    }
-                }
-
-                // Stop searching if a match is found
-                if (matchFound)
-                {
-                    break;
-                }
-            }
-
-            // Display a message if no matches are found
-            if (!matchFound)
-            {
-                MessageBox.Show("No matches found.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // Optionally, clear TextBoxes and ComboBox if no matches are found
-                clearSVFields();
+                MessageBox.Show("Vui lòng nhập dữ liệu để tìm", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void dgvSinhVien_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void LoadAutoComplete()
+        {
+            AutoCompleteStringCollection autoName = new AutoCompleteStringCollection();
+            AutoCompleteStringCollection autoMSSV = new AutoCompleteStringCollection();
+            try
+            {
+                using (Context dbContext = new Context())
+                {
+                    // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
+                    var lstSV = from sv in dbContext.SINH_VIEN
+                                       where (sv.Hide == false)
+                                       select new
+                                       {
+                                           HoTen = sv.HoTen,
+                                           MSSV = sv.MSSV,
+                                           Khoa = sv.Khoa,
+                                           TenKhoa = sv.KHOA1.TenKhoa,
+                                       };
+                    foreach (var SV in lstSV)
+                    {
+                        autoName.Add(SV.HoTen);
+                        autoMSSV.Add(SV.MSSV);
+                    }    
+                }
+                txtName.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                txtName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                txtName.AutoCompleteCustomSource = autoName;
+                
+                txtMSSV.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                txtMSSV.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                txtMSSV.AutoCompleteCustomSource = autoMSSV;
+
+            }
+            catch (Exception ex)
+            {
+                // Hiển thị thông báo lỗi chi tiết
+                MessageBox.Show("Đã xảy ra lỗi khi tải dữ liệu trong LoadAutoComplete().\n\n" + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void txtMSSV_TextChanged(object sender, EventArgs e)
+        {
+            btnTimSV.Enabled = true;
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+            btnTimSV.Enabled = true;
+        }
+
+        private void cbKhoa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnTimSV.Enabled = true;
+        }
+
+        private void btnRefreshSV_Click(object sender, EventArgs e)
+        {
+            cbKhoa.SelectedItem = null;
+            //cbKhoa.SelectedIndex = -1;
+            txtMSSV.Text = txtName.Text = "";
+            btnTimSV.Enabled = false;
         }
     }
 }

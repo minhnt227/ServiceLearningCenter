@@ -18,6 +18,7 @@ namespace ServiceLearning
             InitializeComponent();
         }
         Context db = new Context();
+        bool asc = true;
         public void LoadLoai()
         {
             cmbLoai.Items.Add("Dự án");
@@ -39,7 +40,7 @@ namespace ServiceLearning
                           CreatedDate = s.CreatedDate
                       };
             dgv_HoatDong.DataSource = lst.ToList();
-            FormatGridView();
+            //FormatGridView();
 
         }
         private void frm_Theme_Load(object sender, EventArgs e)
@@ -55,8 +56,9 @@ namespace ServiceLearning
             using (Context dbContext = new Context())
             {
                 // Truy vấn LINQ để lấy dữ liệu từ bảng HOAT_DONG
-                var hoatDongData = from hoatDong in dbContext.HOAT_DONG
+                var hoatDongData = (from hoatDong in dbContext.HOAT_DONG
                                    where hoatDong.Hide == false
+                                   orderby hoatDong.CreatedDate descending
                                    select new
                                    {
                                        MaHD = hoatDong.MaHD,
@@ -65,23 +67,14 @@ namespace ServiceLearning
                                        NgayBatDau = hoatDong.NgayBatDau,
                                        NgayKetThuc = hoatDong.NgayKetThuc,
                                        CreatedDate = hoatDong.CreatedDate
-                                   };
+                                   }).Take(300);  //lấy 300 hoạt động đầu cho khỏi lag
 
                 // Gán dữ liệu cho DataGridView dgv_HoatDong
-                dgv_HoatDong.DataSource = hoatDongData.Take(1000).ToList();
+                dgv_HoatDong.DataSource = hoatDongData.ToList();
 
                 // Đổi tên tiêu đề của các cột
-                FormatGridView();
+                //FormatGridView();
             }
-        }
-        public void FormatGridView()
-        {
-            dgv_HoatDong.Columns["MaHD"].HeaderText = "Mã Hoạt Động";
-            dgv_HoatDong.Columns["TenHoatDong"].HeaderText = "Tên Hoạt Động";
-            dgv_HoatDong.Columns["Loai"].HeaderText = "Loại";
-            dgv_HoatDong.Columns["NgayBatDau"].HeaderText = "Ngày Bắt Đầu";
-            dgv_HoatDong.Columns["NgayKetThuc"].HeaderText = "Ngày Kết Thúc";
-            dgv_HoatDong.Columns["CreatedDate"].HeaderText = "Ngày Tạo";
         }
 
         private void guna2Panel1_Paint(object sender, PaintEventArgs e)
@@ -197,7 +190,6 @@ namespace ServiceLearning
                           CreatedDate = s.CreatedDate
                       };
             dgv_HoatDong.DataSource = lst.ToList();
-            FormatGridView();
         }
         
 
@@ -219,7 +211,7 @@ namespace ServiceLearning
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
                 {
                     string loai = cmbLoai.SelectedItem.ToString();
-                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    DateTime BD = DateTime.ParseExact(dtpNgayBD.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where  s.Loai == loai && s.NgayBatDau>=BD
                               select new
@@ -232,12 +224,11 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
                 {
                     string loai = cmbLoai.SelectedItem.ToString();
-                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    DateTime KT = DateTime.ParseExact(dtpNgayKT.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where s.Loai == loai && s.NgayKetThuc <=KT
                               select new
@@ -250,13 +241,12 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }    
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
                 {
                     string ten = txtSearch.Text;
                     string loai = cmbLoai.SelectedItem.ToString();
-                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    DateTime BD = DateTime.ParseExact(dtpNgayBD.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where s.Loai == loai && s.NgayBatDau >= BD && s.TenHoatDong.Contains(ten)
                               select new
@@ -269,13 +259,12 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }  
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
                 {
                     string ten = txtSearch.Text;
                     string loai = cmbLoai.SelectedItem.ToString();
-                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    DateTime KT = DateTime.ParseExact(dtpNgayKT.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where s.Loai == loai && s.NgayKetThuc <= KT && s.TenHoatDong.Contains(ten)
                               select new
@@ -288,13 +277,12 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }   
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
                 {
                     string loai = cmbLoai.SelectedItem.ToString();
-                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
-                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    DateTime BD = DateTime.ParseExact(dtpNgayBD.Text, "dd-MM-yyyy", null);
+                    DateTime KT = DateTime.ParseExact(dtpNgayKT.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where s.Loai == loai && s.NgayBatDau >= BD && s.NgayKetThuc <= KT 
                               select new
@@ -307,14 +295,13 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }    
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
                 {
                     string ten = txtSearch.Text;
                     string loai = cmbLoai.SelectedItem.ToString();
-                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
-                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    DateTime BD = DateTime.ParseExact(dtpNgayBD.Text, "dd-MM-yyyy", null);
+                    DateTime KT = DateTime.ParseExact(dtpNgayKT.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where s.Loai == loai && s.NgayBatDau >= BD && s.NgayKetThuc <= KT && s.TenHoatDong.Contains(ten)
                               select new
@@ -327,7 +314,6 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }    
             }
             else
@@ -351,11 +337,10 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
                 {
-                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    DateTime BD = DateTime.ParseExact(dtpNgayBD.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where  s.NgayBatDau >= BD
                               select new
@@ -368,11 +353,10 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
                 {
-                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    DateTime KT = DateTime.ParseExact(dtpNgayKT.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where  s.NgayKetThuc <= KT
                               select new
@@ -385,12 +369,11 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
                 {
                     string ten = txtSearch.Text;
-                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
+                    DateTime BD = DateTime.ParseExact(dtpNgayBD.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where s.NgayBatDau >= BD && s.TenHoatDong.Contains(ten)
                               select new
@@ -403,12 +386,11 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
                 {
                     string ten = txtSearch.Text;
-                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    DateTime KT = DateTime.ParseExact(dtpNgayKT.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where s.NgayKetThuc <= KT && s.TenHoatDong.Contains(ten)
                               select new
@@ -421,12 +403,11 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
                 {
-                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
-                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    DateTime BD = DateTime.ParseExact(dtpNgayBD.Text, "dd-MM-yyyy", null);
+                    DateTime KT = DateTime.ParseExact(dtpNgayKT.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where s.NgayBatDau >= BD && s.NgayKetThuc <= KT
                               select new
@@ -439,13 +420,12 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
                 {
                     string ten = txtSearch.Text;
-                    DateTime BD = Convert.ToDateTime(dtpNgayBD.Text);
-                    DateTime KT = Convert.ToDateTime(dtpNgayKT.Text);
+                    DateTime BD = DateTime.ParseExact(dtpNgayBD.Text, "dd-MM-yyyy", null);
+                    DateTime KT = DateTime.ParseExact(dtpNgayKT.Text, "dd-MM-yyyy", null);
                     var lst = from s in db.HOAT_DONG
                               where  s.NgayBatDau >= BD && s.NgayKetThuc <= KT && s.TenHoatDong.Contains(ten)
                               select new
@@ -458,7 +438,6 @@ namespace ServiceLearning
                                   CreatedDate = s.CreatedDate
                               };
                     dgv_HoatDong.DataSource = lst.ToList();
-                    FormatGridView();
                 }
             }    
         }
@@ -473,7 +452,7 @@ namespace ServiceLearning
         }
         private void dtpNgayBD_ValueChanged(object sender, EventArgs e)
         {
-            dtpNgayBD.CustomFormat = "yyyy-MM-dd";
+            dtpNgayBD.CustomFormat = "dd-MM-yyyy";
             btnLoc.Enabled = true;
         }
 
@@ -487,7 +466,7 @@ namespace ServiceLearning
 
         private void dtpNgayKT_ValueChanged(object sender, EventArgs e)
         {
-            dtpNgayKT.CustomFormat = "yyyy-MM-dd";
+            dtpNgayKT.CustomFormat = "dd-MM-yyyy";
             btnLoc.Enabled = true;
         }
 
@@ -507,6 +486,26 @@ namespace ServiceLearning
             dtpNgayKT.CustomFormat = " ";
             LoadDataToDGV_HoatDong();
             btnLoc.Enabled = false;
+        }
+
+        private void dgv_HoatDong_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            //int col = e.ColumnIndex;
+            //if (col < 0)
+            //    return;
+            //else
+            //{
+            //    if (asc)
+            //    {
+            //        dgv_HoatDong.Sort(dgv_HoatDong.Columns[col], ListSortDirection.Descending);
+            //        asc = false;
+            //    }
+            //    else
+            //    {
+            //        dgv_HoatDong.Sort(dgv_HoatDong.Columns[col], ListSortDirection.Ascending);
+            //        asc = true;
+            //    }    
+            //}
         }
     }
 }

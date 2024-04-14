@@ -313,6 +313,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon\photos_icon_156733.ico" />
+    <None Include="Resources\1485969921-5-refresh_78908.png" />
+    <None Include="Resources\emblemsynchronizing_93485.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework">
