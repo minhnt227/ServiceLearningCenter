@@ -110,7 +110,7 @@ namespace ServiceLearning
             {
                 // Thực hiện tìm kiếm theo Tên Đối Tác hoặc Người Đại Diện
                 var result = from dt in db.DOI_TAC
-                             where dt.TenDoiTac.Contains(searchKeyword) || dt.DaiDien.Contains(searchKeyword)
+                             where dt.TenDoiTac.Contains(searchKeyword) && dt.Hide == false
                              select new { a = dt.TenDoiTac, b = dt.DaiDien, c = dt.Email, d = dt.SDT, e = dt.ID_DoiTac };
 
                 // Cập nhật DataGridView với kết quả tìm kiếm

@@ -70,6 +70,7 @@
             // 
             // dgv_HoatDong
             // 
+            this.dgv_HoatDong.AllowUserToAddRows = false;
             this.dgv_HoatDong.AllowUserToOrderColumns = true;
             this.dgv_HoatDong.AllowUserToResizeColumns = false;
             this.dgv_HoatDong.AllowUserToResizeRows = false;
@@ -140,7 +141,6 @@
             this.dgv_HoatDong.ThemeStyle.RowsStyle.Height = 22;
             this.dgv_HoatDong.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.dgv_HoatDong.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            this.dgv_HoatDong.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_HoatDong_ColumnHeaderMouseClick);
             // 
             // MaHD
             // 

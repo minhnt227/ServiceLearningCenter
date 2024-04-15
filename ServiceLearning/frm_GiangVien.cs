@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace ServiceLearning
 {
@@ -39,7 +40,6 @@ namespace ServiceLearning
             // Lấy dữ liệu từ bảng GIANG_VIEN và hiển thị trong dgv_GiangVien
             LoadDataToDGV_GiangVien();
             LoadDataToCbKhoa();
-            LoadAutoComGV();
         }
         private void LoadDataToCbKhoa()
         {
@@ -91,12 +91,14 @@ namespace ServiceLearning
 
         private void LoadDataToDGV_GiangVien()
         {
+            dgv_GiangVien.Rows.Clear();
+            dgv_GiangVien.Refresh();
             try
             {
                 using (Context db = new Context())
                 {
                     // Truy vấn LINQ để lấy dữ liệu từ bảng GIANG_VIEN
-                    var giangVienData = from gv in db.GIANG_VIEN
+                    var giangVienData = (from gv in db.GIANG_VIEN
                                         where gv.Hide == false
                                         select new
                                         {
@@ -105,17 +107,13 @@ namespace ServiceLearning
                                             Ten = gv.Ten,
                                             Khoa = gv.Khoa,
                                             TenKhoa = gv.KHOA1.TenKhoa,
-                                        };
+                                        }).Take(500);
 
                     // Gán dữ liệu cho DataGridView dgv_GiangVien
-                    dgv_GiangVien.DataSource = giangVienData.ToList();
-
-                    // Đổi tên tiêu đề của các cột
-                    dgv_GiangVien.Columns["MaGV"].HeaderText = "Mã Giảng Viên";
-                    dgv_GiangVien.Columns["HoTenLot"].HeaderText = "Họ Tên Lót";
-                    dgv_GiangVien.Columns["Ten"].HeaderText = "Tên";
-                    dgv_GiangVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                    dgv_GiangVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    foreach (var gv in giangVienData)
+                    {
+                        dgv_GiangVien.Rows.Add(gv.MaGV,gv.HoTenLot,gv.Ten, gv.Khoa,gv.TenKhoa);
+                    }
                 }
             }
             catch (Exception ex)
@@ -419,57 +417,74 @@ namespace ServiceLearning
 
         private void btn_Find(object sender, EventArgs e)
         {
-            // Get the search keyword from txtMaGV
-            string searchKeyword = txtMaGv.Text.Trim();
-
             // Check if the search keyword is empty
-            if (string.IsNullOrEmpty(searchKeyword))
+            if (string.IsNullOrEmpty(txtHoTenLot.Text.Trim()) && string.IsNullOrEmpty(txtMaGv.Text.Trim()) && string.IsNullOrEmpty(txtName.Text.Trim()) && cbKhoa.SelectedIndex == -1)
             {
                 MessageBox.Show("Please enter a search keyword.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-
-            bool matchFound = false;
-
-            // Iterate through each row in the DataGridView and filter based on the search keyword
-            foreach (DataGridViewRow row in dgv_GiangVien.Rows)
+            else
             {
-                // Assuming the MaGV is in the first column (index 0)
-                object cellValue = row.Cells["MaGV"].Value;
-
-                // Null check for cell value
-                if (cellValue != null)
+                dgv_GiangVien.Rows.Clear();
+                dgv_GiangVien.Refresh();
+                using (Context db = new Context())
                 {
-                    string maGVCellValue = cellValue.ToString();
-
-                    // Case-insensitive search using String.IndexOf
-                    if (maGVCellValue.IndexOf(searchKeyword, StringComparison.OrdinalIgnoreCase) >= 0)
+                    // Truy vấn LINQ để lấy dữ liệu từ bảng GIANG_VIEN (Dữ liệu đầu tiên)
+                    var giangVienData = (from gv in db.GIANG_VIEN
+                                         where gv.Hide == false
+                                         select new
+                                         {
+                                             MaGV = gv.MaGV,
+                                             HoTenLot = gv.HoTenLot,
+                                             Ten = gv.Ten,
+                                             Khoa = gv.Khoa,
+                                             TenKhoa = gv.KHOA1.TenKhoa,
+                                         });
+                    //lọc dần qua từng điều kiện
+                    if (!string.IsNullOrEmpty(txtMaGv.Text.Trim()))
                     {
-                        // Highlight the matching row (optional)
-                        row.Selected = true;
-
-                        // Scroll to the matching row (optional)
-                        dgv_GiangVien.FirstDisplayedScrollingRowIndex = row.Index;
-
-                        matchFound = true;
-
-                        // Stop searching after the first match (remove this line if you want to highlight multiple matches)
-                        break;
+                        string magv = txtMaGv.Text.Trim();
+                        giangVienData = (from gv in giangVienData
+                                         where gv.MaGV.Contains(magv)  //thêm && .Hide == false ở đây thì sẽ không cần truy vấn đầu nữa (Dự phòng sau này dữ liệu lớn quá)
+                                         select gv);
+                    }
+                    if (!string.IsNullOrEmpty(txtHoTenLot.Text.Trim()))
+                    {
+                        string tenlot = txtHoTenLot.Text.Trim();
+                        giangVienData = (from gv in giangVienData
+                                         where gv.HoTenLot.Contains(tenlot)
+                                         select gv);
+                    }
+                    if (!string.IsNullOrEmpty(txtName.Text.Trim()))
+                    {
+                        string ten = txtName.Text.Trim();
+                        giangVienData = (from gv in giangVienData
+                                         where gv.Ten.Contains(ten)
+                                         select gv);
+                    }
+                    if (cbKhoa.SelectedIndex != -1)
+                    {
+                        string makhoa = cbKhoa.SelectedValue.ToString();
+                        giangVienData = (from gv in giangVienData
+                                         where gv.Khoa == makhoa
+                                         select gv);
+                    }    
+                    // Gán dữ liệu cho DataGridView dgv_GiangVien
+                    foreach (var gv in giangVienData)
+                    {
+                        dgv_GiangVien.Rows.Add(gv.MaGV, gv.HoTenLot, gv.Ten, gv.Khoa, gv.TenKhoa);
                     }
                 }
-            }
 
-            // Display a message if no matches are found
-            if (!matchFound)
-            {
-                MessageBox.Show("No matches found.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            
         }
 
-        private void LoadAutoComGV()
+        private void btnRefreshGV_Click(object sender, EventArgs e)
         {
-
+            txtHoTenLot.Text = txtMaGv.Text = txtName.Text = "";
+            LoadDataToCbKhoa();
+            LoadDataToDGV_GiangVien();
         }
-
     }
 }

@@ -18,7 +18,6 @@ namespace ServiceLearning
             InitializeComponent();
         }
         Context db = new Context();
-        bool asc = true;
         public void LoadLoai()
         {
             cmbLoai.Items.Add("Dự án");
@@ -39,8 +38,10 @@ namespace ServiceLearning
                           NgayKetThuc = s.NgayKetThuc,
                           CreatedDate = s.CreatedDate
                       };
-            dgv_HoatDong.DataSource = lst.ToList();
-            //FormatGridView();
+            foreach (var hd in lst)
+            {
+                dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+            }
 
         }
         private void frm_Theme_Load(object sender, EventArgs e)
@@ -53,13 +54,15 @@ namespace ServiceLearning
 
         private void LoadDataToDGV_HoatDong()
         {
+            dgv_HoatDong.Rows.Clear();
+            dgv_HoatDong.Refresh();
             using (Context dbContext = new Context())
             {
                 // Truy vấn LINQ để lấy dữ liệu từ bảng HOAT_DONG
                 var hoatDongData = (from hoatDong in dbContext.HOAT_DONG
                                    where hoatDong.Hide == false
                                    orderby hoatDong.CreatedDate descending
-                                   select new
+                                   select new 
                                    {
                                        MaHD = hoatDong.MaHD,
                                        TenHoatDong = hoatDong.TenHoatDong,
@@ -70,10 +73,10 @@ namespace ServiceLearning
                                    }).Take(300);  //lấy 300 hoạt động đầu cho khỏi lag
 
                 // Gán dữ liệu cho DataGridView dgv_HoatDong
-                dgv_HoatDong.DataSource = hoatDongData.ToList();
-
-                // Đổi tên tiêu đề của các cột
-                //FormatGridView();
+                foreach (var hd in hoatDongData)
+                {
+                    dgv_HoatDong.Rows.Add(hd.MaHD,hd.TenHoatDong,hd.Loai,hd.NgayBatDau,hd.NgayKetThuc,hd.CreatedDate);
+                }
             }
         }
 
@@ -189,7 +192,10 @@ namespace ServiceLearning
                           NgayKetThuc = s.NgayKetThuc,
                           CreatedDate = s.CreatedDate
                       };
-            dgv_HoatDong.DataSource = lst.ToList();
+            foreach (var hd in lst)
+            {
+                dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+            }
         }
         
 
@@ -223,7 +229,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
                 {
@@ -240,7 +249,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }    
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
                 {
@@ -258,7 +270,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }  
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
                 {
@@ -276,7 +291,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }   
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
                 {
@@ -294,7 +312,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }    
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
                 {
@@ -313,7 +334,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }    
             }
             else
@@ -336,7 +360,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
                 {
@@ -352,7 +379,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
                 {
@@ -368,7 +398,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text == " ")
                 {
@@ -385,7 +418,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text == " " && dtpNgayKT.Text != " ")
                 {
@@ -402,7 +438,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
                 {
@@ -419,7 +458,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }
                 else if (string.IsNullOrEmpty(txtSearch.Text) != true && dtpNgayBD.Text != " " && dtpNgayKT.Text != " ")
                 {
@@ -437,7 +479,10 @@ namespace ServiceLearning
                                   NgayKetThuc = s.NgayKetThuc,
                                   CreatedDate = s.CreatedDate
                               };
-                    dgv_HoatDong.DataSource = lst.ToList();
+                    foreach (var hd in lst)
+                    {
+                        dgv_HoatDong.Rows.Add(hd.MaHD, hd.TenHoatDong, hd.Loai, hd.NgayBatDau, hd.NgayKetThuc, hd.CreatedDate);
+                    }
                 }
             }    
         }
@@ -480,6 +525,8 @@ namespace ServiceLearning
 
         private void guna2PictureBox1_Click(object sender, EventArgs e)
         {
+            dgv_HoatDong.Rows.Clear();
+            dgv_HoatDong.Refresh();
             txtSearch.Text = "";
             cmbLoai.SelectedIndex = -1;
             dtpNgayBD.CustomFormat = " ";
@@ -488,24 +535,5 @@ namespace ServiceLearning
             btnLoc.Enabled = false;
         }
 
-        private void dgv_HoatDong_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            //int col = e.ColumnIndex;
-            //if (col < 0)
-            //    return;
-            //else
-            //{
-            //    if (asc)
-            //    {
-            //        dgv_HoatDong.Sort(dgv_HoatDong.Columns[col], ListSortDirection.Descending);
-            //        asc = false;
-            //    }
-            //    else
-            //    {
-            //        dgv_HoatDong.Sort(dgv_HoatDong.Columns[col], ListSortDirection.Ascending);
-            //        asc = true;
-            //    }    
-            //}
-        }
     }
 }

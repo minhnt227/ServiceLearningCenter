@@ -198,10 +198,7 @@ namespace ServiceLearning
             using (Context db = new Context())
             {
                 var taiTroData = from taiTro in db.TAI_TRO
-                                 where (taiTro.TenTaiTro.Contains(searchKeyword) ||
-                                       taiTro.DaiDien.Contains(searchKeyword) ||
-                                       taiTro.SDT.Contains(searchKeyword) ||
-                                       taiTro.Email.Contains(searchKeyword) )&& taiTro.Hide == false
+                                 where taiTro.TenTaiTro.Contains(searchKeyword) && taiTro.Hide == false
                                  select new
                                  {
                                      ID_TaiTro = taiTro.ID_TaiTro,

@@ -47,13 +47,16 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtMSSV = new Guna.UI2.WinForms.Guna2TextBox();
             this.dgvSinhVien = new Guna.UI2.WinForms.Guna2DataGridView();
+            this.MSSV = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HoTen = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TenKhoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.guna2Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSinhVien)).BeginInit();
             this.SuspendLayout();
             // 
             // guna2Panel1
             // 
-            this.guna2Panel1.Controls.Add(this.btnRefreshSV);
             this.guna2Panel1.Controls.Add(this.guna2Button1);
             this.guna2Panel1.Controls.Add(this.btnTimSV);
             this.guna2Panel1.Controls.Add(this.guna2Button4);
@@ -80,11 +83,13 @@
             this.btnRefreshSV.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.btnRefreshSV.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.btnRefreshSV.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btnRefreshSV.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btnRefreshSV.FillColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnRefreshSV.FocusedColor = System.Drawing.Color.Blue;
             this.btnRefreshSV.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnRefreshSV.ForeColor = System.Drawing.Color.White;
+            this.btnRefreshSV.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.btnRefreshSV.Image = global::ServiceLearning.Properties.Resources._1485969921_5_refresh_78908;
-            this.btnRefreshSV.Location = new System.Drawing.Point(406, 48);
+            this.btnRefreshSV.ImageSize = new System.Drawing.Size(25, 25);
+            this.btnRefreshSV.Location = new System.Drawing.Point(12, 125);
             this.btnRefreshSV.Name = "btnRefreshSV";
             this.btnRefreshSV.Size = new System.Drawing.Size(87, 28);
             this.btnRefreshSV.TabIndex = 14;
@@ -299,6 +304,7 @@
             // 
             // dgvSinhVien
             // 
+            this.dgvSinhVien.AllowUserToAddRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
             this.dgvSinhVien.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvSinhVien.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -314,6 +320,11 @@
             this.dgvSinhVien.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvSinhVien.ColumnHeadersHeight = 25;
             this.dgvSinhVien.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            this.dgvSinhVien.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.MSSV,
+            this.HoTen,
+            this.Khoa,
+            this.TenKhoa});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
@@ -323,7 +334,7 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvSinhVien.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvSinhVien.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dgvSinhVien.Location = new System.Drawing.Point(0, 128);
+            this.dgvSinhVien.Location = new System.Drawing.Point(0, 159);
             this.dgvSinhVien.Name = "dgvSinhVien";
             this.dgvSinhVien.ReadOnly = true;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -336,7 +347,7 @@
             this.dgvSinhVien.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvSinhVien.RowHeadersVisible = false;
             this.dgvSinhVien.RowHeadersWidth = 51;
-            this.dgvSinhVien.Size = new System.Drawing.Size(800, 325);
+            this.dgvSinhVien.Size = new System.Drawing.Size(800, 294);
             this.dgvSinhVien.TabIndex = 10;
             this.dgvSinhVien.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dgvSinhVien.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -362,12 +373,37 @@
             this.dgvSinhVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSinhVien_CellClick_1);
             this.dgvSinhVien.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSinhVien_CellContentClick_1);
             // 
+            // MSSV
+            // 
+            this.MSSV.HeaderText = "MSSV";
+            this.MSSV.Name = "MSSV";
+            this.MSSV.ReadOnly = true;
+            // 
+            // HoTen
+            // 
+            this.HoTen.HeaderText = "Họ và Tên";
+            this.HoTen.Name = "HoTen";
+            this.HoTen.ReadOnly = true;
+            // 
+            // Khoa
+            // 
+            this.Khoa.HeaderText = "Mã Khoa";
+            this.Khoa.Name = "Khoa";
+            this.Khoa.ReadOnly = true;
+            // 
+            // TenKhoa
+            // 
+            this.TenKhoa.HeaderText = "Tên Khoa";
+            this.TenKhoa.Name = "TenKhoa";
+            this.TenKhoa.ReadOnly = true;
+            // 
             // frmSinhVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnRefreshSV);
             this.Controls.Add(this.dgvSinhVien);
             this.Controls.Add(this.guna2Panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -398,5 +434,9 @@
         private Guna.UI2.WinForms.Guna2Button guna2Button1;
         private Guna.UI2.WinForms.Guna2Button btnRefreshSV;
         private Guna.UI2.WinForms.Guna2ComboBox cbKhoa;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MSSV;
+        private System.Windows.Forms.DataGridViewTextBoxColumn HoTen;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Khoa;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TenKhoa;
     }
 }

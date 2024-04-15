@@ -30,7 +30,7 @@ namespace ServiceLearning
                 if (row == null) return false;
                 else
                 {
-                    if (row.Cells["MSSV"].Value != null && row.Cells["MSSV"].Value.ToString() == txtMSSV.Text)
+                    if (row.Cells["MSSV"].Value != null && row.Cells["MSSV"].Value.ToString() == txtMSSV.Text.Trim())
                     {
                         return true;
                     }
@@ -152,12 +152,14 @@ namespace ServiceLearning
         }
         private void LoadDataToDGV()
         {
+            dgvSinhVien.Rows.Clear();
+            dgvSinhVien.Refresh();
             try
             {
                 using (Context dbContext = new Context())
                 {
                     // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
-                    var sinhVienData = from sv in dbContext.SINH_VIEN
+                    var sinhVienData = (from sv in dbContext.SINH_VIEN
                                        where (sv.Hide == false)
                                        select new
                                        {
@@ -165,16 +167,13 @@ namespace ServiceLearning
                                            HoTen = sv.HoTen,
                                            Khoa = sv.Khoa,
                                            TenKhoa = sv.KHOA1.TenKhoa,
-                                       };
+                                       }).Take(500);
 
                     // Gán dữ liệu cho DataGridView dgvSinhVien
-                    dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
-
-                    //// Đổi tên tiêu đề của các cột
-                    dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                    dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                    dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                    dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                    foreach (var sv in sinhVienData)
+                    {
+                        dgvSinhVien.Rows.Add(sv.MSSV,sv.HoTen,sv.Khoa,sv.TenKhoa);
+                    }    
                 }
             }
             catch (Exception ex)
@@ -203,10 +202,10 @@ namespace ServiceLearning
                 using (Context dbContext = new Context())
                 {
                     // Lấy thông tin từ các TextBox và ComboBox
-                    string mssv = txtMSSV.Text;
-                    string hoTen = txtName.Text;
+                    string mssv = txtMSSV.Text.Trim();
+                    string hoTen = txtName.Text.Trim();
                     string khoa = cbKhoa.SelectedValue.ToString().Trim();
-                    string tenkhoa = cbKhoa.Text;
+                    string tenkhoa = cbKhoa.Text.Trim();
 
                     // Kiểm tra xem MSSV có tồn tại trong cơ sở dữ liệu không
                     SINH_VIEN sinhVienToUpdate = dbContext.SINH_VIEN.FirstOrDefault(sv => sv.MSSV == mssv);
@@ -442,21 +441,24 @@ namespace ServiceLearning
         {
             // Get the search keyword from txtboxes
 
-
             // Check if the search keyword is empty
-            if (string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
+            if (string.IsNullOrEmpty(txtMSSV.Text.Trim()) && string.IsNullOrEmpty(txtName.Text.Trim()) && cbKhoa.SelectedIndex == -1)
             {
                 MessageBox.Show("Vui lòng nhập dữ liệu để tìm", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
-                if (string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
+                dgvSinhVien.Rows.Clear();
+                dgvSinhVien.Refresh();
+                //Tìm theo MSSV
+                if (!string.IsNullOrEmpty(txtMSSV.Text.Trim()) && string.IsNullOrEmpty(txtName.Text.Trim()) && cbKhoa.SelectedIndex == -1)
                 {
+                    string Mssv = txtMSSV.Text.Trim();
                     using (Context dbContext = new Context())
                     {
                         // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
                         var sinhVienData = from sv in dbContext.SINH_VIEN
-                                           where (sv.Hide == false)
+                                           where (sv.Hide == false) && sv.MSSV.Contains(Mssv)
                                            select new
                                            {
                                                MSSV = sv.MSSV,
@@ -466,49 +468,21 @@ namespace ServiceLearning
                                            };
 
                         // Gán dữ liệu cho DataGridView dgvSinhVien
-                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
-
-                        //// Đổi tên tiêu đề của các cột
-                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
-                    }
-                }    
-                else if (!string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
-                {
-                    string Mssv = txtMSSV.Text;
-                    using (Context dbContext = new Context())
-                    {
-                        // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
-                        var sinhVienData = from sv in dbContext.SINH_VIEN
-                                           where (sv.Hide == false) && sv.MSSV == Mssv
-                                           select new
-                                           {
-                                               MSSV = sv.MSSV,
-                                               HoTen = sv.HoTen,
-                                               Khoa = sv.Khoa,
-                                               TenKhoa = sv.KHOA1.TenKhoa,
-                                           };
-
-                        // Gán dữ liệu cho DataGridView dgvSinhVien
-                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
-
-                        //// Đổi tên tiêu đề của các cột
-                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                        foreach (var sv in sinhVienData)
+                        {
+                            dgvSinhVien.Rows.Add(sv.MSSV, sv.HoTen, sv.Khoa, sv.TenKhoa);
+                        }
                     }
                 }  
-                else if (string.IsNullOrEmpty(txtMSSV.Text) && !string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
+                //Tìm theo Họ Tên
+                else if (string.IsNullOrEmpty(txtMSSV.Text.Trim()) && !string.IsNullOrEmpty(txtName.Text.Trim()) && cbKhoa.SelectedIndex == -1)
                 {
-                    string hoTen = txtName.Text;
+                    string hoTen = txtName.Text.Trim();
                     using (Context dbContext = new Context())
                     {
                         // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
                         var sinhVienData = from sv in dbContext.SINH_VIEN
-                                           where (sv.Hide == false) && sv.HoTen == hoTen
+                                           where (sv.Hide == false) && sv.HoTen.Contains(hoTen)
                                            select new
                                            {
                                                MSSV = sv.MSSV,
@@ -518,16 +492,14 @@ namespace ServiceLearning
                                            };
 
                         // Gán dữ liệu cho DataGridView dgvSinhVien
-                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
-
-                        //// Đổi tên tiêu đề của các cột
-                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                        foreach (var sv in sinhVienData)
+                        {
+                            dgvSinhVien.Rows.Add(sv.MSSV, sv.HoTen, sv.Khoa, sv.TenKhoa);
+                        }
                     }
                 }
-                else if (string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex != -1)
+                //Tìm theo Khoa
+                else if (string.IsNullOrEmpty(txtMSSV.Text.Trim()) && string.IsNullOrEmpty(txtName.Text.Trim()) && cbKhoa.SelectedIndex != -1)
                 {
                     string MaKhoa = cbKhoa.SelectedValue.ToString();
                     using (Context dbContext = new Context())
@@ -544,24 +516,22 @@ namespace ServiceLearning
                                            };
 
                         // Gán dữ liệu cho DataGridView dgvSinhVien
-                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
-
-                        //// Đổi tên tiêu đề của các cột
-                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                        foreach (var sv in sinhVienData)
+                        {
+                            dgvSinhVien.Rows.Add(sv.MSSV, sv.HoTen, sv.Khoa, sv.TenKhoa);
+                        }
                     }
                 }
-                else if (!string.IsNullOrEmpty(txtMSSV.Text) && string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex != -1)
+                //Tìm theo MSSV và Khoa
+                else if (!string.IsNullOrEmpty(txtMSSV.Text.Trim()) && string.IsNullOrEmpty(txtName.Text.Trim()) && cbKhoa.SelectedIndex != -1)
                 {
-                    string Mssv = txtMSSV.Text;
+                    string Mssv = txtMSSV.Text.Trim();
                     string MaKhoa = cbKhoa.SelectedValue.ToString();
                     using (Context dbContext = new Context())
                     {
                         // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
                         var sinhVienData = from sv in dbContext.SINH_VIEN
-                                           where (sv.Hide == false) && sv.Khoa == MaKhoa && sv.MSSV == Mssv
+                                           where (sv.Hide == false) && sv.Khoa == MaKhoa && sv.MSSV.Contains(Mssv)
                                            select new
                                            {
                                                MSSV = sv.MSSV,
@@ -571,25 +541,22 @@ namespace ServiceLearning
                                            };
 
                         // Gán dữ liệu cho DataGridView dgvSinhVien
-                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
-
-                        //// Đổi tên tiêu đề của các cột
-                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                        foreach (var sv in sinhVienData)
+                        {
+                            dgvSinhVien.Rows.Add(sv.MSSV, sv.HoTen, sv.Khoa, sv.TenKhoa);
+                        }
                     }
                 }
-                else if (string.IsNullOrEmpty(txtMSSV.Text) && !string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex != -1)
+                //Tìm theo Khoa và Họ Tên
+                else if (string.IsNullOrEmpty(txtMSSV.Text.Trim()) && !string.IsNullOrEmpty(txtName.Text.Trim()) && cbKhoa.SelectedIndex != -1)
                 {
-                    //string Mssv = txtMSSV.Text;
-                    string hoTen = txtName.Text;
+                    string hoTen = txtName.Text.Trim();
                     string MaKhoa = cbKhoa.SelectedValue.ToString();
                     using (Context dbContext = new Context())
                     {
                         // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
                         var sinhVienData = from sv in dbContext.SINH_VIEN
-                                           where (sv.Hide == false) && sv.Khoa == MaKhoa &&  sv.HoTen == hoTen
+                                           where (sv.Hide == false) && sv.Khoa == MaKhoa &&  sv.HoTen.Contains(hoTen)
                                            select new
                                            {
                                                MSSV = sv.MSSV,
@@ -599,24 +566,22 @@ namespace ServiceLearning
                                            };
 
                         // Gán dữ liệu cho DataGridView dgvSinhVien
-                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
-
-                        //// Đổi tên tiêu đề của các cột
-                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                        foreach (var sv in sinhVienData)
+                        {
+                            dgvSinhVien.Rows.Add(sv.MSSV, sv.HoTen, sv.Khoa, sv.TenKhoa);
+                        }
                     }
                 }
+                //Tìm theo Họ Tên, MSSV
                 else if (!string.IsNullOrEmpty(txtMSSV.Text) && !string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex == -1)
                 {
-                    string Mssv = txtMSSV.Text;
-                    string hoTen = txtName.Text;
+                    string Mssv = txtMSSV.Text.Trim();
+                    string hoTen = txtName.Text.Trim();
                     using (Context dbContext = new Context())
                     {
                         // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
                         var sinhVienData = from sv in dbContext.SINH_VIEN
-                                           where (sv.Hide == false) && sv.MSSV == Mssv && sv.HoTen == hoTen
+                                           where (sv.Hide == false) && sv.MSSV.Contains(Mssv) && sv.HoTen.Contains(hoTen)
                                            select new
                                            {
                                                MSSV = sv.MSSV,
@@ -626,25 +591,22 @@ namespace ServiceLearning
                                            };
 
                         // Gán dữ liệu cho DataGridView dgvSinhVien
-                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
-
-                        //// Đổi tên tiêu đề của các cột
-                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                        foreach (var sv in sinhVienData)
+                        {
+                            dgvSinhVien.Rows.Add(sv.MSSV, sv.HoTen, sv.Khoa, sv.TenKhoa);
+                        }
                     }
                 }
                 else if (!string.IsNullOrEmpty(txtMSSV.Text) && !string.IsNullOrEmpty(txtName.Text) && cbKhoa.SelectedIndex != -1)
                 {
-                    string Mssv = txtMSSV.Text;
-                    string hoTen = txtName.Text;
+                    string Mssv = txtMSSV.Text.Trim();
+                    string hoTen = txtName.Text.Trim();
                     string MaKhoa = cbKhoa.SelectedValue.ToString();
                     using (Context dbContext = new Context())
                     {
                         // Truy vấn LINQ để lấy dữ liệu từ bảng SINH_VIEN
                         var sinhVienData = from sv in dbContext.SINH_VIEN
-                                           where (sv.Hide == false) && sv.MSSV == Mssv && sv.HoTen == hoTen && sv.Khoa==MaKhoa
+                                           where (sv.Hide == false) && sv.MSSV.Contains(Mssv) && sv.HoTen.Contains(hoTen) && sv.Khoa==MaKhoa
                                            select new
                                            {
                                                MSSV = sv.MSSV,
@@ -654,13 +616,10 @@ namespace ServiceLearning
                                            };
 
                         // Gán dữ liệu cho DataGridView dgvSinhVien
-                        dgvSinhVien.DataSource = sinhVienData.Take(500).ToList();
-
-                        //// Đổi tên tiêu đề của các cột
-                        dgvSinhVien.Columns["MSSV"].HeaderText = "Mã Sinh Viên";
-                        dgvSinhVien.Columns["HoTen"].HeaderText = "Họ Tên";
-                        dgvSinhVien.Columns["Khoa"].HeaderText = "Mã Khoa";
-                        dgvSinhVien.Columns["TenKhoa"].HeaderText = "Tên Khoa";
+                        foreach (var sv in sinhVienData)
+                        {
+                            dgvSinhVien.Rows.Add(sv.MSSV, sv.HoTen, sv.Khoa, sv.TenKhoa);
+                        }
                     }
                 }    
             }
@@ -728,10 +687,10 @@ namespace ServiceLearning
 
         private void btnRefreshSV_Click(object sender, EventArgs e)
         {
-            cbKhoa.SelectedItem = null;
-            //cbKhoa.SelectedIndex = -1;
+            LoadMaKhoaToComboBox();
             txtMSSV.Text = txtName.Text = "";
             btnTimSV.Enabled = false;
+            LoadDataToDGV();
         }
     }
 }
