@@ -201,6 +201,8 @@ namespace ServiceLearning
 
         private void btnLoc_Click_1(object sender, EventArgs e)
         {
+            dgv_HoatDong.Rows.Clear();
+            dgv_HoatDong.Refresh();
             if (cmbLoai.SelectedIndex != -1)
             {
                 if (string.IsNullOrEmpty(txtSearch.Text) == true && dtpNgayBD.Text == " " && dtpNgayKT.Text == " ")
