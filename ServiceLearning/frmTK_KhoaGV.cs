@@ -12,10 +12,10 @@ using System.Windows.Forms;
 
 namespace ServiceLearning
 {
-    public partial class frmTK_Khoa : Form
+    public partial class frmTK_KhoaGV : Form
     {
         Context db = new Context();
-        public frmTK_Khoa()
+        public frmTK_KhoaGV()
         {
             InitializeComponent();
         }
@@ -25,7 +25,7 @@ namespace ServiceLearning
             cmbLoai.Items.Add("Sự kiện");
             cmbLoai.Items.Add("Môn học");
         }
-        private void frmTK_Khoa_Load(object sender, EventArgs e)
+        private void frmTK_KhoaGV_Load(object sender, EventArgs e)
         {
             LoadLoai();
             dtpBD.CustomFormat = " ";
@@ -53,7 +53,7 @@ namespace ServiceLearning
                 {
                     dgvHD.Columns.Add(lstTenKhoa[i], lstTenKhoa[i]);
                 }
-                dgvHD.Columns.Add("Total", "Tổng");
+                dgvHD.Columns.Add("Total", "Tổng GV");
                 /*List<int> lstMaHD = new List<int>();
                 List<string> lstTenHD = new List<string>();*/
                 List<HOAT_DONG> lstHD = new List<HOAT_DONG>();
@@ -86,14 +86,14 @@ namespace ServiceLearning
                     {
                         List<string> list = new List<string>();
                         string maKhoa = lstKhoa[i];
-                        list = (from s in db.SINH_VIEN
-                                join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                        list = (from s in db.GIANG_VIEN
+                                join b in db.HD_GIANGVIEN on s.MaGV equals b.MaGV
                                 join c in db.HOAT_DONG on b.MaHD equals c.MaHD
                                 where (s.Khoa == maKhoa && b.MaHD == MaHD)
-                                select (s.MSSV)).ToList();
-                        int tong = (from gv in db.SINH_VIEN
-                                    where list.Contains(gv.MSSV)
-                                    select gv.MSSV).ToList().Count;
+                                select (s.MaGV)).ToList();
+                        int tong = (from gv in db.GIANG_VIEN
+                                    where list.Contains(gv.MaGV)
+                                    select gv.MaGV).ToList().Count;
                         dgvHD.Rows[j].Cells[i + 4].Value = tong;
                         total = total + tong;
                     }
@@ -218,7 +218,7 @@ namespace ServiceLearning
             {
                 dgvHD.Columns.Add(lstTenKhoa[i], lstTenKhoa[i]);
             }
-            dgvHD.Columns.Add("Total", "Tổng");
+            dgvHD.Columns.Add("Total", "Tổng GV");
             List<int> lstMaHD = new List<int>();
             List<string> lstTenHD = new List<string>();
             if (cmbLoai.SelectedIndex != -1)
@@ -326,14 +326,14 @@ namespace ServiceLearning
                 {
                     List<string> list = new List<string>();
                     string maKhoa = lstKhoa[i];
-                    list = (from s in db.SINH_VIEN
-                            join b in db.HD_SINHVIEN on s.MSSV equals b.MSSV
+                    list = (from s in db.GIANG_VIEN
+                            join b in db.HD_GIANGVIEN on s.MaGV equals b.MaGV
                             join c in db.HOAT_DONG on b.MaHD equals c.MaHD
                             where (s.Khoa == maKhoa && b.MaHD == MaHD)
-                            select (s.MSSV)).ToList();
-                    int tong = (from gv in db.SINH_VIEN
-                                where list.Contains(gv.MSSV)
-                                select gv.MSSV).ToList().Count;
+                            select (s.MaGV)).ToList();
+                    int tong = (from gv in db.GIANG_VIEN
+                                where list.Contains(gv.MaGV)
+                                select gv.MaGV).ToList().Count;
                     dgvHD.Rows[j].Cells[i + 4].Value = tong;
                     total = total + tong;
                 }
@@ -353,8 +353,7 @@ namespace ServiceLearning
 
         private void btnChangeToGV_Click(object sender, EventArgs e)
         {
-            
-            frmTK_KhoaGV  form = new frmTK_KhoaGV();
+            frmTK_Khoa form = new frmTK_Khoa();
             form.TopLevel = false;
             form.FormBorderStyle = FormBorderStyle.None;
             form.Dock = DockStyle.Fill;

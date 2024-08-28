@@ -114,6 +114,12 @@
     <Compile Include="frmSinhVien.Designer.cs">
       <DependentUpon>frmSinhVien.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmTK_KhoaGV.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTK_KhoaGV.Designer.cs">
+      <DependentUpon>frmTK_KhoaGV.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmTK_SinhVien.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,6 +229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSinhVien.resx">
       <DependentUpon>frmSinhVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTK_KhoaGV.resx">
+      <DependentUpon>frmTK_KhoaGV.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTK_SinhVien.resx">
       <DependentUpon>frmTK_SinhVien.cs</DependentUpon>
