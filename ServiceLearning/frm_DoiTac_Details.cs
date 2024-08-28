@@ -61,6 +61,8 @@ namespace ServiceLearning
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
+            if (guna2DataGridView1.CurrentRow == null) 
+                return;
             id = Convert.ToInt32(guna2DataGridView1.CurrentRow.Cells["e"].Value);
             DOI_TAC = db.DOI_TAC.Find(id);
             DOI_TAC.TenDoiTac = txtName.Text.Trim();

@@ -168,10 +168,17 @@ namespace ServiceLearning
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-            int EventID = (int)dgv_HoatDong.CurrentRow.Cells["MaHD"].Value;
-            frmAddHoatDong Update = new frmAddHoatDong();
-            Update.LoadFormUpdate(EventID);
-            Update.ShowDialog();
+            if (dgv_HoatDong.SelectedRows.Count > 0)
+            {
+                int EventID = (int)dgv_HoatDong.CurrentRow.Cells["MaHD"].Value;
+                frmAddHoatDong Update = new frmAddHoatDong();
+                Update.LoadFormUpdate(EventID);
+                Update.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một hoạt động để sửa.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void btn_AddHD(object sender, EventArgs e)
