@@ -53,11 +53,15 @@ namespace ServiceLearning
             List<SINH_VIEN> lstSV = new List<SINH_VIEN>();
             using (Context db = new Context())
             {
-            lstSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x).Take(200).ToList();
+                lstSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x).Take(200).ToList();
                 for (int j = 0; j < lstSV.Count; j++)
                 {
-
                     SINH_VIEN SV = lstSV[j];
+                    if (SV.KHOA1 == null)
+                    {
+                        dgvSV.Rows.Add();
+                        continue;
+                    }
                     dgvSV.Rows.Add();
                     dgvSV.Rows[j].Cells[0].Value = j + 1;
                     dgvSV.Rows[j].Cells[1].Value = SV.MSSV;
@@ -79,12 +83,15 @@ namespace ServiceLearning
                         vaitro = vaitro + String.Join("\n- ", lstHD.Select(x => x.VaiTro));
                         TenHD = TenHD + String.Join("\n- ", lstHD.Select(x => x.HOAT_DONG.TenHoatDong));
 
+                        if (vaitro.Equals("- ") && TenHD.Equals("- "))
+                            vaitro = TenHD = "";
+
                         dgvSV.Rows[j].Cells[4].Value = vaitro;
                         dgvSV.Rows[j].Cells[5].Value = TenHD;
                     }
                 }
             }
-            
+            Xoa();
         }
         private void LocThongkeSinhVien()
         {

@@ -86,6 +86,8 @@ namespace ServiceLearning
             List<HD_GIANGVIEN> List = hD.HD_GIANGVIEN.ToList();
             foreach (HD_GIANGVIEN GV in List)
             {
+                if (GV.GIANG_VIEN == null || GV.GIANG_VIEN.KHOA1 == null || GV.GIANG_VIEN.KHOA1.Hide == true) { continue; }
+
                 DataGridViewRow row = new DataGridViewRow();
                 dgv_GV.Rows.Add(GV.MaGV, GV.GIANG_VIEN.HoTenLot, GV.GIANG_VIEN.Ten, GV.GIANG_VIEN.KHOA1.TenKhoa, GV.VaiTro, GV.GIANG_VIEN.Khoa);
             }

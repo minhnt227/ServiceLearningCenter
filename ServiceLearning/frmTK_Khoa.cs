@@ -38,32 +38,47 @@ namespace ServiceLearning
             this.dgvHD.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             try
             {
+                //create DataGridView Table
                 List<string> lstTenKhoa = new List<string>();
                 lstTenKhoa = db.KHOAs.Where(x=>x.Hide == false).Select(x => x.TenKhoa).ToList();
                 this.dgvHD.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
                 dgvHD.Columns.Add("STT", "STT");
                 dgvHD.Columns.Add("Hoạt động", "Hoạt động");
+                dgvHD.Columns.Add("NgayBD","Ngày Bắt Đầu");
+                dgvHD.Columns[2].DefaultCellStyle.Format = "dd/MM/yyyy";
+                dgvHD.Columns.Add("NgayKT","Ngày Kết Thúc");
+                dgvHD.Columns[3].DefaultCellStyle.Format = "dd/MM/yyyy";
+
                 for (int i = 0; i < lstTenKhoa.Count; i++)
                 {
                     dgvHD.Columns.Add(lstTenKhoa[i], lstTenKhoa[i]);
                 }
                 dgvHD.Columns.Add("Total", "Tổng");
-                List<int> lstMaHD = new List<int>();
-                List<string> lstTenHD = new List<string>();
-                lstMaHD = (from s in db.HOAT_DONG
+                /*List<int> lstMaHD = new List<int>();
+                List<string> lstTenHD = new List<string>();*/
+                List<HOAT_DONG> lstHD = new List<HOAT_DONG>();
+                /*lstMaHD = (from s in db.HOAT_DONG
                            where s.Hide == false 
                            select (s.MaHD)).ToList();
                 lstTenHD = (from s in db.HOAT_DONG
                             where s.Hide == false
-                            select (s.TenHoatDong)).ToList();              
-                for (int j = 0; j < lstMaHD.Count; j++)
+                            select (s.TenHoatDong)).ToList();*/
+                lstHD = (from s in db.HOAT_DONG
+                            where s.Hide == false
+                            select s).ToList();  
+                //Insert Value
+                for (int j = 0; j < lstHD.Count; j++)
                 {
-
-                    int MaHD = lstMaHD[j];
-                    string TenHD = lstTenHD[j];
+                    
+                    HOAT_DONG temp = new HOAT_DONG();
+                    temp = lstHD[j];
+                    int MaHD = temp.MaHD;
+                    string TenHD = temp.TenHoatDong;
                     dgvHD.Rows.Add();
                     dgvHD.Rows[j].Cells[0].Value = j + 1;
                     dgvHD.Rows[j].Cells[1].Value = TenHD;
+                    dgvHD.Rows[j].Cells[2].Value = temp.NgayBatDau;
+                    dgvHD.Rows[j].Cells[3].Value = temp.NgayKetThuc;
                     List<string> lstKhoa = new List<string>();
                     lstKhoa = db.KHOAs.Where(x => x.Hide == false).Select(x => x.MaKhoa).ToList();
                     int total = 0;
@@ -79,10 +94,10 @@ namespace ServiceLearning
                         int tong = (from gv in db.SINH_VIEN
                                     where list.Contains(gv.MSSV)
                                     select gv.MSSV).ToList().Count;
-                        dgvHD.Rows[j].Cells[i + 2].Value = tong;
+                        dgvHD.Rows[j].Cells[i + 4].Value = tong;
                         total = total + tong;
                     }
-                    dgvHD.Rows[j].Cells[lstKhoa.Count + 2].Value = total;
+                    dgvHD.Rows[j].Cells[lstKhoa.Count + 4].Value = total;
                 }
             }
             catch (Exception ex)
@@ -127,7 +142,7 @@ namespace ServiceLearning
                 {
                     for (int j = 0; j < dtg.ColumnCount; j++)
                     {
-                        worksheet.Cells[i + 2, j + 1] = dtg.Rows[i].Cells[j].Value;
+                        worksheet.Cells[i + 2, j + 1] = dtg.Rows[i].Cells[j].FormattedValue;
                     }
                 }
                 excel.Columns.AutoFit();
@@ -195,6 +210,10 @@ namespace ServiceLearning
 
             dgvHD.Columns.Add("STT", "STT");
             dgvHD.Columns.Add("Hoạt động", "Hoạt động");
+            dgvHD.Columns.Add("NgayBD", "Ngày Bắt Đầu");
+            dgvHD.Columns[2].DefaultCellStyle.Format = "dd/MM/yyyy";
+            dgvHD.Columns.Add("NgayKT", "Ngày Kết Thúc");
+            dgvHD.Columns[3].DefaultCellStyle.Format = "dd/MM/yyyy";
             for (int i = 0; i < lstTenKhoa.Count; i++)
             {
                 dgvHD.Columns.Add(lstTenKhoa[i], lstTenKhoa[i]);
@@ -298,6 +317,8 @@ namespace ServiceLearning
                 dgvHD.Rows.Add();
                 dgvHD.Rows[j].Cells[0].Value = j + 1;
                 dgvHD.Rows[j].Cells[1].Value = TenHD;
+                dgvHD.Rows[j].Cells[2].Value = db.HOAT_DONG.Find(MaHD).NgayBatDau;
+                dgvHD.Rows[j].Cells[3].Value = db.HOAT_DONG.Find(MaHD).NgayKetThuc;
                 List<string> lstKhoa = new List<string>();
                 lstKhoa = db.KHOAs.Where(x => x.Hide == false).Select(x => x.MaKhoa).ToList();
                 int total = 0;
@@ -313,10 +334,10 @@ namespace ServiceLearning
                     int tong = (from gv in db.SINH_VIEN
                                 where list.Contains(gv.MSSV)
                                 select gv.MSSV).ToList().Count;
-                    dgvHD.Rows[j].Cells[i + 2].Value = tong;
+                    dgvHD.Rows[j].Cells[i + 4].Value = tong;
                     total = total + tong;
                 }
-                dgvHD.Rows[j].Cells[lstKhoa.Count + 2].Value = total;
+                dgvHD.Rows[j].Cells[lstKhoa.Count + 4].Value = total;
             }
         }
         private void guna2PictureBox2_Click(object sender, EventArgs e)

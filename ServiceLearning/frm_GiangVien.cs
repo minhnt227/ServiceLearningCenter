@@ -445,7 +445,7 @@ namespace ServiceLearning
                     {
                         string magv = txtMaGv.Text.Trim();
                         giangVienData = (from gv in giangVienData
-                                         where gv.MaGV.Contains(magv)  //thêm && .Hide == false ở đây thì sẽ không cần truy vấn đầu nữa (Dự phòng sau này dữ liệu lớn quá)
+                                         where gv.MaGV.Contains(magv)  //thêm && .Hide == false ở đây(và ở những cái dưới) thì sẽ không cần truy vấn đầu nữa (Dự phòng sau này dữ liệu lớn quá)
                                          select gv);
                     }
                     if (!string.IsNullOrEmpty(txtHoTenLot.Text.Trim()))

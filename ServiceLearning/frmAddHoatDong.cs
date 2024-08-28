@@ -15,6 +15,8 @@ using TextBox = System.Windows.Forms.TextBox;
 using ComponentFactory.Krypton.Toolkit;
 using OfficeOpenXml;
 using System.IO;
+using System.Xml.Linq;
+using TheArtOfDevHtmlRenderer.Core;
 
 namespace ServiceLearning
 {
@@ -137,6 +139,8 @@ namespace ServiceLearning
             List<HD_GIANGVIEN> List = hD.HD_GIANGVIEN.ToList();
             foreach (HD_GIANGVIEN GV in List)
             {
+                if (GV.GIANG_VIEN == null || GV.GIANG_VIEN.KHOA1 == null || GV.GIANG_VIEN.KHOA1.Hide == true) { continue; }
+
                 DataGridViewRow row = new DataGridViewRow();
                 dgv_GV.Rows.Add(GV.MaGV, GV.GIANG_VIEN.HoTenLot, GV.GIANG_VIEN.Ten, GV.GIANG_VIEN.KHOA1.TenKhoa, GV.VaiTro, GV.GIANG_VIEN.Khoa);
             }
@@ -297,7 +301,9 @@ namespace ServiceLearning
             txtMSSV.Clear();
             txtSVHoTen.Clear();
             cbKhoa.SelectedIndex = -1;
+            cbKhoa.Text = string.Empty;
             cbRole.SelectedIndex = -1;
+            cbRole.Text = string.Empty;
             txtSVNotes.Clear();
             txtMSSV.ReadOnly = false;
             btnAddSV.Enabled = true;
@@ -686,17 +692,90 @@ namespace ServiceLearning
 
         private void btnSVFind_Click(object sender, EventArgs e)
         {
+            lblSVFind.Text = "Loading...";
+            //If no value is enter for search, disable button
+            if (string.IsNullOrEmpty(txtSVHoTen.Text.Trim()) && String.IsNullOrEmpty(txtMSSV.Text.Trim()) && String.IsNullOrEmpty(cbKhoa.Text.ToString().Trim()))
+            {
+                btnSVFind.Enabled = false;
+                lblSVFind.Text = "";
+                return;
+            }    
+            //Filter through each condition
             using (Context db = new Context())
             {
-                SINH_VIEN sv = db.SINH_VIEN.Find(txtMSSV.Text);
+                //initialize data
+                lblSVFind.Text = "Init data...";
+                var SVdata = (from sv in db.SINH_VIEN
+                                         where sv.Hide == false && sv.KHOA1.Hide == false
+                                         select new
+                                         {
+                                             MSSV = sv.MSSV,
+                                             HoTen = sv.HoTen,
+                                             Khoa = sv.Khoa,
+                                             TenKhoa = sv.KHOA1.TenKhoa,
+                                         });
+                if (SVdata == null)
+                {
+                    lblSVFind.Text = "";
+                    return;
+                }
+                lblSVFind.Text = "Đang Lọc...";
+                //filter MSSV
+                if (!String.IsNullOrEmpty(txtMSSV.Text.Trim()))
+                {
+                    string mssv = txtMSSV.Text.Trim();
+                    SVdata = (from sv in SVdata
+                              where sv.MSSV.Contains(mssv)
+                              select sv
+                              );
+                }
+                //filter name
+                if (!string.IsNullOrEmpty(txtSVHoTen.Text.Trim()))
+                {
+                    string name = txtSVHoTen.Text.Trim();
+                    SVdata = (from sv in SVdata
+                              where sv.HoTen.Contains(name)
+                              select sv
+                              );
+                }
+                //filter khoa
+                if (cbKhoa.SelectedIndex != -1)
+                {
+                    string maKh = cbKhoa.SelectedValue.ToString();
+                    SVdata = (from sv in SVdata
+                              where sv.Khoa == maKh
+                              select sv
+                              );
+                }
+                if (SVdata == null)
+                {
+                    lblSVFind.Text = "";
+                    return;
+                }
+                var SV = SVdata.FirstOrDefault();
+                if (SV == null)
+                {
+                    lblSVFind.Text = "";
+                    return;
+                }
+                txtSVHoTen.Text = SV.HoTen.ToString();
+                txtMSSV.Text = SV.MSSV.ToString();
+                txtMSSV.ReadOnly = true;
+                txtSVHoTen.Focus();
+                cbKhoa.SelectedValue = SV.Khoa;
+                btnSVFind.Enabled = false;
+                lblSVFind.Text = "";
+                /*SINH_VIEN sv = db.SINH_VIEN.Find(txtMSSV.Text);
                 if (sv != null)
                 {
                     txtSVHoTen.Text = sv.HoTen.ToString();
                     cbKhoa.SelectedValue = sv.Khoa;
                 }
                 else 
-                    return;
+                    return;*/
+
             }
+            return;
         }
 
         private void dtpNgayKT_ValueChanged(object sender, EventArgs e)
@@ -756,9 +835,12 @@ namespace ServiceLearning
             txtMaGV.Clear();
             txtGVHoTenLot.Clear();
             cbGV_Khoa.SelectedIndex = -1;
+            cbGV_Khoa.Text = String.Empty;
             txtTenGV.Clear();
             cbGV_Role.SelectedIndex = -1;
+            cbGV_Role.Text = String.Empty;
             txtMaGV.ReadOnly = false;
+            btnFindGV.Enabled = true;
         }
 
         private void btnGVShow_Click(object sender, EventArgs e)
@@ -866,9 +948,84 @@ namespace ServiceLearning
 
         private void btnFindGV_Click(object sender, EventArgs e)
         {
+            //If no value is enter for search, disable button
+            if (string.IsNullOrEmpty(txtMaGV.Text.Trim()) && String.IsNullOrEmpty(txtGVHoTenLot.Text.Trim()) && String.IsNullOrEmpty(txtTenGV.Text.Trim()) && String.IsNullOrEmpty(cbGV_Khoa.Text.ToString().Trim()))
+            {
+                btnFindGV.Enabled = false;
+                lblGVFind.Text = "";
+                return;
+            }
             using (Context db = new Context())
             {
-                GIANG_VIEN gv = db.GIANG_VIEN.Find(txtMaGV.Text);
+                //initialize data
+                lblGVFind.Text = "loading...";
+                var giangVienData = (from gv in db.GIANG_VIEN
+                                     where gv.Hide == false
+                                     select new
+                                     {
+                                         MaGV = gv.MaGV,
+                                         HoTenLot = gv.HoTenLot,
+                                         Ten = gv.Ten,
+                                         Khoa = gv.Khoa,
+                                         TenKhoa = gv.KHOA1.TenKhoa,
+                                     });
+                if (giangVienData == null)
+                {
+                    lblGVFind.Text = "";
+                    return;
+                }
+                //filter
+                if (!string.IsNullOrEmpty(txtMaGV.Text.Trim()))
+                {
+                    string magv = txtMaGV.Text.Trim();
+                    giangVienData = (from gv in giangVienData
+                                     where gv.MaGV.Contains(magv)  //thêm && .Hide == false ở đây(và ở những cái dưới) thì sẽ không cần truy vấn đầu nữa (Dự phòng sau này dữ liệu lớn quá)
+                                     select gv);
+                }
+                if (!string.IsNullOrEmpty(txtGVHoTenLot.Text.Trim()))
+                {
+                    string tenlot = txtGVHoTenLot.Text.Trim();
+                    giangVienData = (from gv in giangVienData
+                                     where gv.HoTenLot.Contains(tenlot)
+                                     select gv);
+                }
+                if (!string.IsNullOrEmpty(txtTenGV.Text.Trim()))
+                {
+                    string ten = txtTenGV.Text.Trim();
+                    giangVienData = (from gv in giangVienData
+                                     where gv.Ten.Contains(ten)
+                                     select gv);
+                }
+                if (cbGV_Khoa.SelectedIndex != -1)
+                {
+                    string makhoa = cbGV_Khoa.SelectedValue.ToString();
+                    giangVienData = (from gv in giangVienData
+                                     where gv.Khoa == makhoa
+                                     select gv);
+                }
+                //check again for null
+                if (giangVienData == null)
+                {
+                    lblGVFind.Text = "";
+                    return;
+                }
+                //Insert value
+                var GV = giangVienData.FirstOrDefault();
+                if (GV == null)
+                {
+                    lblGVFind.Text = "";
+                    return;
+                }
+                txtMaGV.Text = GV.MaGV.ToString();
+                txtGVHoTenLot.Text = GV.HoTenLot.ToString();
+                txtTenGV.Text = GV.Ten.ToString();
+                txtMaGV.ReadOnly = true;
+                txtTenGV.Focus();
+                cbGV_Khoa.SelectedValue = GV.Khoa;
+                btnFindGV.Enabled = false;
+                lblGVFind.Text = "";
+
+                /*GIANG_VIEN gv = db.GIANG_VIEN.Find(txtMaGV.Text);
                 if (gv != null)
                 {
                     txtMaGV.Text = gv.MaGV;
@@ -879,7 +1036,7 @@ namespace ServiceLearning
                     //cbGV_Role.Text = gv.DonVi;
                 }
                 else
-                    return;
+                    return;*/
             }
         }
         private DOI_TAC FindDTByName(string name)
@@ -1656,6 +1813,41 @@ namespace ServiceLearning
             {
                 MessageBox.Show("error while DeleteAllMembers() \n\n" + ex.Message);
             }
+        }
+
+        private void txtMSSV_TextChanged(object sender, EventArgs e)
+        {
+            btnSVFind.Enabled = true;
+        }
+
+        private void txtSVHoTen_TextChanged(object sender, EventArgs e)
+        {
+            btnSVFind.Enabled = true;
+        }
+
+        private void cbKhoa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnSVFind.Enabled = true;
+        }
+
+        private void txtMaGV_TextChanged(object sender, EventArgs e)
+        {
+            btnFindGV.Enabled = true;
+        }
+
+        private void txtGVHoTenLot_TextChanged(object sender, EventArgs e)
+        {
+            btnFindGV.Enabled = true;
+        }
+
+        private void txtTenGV_TextChanged(object sender, EventArgs e)
+        {
+            btnFindGV.Enabled = true;
+        }
+
+        private void cbGV_Khoa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnFindGV.Enabled = true;
         }
     }
 }

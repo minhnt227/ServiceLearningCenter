@@ -15,6 +15,14 @@ namespace ServiceLearning
             HD_SINHVIEN = new HashSet<HD_SINHVIEN>();
         }
 
+        public SINH_VIEN(string mSSV, string hoTen, string khoa, string tenkhoa)
+        {
+            MSSV = mSSV;
+            HoTen = hoTen;
+            Khoa = khoa;
+            KHOA1.TenKhoa = tenkhoa;
+        }
+
         [Key]
         [StringLength(10)]
         public string MSSV { get; set; }
