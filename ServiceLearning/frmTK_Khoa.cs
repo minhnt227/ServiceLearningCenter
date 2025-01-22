@@ -18,6 +18,7 @@ namespace ServiceLearning
         public frmTK_Khoa()
         {
             InitializeComponent();
+            ThongKeKhoa();
         }
         public void LoadLoai()
         {
@@ -30,7 +31,6 @@ namespace ServiceLearning
             LoadLoai();
             dtpBD.CustomFormat = " ";
             dtpKT.CustomFormat = " ";
-            ThongKeKhoa();
             btnLoc.Enabled = false;
         }
         private void ThongKeKhoa()

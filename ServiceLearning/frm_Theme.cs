@@ -184,6 +184,7 @@ namespace ServiceLearning
         private void btn_AddHD(object sender, EventArgs e)
         {
             frmAddHoatDong fm = new frmAddHoatDong();
+            fm.isCreate = true;
             fm.ShowDialog();
         }
         private void LoadTen_Loai(string ten, string loai)

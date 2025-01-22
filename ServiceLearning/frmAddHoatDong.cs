@@ -124,11 +124,22 @@ namespace ServiceLearning
             }
 
         }
+        /*
+         Nguyen The Minh - 22/01/2025
+        fix error where KHOA1 is null         
+         
+         */
         private void LoadHD_SinhVien(HOAT_DONG hD)
         {
             List<HD_SINHVIEN> SVList = hD.HD_SINHVIEN.ToList();
             foreach (HD_SINHVIEN SV in SVList)
             {
+                using (Context db = new Context())
+                {
+                    SV.SINH_VIEN.KHOA1 = db.KHOAs.Find(SV.SINH_VIEN.Khoa);
+                    if (SV.SINH_VIEN.KHOA1 == null)
+                        continue;
+                }
                 DataGridViewRow row = new DataGridViewRow();
                 dgvSinhVien.Rows.Add(SV.MSSV, SV.SINH_VIEN.HoTen, SV.SINH_VIEN.KHOA1.TenKhoa, SV.VaiTro, SV.GhiChu, SV.SINH_VIEN.Khoa, SV.VaiTro);
             }
@@ -471,15 +482,17 @@ namespace ServiceLearning
             {
                 using (Context db = new Context())
                 {   //tim hoat dong theo ten va chua bi xoa
-                    HOAT_DONG hoatDong = isCreate? new HOAT_DONG() : db.HOAT_DONG.Where<HOAT_DONG>(hd=>hd.Hide.Value != true && hd.TenHoatDong.Contains(iniName)).FirstOrDefault();
+                    HOAT_DONG hoatDong = isCreate? 
+                        new HOAT_DONG() : 
+                        db.HOAT_DONG.Where<HOAT_DONG>(hd=>hd.Hide.Value != true && hd.TenHoatDong.Contains(iniName)).OrderByDescending(hd=>hd.CreatedDate).FirstOrDefault();
                     hoatDong.TenHoatDong = txtTenHD.Text.Trim();
                     hoatDong.Loai = cbLoai.Text.Trim();
                     hoatDong.NgayBatDau = dtpNgayBD.Value;
                     hoatDong.NgayKetThuc = dtpNgayKT.Value;
-                    hoatDong.CreatedDate = DateTime.Now;
                     hoatDong.Hide = false;
                     if (isCreate) //lưu hoạt động vào DB để tạo ID trước
                     {
+                        hoatDong.CreatedDate = DateTime.Now;
                         db.HOAT_DONG.Add(hoatDong);
                         db.SaveChanges();
                     }    
