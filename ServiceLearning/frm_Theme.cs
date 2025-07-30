@@ -61,7 +61,7 @@ namespace ServiceLearning
                 // Truy vấn LINQ để lấy dữ liệu từ bảng HOAT_DONG
                 var hoatDongData = (from hoatDong in dbContext.HOAT_DONG
                                    where hoatDong.Hide == false
-                                   orderby hoatDong.CreatedDate descending
+                                   orderby hoatDong.NgayBatDau descending
                                    select new 
                                    {
                                        MaHD = hoatDong.MaHD,

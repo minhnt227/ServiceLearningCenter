@@ -220,7 +220,53 @@ namespace ServiceLearning
                 dgvHD.Columns.Add(lstTenKhoa[i], lstTenKhoa[i]);
             }
             dgvHD.Columns.Add("Total", "Tổng GV");
-            List<int> lstMaHD = new List<int>();
+            //filter
+            //Initial Data
+            var lstHD = (from s in db.HOAT_DONG
+                         where s.Hide == false
+                         orderby s.NgayBatDau descending
+                         select new
+                         {
+                             MaHD = s.MaHD,
+                             TenHD = s.TenHoatDong,
+                             Loai = s.Loai,
+                             NgayBatDau = s.NgayBatDau,
+                             NgayKetThuc = s.NgayKetThuc,
+                             CreatedDate = s.CreatedDate,
+                         });
+
+
+            if (cmbLoai.SelectedIndex != -1)
+            {
+                string loai = cmbLoai.SelectedItem.ToString();
+                lstHD = (from HD in lstHD
+                         where HD.Loai == loai
+                         select HD);
+
+            }
+            if (!string.IsNullOrEmpty(txtSearchByName.Text.Trim()))
+            {
+                string Ten = txtSearchByName.Text.Trim();
+                lstHD = (from HD in lstHD
+                         where HD.TenHD.Contains(Ten)
+                         select HD);
+            }
+            if (!string.IsNullOrEmpty(dtpBD.Text.Trim()))
+            {
+                DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                lstHD = (from HD in lstHD
+                         where HD.NgayBatDau >= BD
+                         select HD);
+            }
+            if (!string.IsNullOrEmpty(dtpKT.Text.Trim()))
+            {
+                DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                lstHD = (from HD in lstHD
+                         where HD.NgayBatDau <= KT
+                         select HD);
+            }
+
+            /*List<int> lstMaHD = new List<int>();
             List<string> lstTenHD = new List<string>();
             if (cmbLoai.SelectedIndex != -1)
             {
@@ -309,17 +355,18 @@ namespace ServiceLearning
                                 where s.Hide == false && s.NgayBatDau >= BD && s.NgayKetThuc <= KT
                                 select (s.TenHoatDong)).ToList();
                 }
-            }
-            for (int j = 0; j < lstMaHD.Count; j++)
+            }*/
+            int j = 0;
+            foreach (var HD in lstHD)
             {
 
-                int MaHD = lstMaHD[j];
-                string TenHD = lstTenHD[j];
+                int MaHD = HD.MaHD;
+                string TenHD = HD.TenHD;
                 dgvHD.Rows.Add();
                 dgvHD.Rows[j].Cells[0].Value = j + 1;
                 dgvHD.Rows[j].Cells[1].Value = TenHD;
-                dgvHD.Rows[j].Cells[2].Value = db.HOAT_DONG.Find(MaHD).NgayBatDau;
-                dgvHD.Rows[j].Cells[3].Value = db.HOAT_DONG.Find(MaHD).NgayKetThuc;
+                dgvHD.Rows[j].Cells[2].Value = HD.NgayBatDau;
+                dgvHD.Rows[j].Cells[3].Value = HD.NgayKetThuc;
                 List<string> lstKhoa = new List<string>();
                 lstKhoa = db.KHOAs.Where(x => x.Hide == false).Select(x => x.MaKhoa).ToList();
                 int total = 0;
@@ -339,6 +386,7 @@ namespace ServiceLearning
                     total = total + tong;
                 }
                 dgvHD.Rows[j].Cells[lstKhoa.Count + 4].Value = total;
+                j++;
             }
         }
         private void guna2PictureBox2_Click(object sender, EventArgs e)
@@ -361,6 +409,15 @@ namespace ServiceLearning
             this.Parent.Controls.Add(form);
             form.Show();
             this.Parent.Controls.Remove(this);
+        }
+
+        private void txtSearchByName_TextChanged(object sender, EventArgs e)
+        {
+            if(txtSearchByName.Text.Length > 0)
+            {
+                btnLoc.Enabled = true;
+            }
+            else btnLoc.Enabled = false;
         }
     }
 }

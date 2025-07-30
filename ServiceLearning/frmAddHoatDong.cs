@@ -150,6 +150,11 @@ namespace ServiceLearning
             List<HD_GIANGVIEN> List = hD.HD_GIANGVIEN.ToList();
             foreach (HD_GIANGVIEN GV in List)
             {
+                using (Context db = new Context())
+                {
+                    GV.GIANG_VIEN = db.GIANG_VIEN.Find(GV.MaGV);
+                    GV.GIANG_VIEN.KHOA1 = db.KHOAs.Find(GV.GIANG_VIEN.Khoa);
+                }
                 if (GV.GIANG_VIEN == null || GV.GIANG_VIEN.KHOA1 == null || GV.GIANG_VIEN.KHOA1.Hide == true) { continue; }
 
                 DataGridViewRow row = new DataGridViewRow();

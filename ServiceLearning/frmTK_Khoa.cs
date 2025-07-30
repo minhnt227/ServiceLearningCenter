@@ -1,5 +1,6 @@
 ﻿using OfficeOpenXml;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -66,7 +67,7 @@ namespace ServiceLearning
                 lstHD = (from s in db.HOAT_DONG
                             where s.Hide == false
                             orderby s.NgayBatDau descending     //Xếp theo sự kiện mới nhất trên cùng
-                            select s).Take(50).ToList();        //Chỉ lấy 50 HĐ đầu, tránh lag
+                            select s).Take(20).ToList();        //Chỉ lấy 50 HĐ đầu, tránh lag
                 //Insert Value
                 for (int j = 0; j < lstHD.Count; j++)
                 {
@@ -220,9 +221,55 @@ namespace ServiceLearning
                 dgvHD.Columns.Add(lstTenKhoa[i], lstTenKhoa[i]);
             }
             dgvHD.Columns.Add("Total", "Tổng");
-            List<int> lstMaHD = new List<int>();
-            List<string> lstTenHD = new List<string>();
+            //Initial Data
+            var lstHD = (from s in db.HOAT_DONG
+                       where s.Hide == false
+                       orderby s.NgayBatDau descending
+                       select new
+                       {
+                           MaHD = s.MaHD,
+                           TenHD = s.TenHoatDong,
+                           Loai = s.Loai,
+                           NgayBatDau = s.NgayBatDau,
+                           NgayKetThuc = s.NgayKetThuc,
+                           CreatedDate = s.CreatedDate,
+                       });
+            
+
             if (cmbLoai.SelectedIndex != -1)
+            {
+                string loai = cmbLoai.SelectedItem.ToString();
+                lstHD = (from HD in lstHD
+                         where HD.Loai == loai
+                         select HD);
+
+            }
+            if (!string.IsNullOrEmpty(txtSearchByName.Text.Trim())) 
+            {
+                string Ten = txtSearchByName.Text.Trim();
+                lstHD = (from HD in lstHD
+                         where HD.TenHD.Contains(Ten)
+                         select HD);
+            }
+            if (!string.IsNullOrEmpty(dtpBD.Text.Trim()))
+            {
+                DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                lstHD = (from HD in lstHD
+                         where HD.NgayBatDau >= BD
+                         select HD);
+            }
+            if (!string.IsNullOrEmpty(dtpKT.Text.Trim()))
+            {
+                DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                lstHD = (from HD in lstHD
+                         where HD.NgayBatDau <= KT
+                         select HD);
+            }
+            /*lstMaHD = (from s in lstHD
+                       select (s.MaHD)).ToList();
+            lstTenHD = (from s in lstHD
+                        select (s.TenHD)).ToList();*/
+            /*if (cmbLoai.SelectedIndex != -1)
             {
                 string loai = cmbLoai.SelectedItem.ToString();
                 if (dtpBD.Text == " " && dtpKT.Text == " ")
@@ -310,16 +357,19 @@ namespace ServiceLearning
                                 select (s.TenHoatDong)).ToList();
                 }
             }
-            for (int j = 0; j < lstMaHD.Count; j++)
+*/          int j = 0;
+            //for (int j = 0; j < lstMaHD.Count; j++) 
+                
+            foreach(var HD in lstHD) 
             {
-
-                int MaHD = lstMaHD[j];
-                string TenHD = lstTenHD[j];
+                
+                int MaHD = HD.MaHD;
+                string TenHD = HD.TenHD;
                 dgvHD.Rows.Add();
                 dgvHD.Rows[j].Cells[0].Value = j + 1;
                 dgvHD.Rows[j].Cells[1].Value = TenHD;
-                dgvHD.Rows[j].Cells[2].Value = db.HOAT_DONG.Find(MaHD).NgayBatDau;
-                dgvHD.Rows[j].Cells[3].Value = db.HOAT_DONG.Find(MaHD).NgayKetThuc;
+                dgvHD.Rows[j].Cells[2].Value = HD.NgayBatDau;
+                dgvHD.Rows[j].Cells[3].Value = HD.NgayKetThuc;
                 List<string> lstKhoa = new List<string>();
                 lstKhoa = db.KHOAs.Where(x => x.Hide == false).Select(x => x.MaKhoa).ToList();
                 int total = 0;
@@ -332,13 +382,15 @@ namespace ServiceLearning
                             join c in db.HOAT_DONG on b.MaHD equals c.MaHD
                             where (s.Khoa == maKhoa && b.MaHD == MaHD)
                             select (s.MSSV)).ToList();
-                    int tong = (from gv in db.SINH_VIEN
-                                where list.Contains(gv.MSSV)
-                                select gv.MSSV).ToList().Count;
-                    dgvHD.Rows[j].Cells[i + 4].Value = tong;
-                    total = total + tong;
+                    int temp = list.Count;
+                    /*int tong = (from sv in db.SINH_VIEN
+                                where list.Contains(sv.MSSV)
+                                select sv.MSSV).ToList().Count;*/
+                    dgvHD.Rows[j].Cells[i + 4].Value = temp;
+                    total = total + temp;
                 }
                 dgvHD.Rows[j].Cells[lstKhoa.Count + 4].Value = total;
+                j++;
             }
         }
         private void guna2PictureBox2_Click(object sender, EventArgs e)
@@ -362,6 +414,15 @@ namespace ServiceLearning
             this.Parent.Controls.Add(form);
             form.Show();
             this.Parent.Controls.Remove(this);
+        }
+
+        private void txtSearchByName_TextChanged(object sender, EventArgs e)
+        {
+            if(txtSearchByName.Text.Length > 0)
+            {
+                btnLoc.Enabled = true;
+            }
+            else btnLoc.Enabled = false;
         }
     }
 }
