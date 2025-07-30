@@ -65,7 +65,8 @@ namespace ServiceLearning
                             select (s.TenHoatDong)).ToList();*/
                 lstHD = (from s in db.HOAT_DONG
                             where s.Hide == false
-                            select s).ToList();  
+                            orderby s.NgayBatDau descending     //Xếp theo sự kiện mới nhất trên cùng
+                            select s).Take(50).ToList();        //Chỉ lấy 50 HĐ đầu, tránh lag
                 //Insert Value
                 for (int j = 0; j < lstHD.Count; j++)
                 {
