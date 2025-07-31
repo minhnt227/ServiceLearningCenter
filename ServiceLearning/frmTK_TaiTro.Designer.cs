@@ -47,6 +47,8 @@
             this.dtpKT = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.dtpBD = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
+            this.lblName = new System.Windows.Forms.Label();
+            this.txtName = new Guna.UI2.WinForms.Guna2TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTT)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox2)).BeginInit();
@@ -62,9 +64,10 @@
             this.btnExport.FillColor = System.Drawing.Color.ForestGreen;
             this.btnExport.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.btnExport.ForeColor = System.Drawing.Color.White;
-            this.btnExport.Location = new System.Drawing.Point(12, 64);
+            this.btnExport.Location = new System.Drawing.Point(16, 79);
+            this.btnExport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(145, 27);
+            this.btnExport.Size = new System.Drawing.Size(193, 33);
             this.btnExport.TabIndex = 8;
             this.btnExport.Text = "Export Excel";
             this.btnExport.Click += new System.EventHandler(this.btn_Export);
@@ -78,7 +81,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -101,11 +104,12 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvTT.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvTT.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.dgvTT.Location = new System.Drawing.Point(12, 110);
+            this.dgvTT.Location = new System.Drawing.Point(16, 135);
+            this.dgvTT.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgvTT.Name = "dgvTT";
             this.dgvTT.RowHeadersVisible = false;
             this.dgvTT.RowHeadersWidth = 51;
-            this.dgvTT.Size = new System.Drawing.Size(843, 446);
+            this.dgvTT.Size = new System.Drawing.Size(1124, 549);
             this.dgvTT.TabIndex = 9;
             this.dgvTT.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.dgvTT.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -180,25 +184,32 @@
             // groupBox1
             // 
             this.groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.groupBox1.Controls.Add(this.txtName);
             this.groupBox1.Controls.Add(this.btnLoc);
             this.groupBox1.Controls.Add(this.guna2PictureBox2);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.dtpKT);
             this.groupBox1.Controls.Add(this.dtpBD);
+            this.groupBox1.Controls.Add(this.lblName);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(231, 12);
+            this.groupBox1.Location = new System.Drawing.Point(232, 15);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(435, 83);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Size = new System.Drawing.Size(908, 102);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Search";
             // 
             // btnLoc
             // 
-            this.btnLoc.Location = new System.Drawing.Point(331, 52);
+            this.btnLoc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLoc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLoc.Location = new System.Drawing.Point(812, 59);
+            this.btnLoc.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLoc.Name = "btnLoc";
-            this.btnLoc.Size = new System.Drawing.Size(53, 23);
+            this.btnLoc.Size = new System.Drawing.Size(77, 33);
             this.btnLoc.TabIndex = 20;
             this.btnLoc.Text = "Lọc";
             this.btnLoc.UseVisualStyleBackColor = true;
@@ -206,11 +217,13 @@
             // 
             // guna2PictureBox2
             // 
+            this.guna2PictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.guna2PictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("guna2PictureBox2.Image")));
             this.guna2PictureBox2.ImageRotate = 0F;
-            this.guna2PictureBox2.Location = new System.Drawing.Point(331, 19);
+            this.guna2PictureBox2.Location = new System.Drawing.Point(812, 18);
+            this.guna2PictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.guna2PictureBox2.Name = "guna2PictureBox2";
-            this.guna2PictureBox2.Size = new System.Drawing.Size(45, 27);
+            this.guna2PictureBox2.Size = new System.Drawing.Size(77, 33);
             this.guna2PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.guna2PictureBox2.TabIndex = 19;
             this.guna2PictureBox2.TabStop = false;
@@ -218,26 +231,32 @@
             // 
             // label4
             // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(163, 23);
+            this.label4.Location = new System.Drawing.Point(594, 26);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(93, 15);
+            this.label4.Size = new System.Drawing.Size(111, 18);
             this.label4.TabIndex = 18;
             this.label4.Text = "Ngày kết thúc";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // dtpKT
             // 
+            this.dtpKT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpKT.BorderRadius = 7;
             this.dtpKT.Checked = true;
             this.dtpKT.CustomFormat = " ";
             this.dtpKT.FillColor = System.Drawing.Color.White;
             this.dtpKT.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dtpKT.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpKT.Location = new System.Drawing.Point(166, 41);
+            this.dtpKT.Location = new System.Drawing.Point(597, 48);
+            this.dtpKT.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dtpKT.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.dtpKT.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.dtpKT.Name = "dtpKT";
-            this.dtpKT.Size = new System.Drawing.Size(139, 36);
+            this.dtpKT.Size = new System.Drawing.Size(175, 44);
             this.dtpKT.TabIndex = 17;
             this.dtpKT.Value = new System.DateTime(2023, 10, 19, 20, 27, 45, 846);
             this.dtpKT.ValueChanged += new System.EventHandler(this.dtpKT_ValueChanged);
@@ -245,16 +264,19 @@
             // 
             // dtpBD
             // 
+            this.dtpBD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpBD.BorderRadius = 7;
             this.dtpBD.Checked = true;
             this.dtpBD.CustomFormat = " ";
             this.dtpBD.FillColor = System.Drawing.Color.White;
             this.dtpBD.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dtpBD.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpBD.Location = new System.Drawing.Point(15, 39);
+            this.dtpBD.Location = new System.Drawing.Point(397, 48);
+            this.dtpBD.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dtpBD.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.dtpBD.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.dtpBD.Name = "dtpBD";
-            this.dtpBD.Size = new System.Drawing.Size(131, 36);
+            this.dtpBD.Size = new System.Drawing.Size(175, 44);
             this.dtpBD.TabIndex = 16;
             this.dtpBD.Value = new System.DateTime(2023, 10, 19, 20, 44, 29, 208);
             this.dtpBD.ValueChanged += new System.EventHandler(this.dtpBD_ValueChanged);
@@ -262,24 +284,65 @@
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 21);
+            this.label3.Location = new System.Drawing.Point(393, 26);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(91, 15);
+            this.label3.Size = new System.Drawing.Size(106, 18);
             this.label3.TabIndex = 15;
             this.label3.Text = "Ngày bắt đầu";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // lblName
+            // 
+            this.lblName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblName.AutoSize = true;
+            this.lblName.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblName.Location = new System.Drawing.Point(8, 28);
+            this.lblName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(130, 18);
+            this.lblName.TabIndex = 15;
+            this.lblName.Text = "Tên Nhà Tài Trợ";
+            this.lblName.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // txtName
+            // 
+            this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtName.BorderRadius = 7;
+            this.txtName.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtName.DefaultText = "";
+            this.txtName.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.txtName.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.txtName.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtName.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtName.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtName.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.txtName.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.txtName.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtName.Location = new System.Drawing.Point(11, 50);
+            this.txtName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtName.Name = "txtName";
+            this.txtName.PasswordChar = '\0';
+            this.txtName.PlaceholderText = "";
+            this.txtName.SelectedText = "";
+            this.txtName.Size = new System.Drawing.Size(367, 42);
+            this.txtName.TabIndex = 22;
+            this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // frmTK_TaiTro
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(867, 568);
+            this.ClientSize = new System.Drawing.Size(1156, 699);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgvTT);
             this.Controls.Add(this.btnExport);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "frmTK_TaiTro";
             this.Text = "Thống kê theo Nhà Tài Trợ";
             this.Load += new System.EventHandler(this.frmTK_TaiTro_Load);
@@ -307,5 +370,7 @@
         private Guna.UI2.WinForms.Guna2DateTimePicker dtpKT;
         private Guna.UI2.WinForms.Guna2DateTimePicker dtpBD;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblName;
+        private Guna.UI2.WinForms.Guna2TextBox txtName;
     }
 }

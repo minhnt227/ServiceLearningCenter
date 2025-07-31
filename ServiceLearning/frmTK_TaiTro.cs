@@ -217,85 +217,102 @@ namespace ServiceLearning
                 dgvTT.Rows.Clear();
                 dgvTT.Refresh();
                 this.dgvTT.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                List<string> lstTenTaiTro = new List<string>();
-                List<int> IDTaiTro = new List<int>();
-                lstTenTaiTro = db.TAI_TRO.Where(x => x.Hide == false).Select(x => x.TenTaiTro).ToList();
-                IDTaiTro = db.TAI_TRO.Where(x => x.Hide == false).Select(x => x.ID_TaiTro).ToList();
-                for (int j = 0; j < IDTaiTro.Count; j++)
+                this.dgvTT.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+                //List<string> lstTenDoiTac = new List<string>();
+                //List<int> IDDoiTac = new List<int>();
+
+                // 1. Tải tất cả dữ liệu TT cần thiết trong một lần truy vấn
+                // Giả sử db.TAI_TRO là một DbSet trong DbContext của bạn và nó có các thuộc tính
+                // ID_TaiTro, TenTT, DaiDien, SDT, Email, Hide.
+                var partners = db.TAI_TRO
+                                 .Where(x => x.Hide != true)
+                                 .Select(x => new
+                                 {
+                                     x.ID_TaiTro,
+                                     x.TenTaiTro,
+                                     x.DaiDien,
+                                     x.SDT,
+                                     x.Email
+                                 });
+
+                string TTName = txtName.Text.Trim();
+                if (!string.IsNullOrEmpty(TTName))
                 {
-                    string TenDT = lstTenTaiTro[j];
-                    int id = IDTaiTro[j];
+                    partners = partners.Where(d => d.TenTaiTro.Contains(TTName));
+                }
+                // Lấy giá trị ngày tháng từ DateTimePicker
+                // Giả định dtpBD và dtpKT là các điều khiển DateTimePicker.
+                // Kiểm tra nếu DateTimePicker có giá trị (ví dụ: thông qua thuộc tính Checked hoặc kiểm tra giá trị mặc định)
+                // Nếu bạn đang sử dụng ShowCheckBox, hãy kiểm tra dtpBD.Checked và dtpKT.Checked.
+                // Nếu không, bạn có thể cần kiểm tra dtpBD.Value != default(DateTime) hoặc một giá trị mặc định cụ thể.
+
+
+                DateTime? startDate = null;
+                if (dtpBD.Text != " ") 
+                {
+                    if (DateTime.TryParse(dtpBD.Text, out DateTime tempDate))
+                    {
+                        startDate = tempDate;
+                    }
+                }
+
+                DateTime? endDate = null;
+                if (dtpKT.Text != " ") 
+                {
+                    if (DateTime.TryParse(dtpKT.Text, out DateTime tempDate))
+                    {
+                        endDate = tempDate;
+                    }
+                }
+
+                int rowIdx = 0; // Chỉ số hàng cho DataGridView
+                foreach (var partner in partners)
+                {
                     dgvTT.Rows.Add();
-                    dgvTT.Rows[j].Cells[0].Value = j + 1;
-                    dgvTT.Rows[j].Cells[1].Value = TenDT;
-                    List<string> nguoidaidien = (from s in db.TAI_TRO
-                                                 where s.ID_TaiTro == id
-                                                 select (s.DaiDien)).ToList();
-                    dgvTT.Rows[j].Cells[2].Value = nguoidaidien[0];
-                    List<string> SDT = (from s in db.TAI_TRO
-                                        where s.ID_TaiTro == id
-                                        select (s.SDT)).ToList();
-                    dgvTT.Rows[j].Cells[3].Value = SDT[0];
-                    List<string> email = (from s in db.TAI_TRO
-                                          where s.ID_TaiTro == id
-                                          select (s.Email)).ToList();
-                    dgvTT.Rows[j].Cells[4].Value = email[0];
-                    List<int> lstMaHD = new List<int>();
-                    if (dtpBD.Text == " " && dtpKT.Text == " ")
+                    dgvTT.Rows[rowIdx].Cells[0].Value = rowIdx + 1; // Số thứ tự
+                    dgvTT.Rows[rowIdx].Cells[1].Value = partner.TenTaiTro;
+                    dgvTT.Rows[rowIdx].Cells[2].Value = partner.DaiDien;
+                    dgvTT.Rows[rowIdx].Cells[3].Value = partner.SDT;
+                    dgvTT.Rows[rowIdx].Cells[4].Value = partner.Email;
+                    // 2. Lọc các hoạt động liên quan đến đối tác này dựa trên ngày tháng
+                    // Bắt đầu với tất cả các hoạt động của nhà TT không ẩn
+                    var queryHoatDong = db.HD_TAITRO
+                                          .Where(b => b.ID_TaiTro == partner.ID_TaiTro && b.HOAT_DONG.Hide == false)
+                                          .Select(b => b.HOAT_DONG); // Chọn đối tượng HOAT_DONG
+
+                    // Áp dụng bộ lọc ngày tháng động 
+                    if (startDate.HasValue)
                     {
-                        lstMaHD = (from s in db.TAI_TRO
-                                   join b in db.HD_TAITRO on s.ID_TaiTro equals b.ID_TaiTro
-                                   where b.ID_TaiTro == id && b.HOAT_DONG.Hide == false
-                                   select (b.MaHD)).ToList();
+                        queryHoatDong = queryHoatDong.Where(c => c.NgayBatDau >= startDate.Value);
                     }
-                    else if (dtpBD.Text != " " && dtpKT.Text == " ")
+                    if (endDate.HasValue)
                     {
-                        DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                        lstMaHD = (from s in db.TAI_TRO
-                                   join b in db.HD_TAITRO on s.ID_TaiTro equals b.ID_TaiTro
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where b.ID_TaiTro == id && c.NgayBatDau >= BD && b.HOAT_DONG.Hide == false
-                                   select (b.MaHD)).ToList();
-                    }
-                    else if (dtpBD.Text == " " && dtpKT.Text != " ")
-                    {
-                        DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                        lstMaHD = (from s in db.TAI_TRO
-                                   join b in db.HD_TAITRO on s.ID_TaiTro equals b.ID_TaiTro
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where b.ID_TaiTro == id && c.NgayKetThuc <= KT && b.HOAT_DONG.Hide == false
-                                   select (b.MaHD)).ToList();
-                    }
-                    else if (dtpBD.Text != " " && dtpKT.Text != " ")
-                    {
-                        DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                        DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                        lstMaHD = (from s in db.TAI_TRO
-                                   join b in db.HD_TAITRO on s.ID_TaiTro equals b.ID_TaiTro
-                                   join c in db.HOAT_DONG on b.MaHD equals c.MaHD
-                                   where b.ID_TaiTro == id && c.NgayBatDau >= BD && c.NgayKetThuc <= KT && b.HOAT_DONG.Hide == false
-                                   select (b.MaHD)).ToList();
+                        queryHoatDong = queryHoatDong.Where(c => c.NgayKetThuc <= endDate.Value);
                     }
 
-                    if (lstMaHD.Count == 0) dgvTT.Rows[j].Cells[5].Value = "";
+
+                    var lstTenHD = queryHoatDong.Select(c => c.TenHoatDong).ToList();
+
+                    if (lstTenHD.Count == 0)
+                    {
+                        dgvTT.Rows[rowIdx].Cells[5].Value = " ";
+                    }
                     else
                     {
-                        string TenHD = "- ";
-                        int MaHD = lstMaHD[0];
-                        List<string> NameHD = (from s in db.HOAT_DONG
-                                               where s.MaHD == MaHD && s.Hide == false
-                                               select (s.TenHoatDong)).ToList();
-                        TenHD = TenHD + NameHD[0];
-                        for (int i = 1; i < lstMaHD.Count; i++)
+                        // Sử dụng StringBuilder để nối chuỗi hiệu quả hơn
+                        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                        for (int i = 0; i < lstTenHD.Count; i++)
                         {
-                            MaHD = lstMaHD[i];
-                            List<string> TenHoat = (from s in db.HOAT_DONG
-                                                    where s.MaHD == MaHD && s.Hide == false
-                                                    select (s.TenHoatDong)).ToList();
-                            TenHD = TenHD + "\n- " + TenHoat[0];
+                            sb.Append("- ").Append(lstTenHD[i]);
+                            if (i < lstTenHD.Count - 1)
+                            {
+                                sb.Append("\n");
+                            }
                         }
-                        dgvTT.Rows[j].Cells[5].Value = TenHD;
+                        dgvTT.Rows[rowIdx].Cells[5].Value = sb.ToString();
                     }
+                    rowIdx++;
                 }
                 Xoa();
             }
@@ -303,6 +320,24 @@ namespace ServiceLearning
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
             }
+            
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtName.Text.Trim().Length > 0)
+                btnLoc.Enabled = true;
+            else btnLoc.Enabled = false;
         }
     }
 }
