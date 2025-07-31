@@ -40,7 +40,7 @@ namespace ServiceLearning
                           Taitro = s.TaiTro,
                           Khac = s.Khac
                       };
-            dgvTC.DataSource = lst.ToList();
+            dgvTC.DataSource = lst.Take(100).ToList();
             FormatGridView();
         }
         public void FormatGridView()
@@ -161,197 +161,53 @@ namespace ServiceLearning
 
         private void btnLoc_Click(object sender, EventArgs e)
         {
-            if (cmbLoai.SelectedIndex != -1)   
+            //Giá trị khởi đầu
+            var lst = from s in db.TAI_CHINH
+                      join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                      where s.Hide == false && b.Hide == false
+                      group s by s.MaHD into g
+                      let maxID = g.Max(x => x.ID_TaiChinh)
+                      from s in g
+                      join b in db.HOAT_DONG on s.MaHD equals b.MaHD
+                      where s.ID_TaiChinh == maxID
+                      select new
+                      {
+                          TenHoatDong = b.TenHoatDong,
+                          Loai = b.Loai,
+                          NgayBatDau = b.NgayBatDau,
+                          TongChiPhi = s.UEF + s.TaiTro,
+                          UEF = s.UEF,
+                          Taitro = s.TaiTro,
+                          Khac = s.Khac
+                      };
+            if (!string.IsNullOrEmpty(txtSearchByName.Text.Trim()))
+            {
+                lst = (from tc in lst
+                      where tc.TenHoatDong.Contains( txtSearchByName.Text.Trim() )
+                      select tc);
+            }
+            if (cmbLoai.SelectedIndex != -1)
             {
                 string loai = cmbLoai.SelectedItem.ToString();
-                if (dtpBD.Text == " " && dtpKT.Text == " ")
-                {
-                    var lst = from s in db.TAI_CHINH
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false && b.Hide == false
-                              group s by s.MaHD into g
-                              let maxID = g.Max(x => x.ID_TaiChinh)
-                              from s in g
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.ID_TaiChinh == maxID && b.Loai == loai
-                              select new
-                              {
-                                  TenHoatDong = b.TenHoatDong,
-                                  Loai = b.Loai,
-                                  NgayBatDau = b.NgayBatDau,
-                                  TongChiPhi = s.UEF + s.TaiTro,
-                                  UEF = s.UEF,
-                                  Taitro = s.TaiTro,
-                                  Khac = s.Khac
-                              };
-                    dgvTC.DataSource = lst.ToList();
-                }
-                else if (dtpBD.Text != " " && dtpKT.Text == " ")
-                {
-                    DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                    var lst = from s in db.TAI_CHINH
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false && b.Hide == false
-                              group s by s.MaHD into g
-                              let maxID = g.Max(x => x.ID_TaiChinh)
-                              from s in g
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.ID_TaiChinh == maxID && b.NgayBatDau >= BD && b.Loai == loai
-                              select new
-                              {
-                                  TenHoatDong = b.TenHoatDong,
-                                  Loai = b.Loai,
-                                  NgayBatDau = b.NgayBatDau,
-                                  TongChiPhi = s.UEF + s.TaiTro,
-                                  UEF = s.UEF,
-                                  Taitro = s.TaiTro,
-                                  Khac = s.Khac
-                              };
-                    dgvTC.DataSource = lst.ToList();
-                }
-                else if (dtpBD.Text == " " && dtpKT.Text != " ")
-                {
-                    DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                    var lst = from s in db.TAI_CHINH
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false && b.Hide == false
-                              group s by s.MaHD into g
-                              let maxID = g.Max(x => x.ID_TaiChinh)
-                              from s in g
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.ID_TaiChinh == maxID && b.NgayKetThuc <= KT && b.Loai == loai
-                              select new
-                              {
-                                  TenHoatDong = b.TenHoatDong,
-                                  Loai = b.Loai,
-                                  NgayBatDau = b.NgayBatDau,
-                                  TongChiPhi = s.UEF + s.TaiTro,
-                                  UEF = s.UEF,
-                                  Taitro = s.TaiTro,
-                                  Khac = s.Khac
-                              };
-                    dgvTC.DataSource = lst.ToList();
-                }
-                else if (dtpBD.Text != " " && dtpKT.Text != " ")
-                {
-                    DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                    DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                    var lst = from s in db.TAI_CHINH
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false && b.Hide == false
-                              group s by s.MaHD into g
-                              let maxID = g.Max(x => x.ID_TaiChinh)
-                              from s in g
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.ID_TaiChinh == maxID && b.NgayBatDau >= BD && b.NgayKetThuc <= KT && b.Loai == loai
-                              select new
-                              {
-                                  TenHoatDong = b.TenHoatDong,
-                                  Loai = b.Loai,
-                                  NgayBatDau = b.NgayBatDau,
-                                  TongChiPhi = s.UEF + s.TaiTro,
-                                  UEF = s.UEF,
-                                  Taitro = s.TaiTro,
-                                  Khac = s.Khac
-                              };
-                    dgvTC.DataSource = lst.ToList();
-                }
+                lst = (from tc in lst
+                       where tc.Loai == loai
+                       select tc);
             }
-            else if (cmbLoai.SelectedIndex == -1 )
+            if (dtpBD.Text != " ")
             {
-                if (dtpBD.Text == " " && dtpKT.Text == " ")
-                {
-                    var lst = from s in db.TAI_CHINH
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false && b.Hide == false
-                              group s by s.MaHD into g
-                              let maxID = g.Max(x => x.ID_TaiChinh)
-                              from s in g
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.ID_TaiChinh == maxID 
-                              select new
-                              {
-                                  TenHoatDong = b.TenHoatDong,
-                                  Loai = b.Loai,
-                                  NgayBatDau = b.NgayBatDau,
-                                  TongChiPhi = s.UEF + s.TaiTro,
-                                  UEF = s.UEF,
-                                  Taitro = s.TaiTro,
-                                  Khac = s.Khac
-                              };
-                    dgvTC.DataSource = lst.ToList();
-                }
-                else if (dtpBD.Text != " " && dtpKT.Text == " ")
-                {
-                    DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                    var lst = from s in db.TAI_CHINH
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false && b.Hide == false
-                              group s by s.MaHD into g
-                              let maxID = g.Max(x => x.ID_TaiChinh)
-                              from s in g
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.ID_TaiChinh == maxID && b.NgayBatDau >= BD 
-                              select new
-                              {
-                                  TenHoatDong = b.TenHoatDong,
-                                  Loai = b.Loai,
-                                  NgayBatDau = b.NgayBatDau,
-                                  TongChiPhi = s.UEF + s.TaiTro,
-                                  UEF = s.UEF,
-                                  Taitro = s.TaiTro,
-                                  Khac = s.Khac
-                              };
-                    dgvTC.DataSource = lst.ToList();
-                }
-                else if (dtpBD.Text == " " && dtpKT.Text != " ")
-                {
-                    DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                    var lst = from s in db.TAI_CHINH
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false && b.Hide == false
-                              group s by s.MaHD into g
-                              let maxID = g.Max(x => x.ID_TaiChinh)
-                              from s in g
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.ID_TaiChinh == maxID && b.NgayKetThuc <= KT 
-                              select new
-                              {
-                                  TenHoatDong = b.TenHoatDong,
-                                  Loai = b.Loai,
-                                  NgayBatDau = b.NgayBatDau,
-                                  TongChiPhi = s.UEF + s.TaiTro,
-                                  UEF = s.UEF,
-                                  Taitro = s.TaiTro,
-                                  Khac = s.Khac
-                              };
-                    dgvTC.DataSource = lst.ToList();
-                }
-                else if (dtpBD.Text != " " && dtpKT.Text != " ")
-                {
-                    DateTime BD = Convert.ToDateTime(dtpBD.Text);
-                    DateTime KT = Convert.ToDateTime(dtpKT.Text);
-                    var lst = from s in db.TAI_CHINH
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.Hide == false && b.Hide == false
-                              group s by s.MaHD into g
-                              let maxID = g.Max(x => x.ID_TaiChinh)
-                              from s in g
-                              join b in db.HOAT_DONG on s.MaHD equals b.MaHD
-                              where s.ID_TaiChinh == maxID && b.NgayBatDau >= BD && b.NgayKetThuc <= KT 
-                              select new
-                              {
-                                  TenHoatDong = b.TenHoatDong,
-                                  Loai = b.Loai,
-                                  NgayBatDau = b.NgayBatDau,
-                                  TongChiPhi = s.UEF + s.TaiTro,
-                                  UEF = s.UEF,
-                                  Taitro = s.TaiTro,
-                                  Khac = s.Khac
-                              };
-                    dgvTC.DataSource = lst.ToList();
-                }
-            }   
+                DateTime BD = Convert.ToDateTime(dtpBD.Text);
+                lst = (from tc in lst
+                       where tc.NgayBatDau >= BD
+                       select tc);
+            }
+            if (dtpKT.Text != " ")
+            {
+                DateTime KT = Convert.ToDateTime(dtpKT.Text);
+                lst = (from tc in lst
+                       where tc.NgayBatDau <= KT
+                       select tc);
+            }
+            dgvTC.DataSource = lst.ToList();
             
             FormatGridView();
         }
@@ -368,6 +224,15 @@ namespace ServiceLearning
             {
                 dtpKT.CustomFormat = " ";
             }
+        }
+
+        private void txtSearchByName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtSearchByName.Text.Length > 0)
+            {
+                btnLoc.Enabled = true;
+            }
+            else btnLoc.Enabled = false;
         }
     }
 }

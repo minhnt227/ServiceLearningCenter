@@ -48,9 +48,9 @@ namespace ServiceLearning
                 List<string> lstMaGV = new List<string>();
                 List<string> lstTenGV = new List<string>();
                 List<string> lstHoTenLotGV = new List<string>();
-                lstMaGV = db.GIANG_VIEN.Where(x=>x.Hide == false).Select(x => x.MaGV).Take(100).ToList();
-                lstTenGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.Ten).Take(100).ToList();
-                lstHoTenLotGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.HoTenLot).Take(100).ToList();
+                lstMaGV = db.GIANG_VIEN.Where(x=>x.Hide == false).Select(x => x.MaGV).Take(50).ToList();
+                lstTenGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.Ten).Take(50).ToList();
+                lstHoTenLotGV = db.GIANG_VIEN.Where(x => x.Hide == false).Select(x => x.HoTenLot).Take(50).ToList();
                 for (int j = 0; j < lstMaGV.Count; j++)
                 {
                     string MaGV = lstMaGV[j];
@@ -103,7 +103,9 @@ namespace ServiceLearning
             //MessageBox.Show(n.ToString());
             for (int i = 0; i < n; i++)
             {
-                if (dgvGV.Rows[i].Cells[5].Value.ToString() == " " || dgvGV.Rows[i].Cells[4].Value.ToString() == " ")
+                if (dgvGV.Rows[i].Cells[5].Value == null || dgvGV.Rows[i].Cells[4].Value == null)
+                    continue;
+                    if (dgvGV.Rows[i].Cells[5].Value.ToString() == " " || dgvGV.Rows[i].Cells[4].Value.ToString() == " ")
                 {
                     //Object stt = dgvSV.Rows[i].Cells[0].Value;
                     dgvGV.Rows.RemoveAt(dgvGV.Rows[i].Index);
@@ -264,7 +266,7 @@ namespace ServiceLearning
                 {
                     // Use .Contains() for partial matching and .ToLower() for case-insensitive search.
                     // Add null check for gv.Ten to prevent NullReferenceException.
-                    dataGV = dataGV.Where(gv => gv.Ten != null && gv.Ten.ToLower().Contains(Ten.ToLower()));
+                    dataGV = dataGV.Where(gv => gv.Ten != null && gv.Ten.Contains(Ten));
                 }
 
                 // Project the filtered lecturers into the GIANGVIEN.

@@ -53,8 +53,6 @@
             this.Khoa = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.VaiTro = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ThamGia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NgayBatDau = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NgayKetThuc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSV)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox2)).BeginInit();
@@ -84,9 +82,7 @@
             this.HovaTen,
             this.Khoa,
             this.VaiTro,
-            this.ThamGia,
-            this.NgayBatDau,
-            this.NgayKetThuc});
+            this.ThamGia});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
@@ -97,7 +93,7 @@
             this.dgvSV.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvSV.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
             this.dgvSV.Location = new System.Drawing.Point(8, 124);
-            this.dgvSV.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvSV.Margin = new System.Windows.Forms.Padding(4);
             this.dgvSV.Name = "dgvSV";
             this.dgvSV.RowHeadersVisible = false;
             this.dgvSV.RowHeadersWidth = 51;
@@ -142,9 +138,9 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(16, 15);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(1125, 102);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
@@ -185,7 +181,7 @@
             // btnLoc
             // 
             this.btnLoc.Location = new System.Drawing.Point(1043, 62);
-            this.btnLoc.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLoc.Margin = new System.Windows.Forms.Padding(4);
             this.btnLoc.Name = "btnLoc";
             this.btnLoc.Size = new System.Drawing.Size(71, 28);
             this.btnLoc.TabIndex = 20;
@@ -198,7 +194,7 @@
             this.guna2PictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("guna2PictureBox2.Image")));
             this.guna2PictureBox2.ImageRotate = 0F;
             this.guna2PictureBox2.Location = new System.Drawing.Point(1043, 21);
-            this.guna2PictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.guna2PictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.guna2PictureBox2.Name = "guna2PictureBox2";
             this.guna2PictureBox2.Size = new System.Drawing.Size(60, 33);
             this.guna2PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -225,7 +221,7 @@
             this.dtpKT.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dtpKT.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpKT.Location = new System.Drawing.Point(849, 50);
-            this.dtpKT.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpKT.Margin = new System.Windows.Forms.Padding(4);
             this.dtpKT.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.dtpKT.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.dtpKT.Name = "dtpKT";
@@ -244,7 +240,7 @@
             this.dtpBD.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dtpBD.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpBD.Location = new System.Drawing.Point(649, 50);
-            this.dtpBD.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpBD.Margin = new System.Windows.Forms.Padding(4);
             this.dtpBD.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.dtpBD.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.dtpBD.Name = "dtpBD";
@@ -287,7 +283,7 @@
             this.cmbLoai.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
             this.cmbLoai.ItemHeight = 30;
             this.cmbLoai.Location = new System.Drawing.Point(473, 50);
-            this.cmbLoai.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cmbLoai.Margin = new System.Windows.Forms.Padding(4);
             this.cmbLoai.Name = "cmbLoai";
             this.cmbLoai.Size = new System.Drawing.Size(153, 36);
             this.cmbLoai.TabIndex = 13;
@@ -307,7 +303,7 @@
             this.cmbKhoa.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
             this.cmbKhoa.ItemHeight = 30;
             this.cmbKhoa.Location = new System.Drawing.Point(236, 50);
-            this.cmbKhoa.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cmbKhoa.Margin = new System.Windows.Forms.Padding(4);
             this.cmbKhoa.Name = "cmbKhoa";
             this.cmbKhoa.Size = new System.Drawing.Size(228, 36);
             this.cmbKhoa.TabIndex = 11;
@@ -338,7 +334,7 @@
             this.btnExport.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.btnExport.ForeColor = System.Drawing.Color.White;
             this.btnExport.Location = new System.Drawing.Point(936, 553);
-            this.btnExport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnExport.Margin = new System.Windows.Forms.Padding(4);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(193, 33);
             this.btnExport.TabIndex = 14;
@@ -388,18 +384,6 @@
             this.ThamGia.MinimumWidth = 6;
             this.ThamGia.Name = "ThamGia";
             // 
-            // NgayBatDau
-            // 
-            this.NgayBatDau.HeaderText = "Ngày Bắt Đầu";
-            this.NgayBatDau.MinimumWidth = 6;
-            this.NgayBatDau.Name = "NgayBatDau";
-            // 
-            // NgayKetThuc
-            // 
-            this.NgayKetThuc.HeaderText = "Ngày Kết Thúc";
-            this.NgayKetThuc.MinimumWidth = 6;
-            this.NgayKetThuc.Name = "NgayKetThuc";
-            // 
             // frmTK_SinhVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -408,7 +392,7 @@
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgvSV);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmTK_SinhVien";
             this.Text = "frmTK_SinhVien";
             this.Load += new System.EventHandler(this.frmTK_SinhVien_Load);
@@ -443,7 +427,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Khoa;
         private System.Windows.Forms.DataGridViewTextBoxColumn VaiTro;
         private System.Windows.Forms.DataGridViewTextBoxColumn ThamGia;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NgayBatDau;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NgayKetThuc;
     }
 }

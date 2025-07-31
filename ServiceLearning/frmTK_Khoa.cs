@@ -424,5 +424,10 @@ namespace ServiceLearning
             }
             else btnLoc.Enabled = false;
         }
+
+        private void NameFilterLbl_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
