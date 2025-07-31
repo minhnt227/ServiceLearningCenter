@@ -244,6 +244,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmTK_GiangVien.resx">
       <DependentUpon>frmTK_GiangVien.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmTK_Khoa.resx">
       <DependentUpon>frmTK_Khoa.cs</DependentUpon>
