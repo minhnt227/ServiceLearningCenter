@@ -105,13 +105,13 @@ namespace ServiceLearning
                 if (string.IsNullOrEmpty(txtSearch.Text) != true)
                 {
                     string mssv = txtSearch.Text;
-                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.MSSV).Take(200).ToList();
-                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.HoTen).Take(200).ToList();
+                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.MSSV).ToList();
+                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false && x.MSSV.Contains(mssv)).Select(x => x.HoTen).ToList();
                 }
                 else
                 {
-                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).Take(200).ToList();
-                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).Take(200).ToList();
+                    lstMaSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.MSSV).ToList();
+                    lstHoTenSV = db.SINH_VIEN.Where(x => x.Hide == false).Select(x => x.HoTen).ToList();
                 }
                 for (int j = 0; j < lstMaSV.Count; j++)
                 {
