@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Guna.UI2.WinForms;
+using OfficeOpenXml.LoadFunctions.Params;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +14,10 @@ namespace ServiceLearning
 {
     public partial class frmTK_SinhVien : Form
     {
+        private ServiceStudent _service = new ServiceStudent();
+        private int _currentPage = 1;
+        private int _pageSize = 50; // Load 50 rows per page
+        private int _totalRecords = 0;
         Context db = new Context();
         public frmTK_SinhVien()
         {
@@ -25,10 +31,41 @@ namespace ServiceLearning
             DisplayCMBKhoa(cmbKhoa);
             dtpBD.CustomFormat = " ";
             dtpKT.CustomFormat = " ";
-            ThongkeSinhVien();
+            //ThongkeSinhVien();
+            LoadData();
             Xoa();
             btnLoc.Enabled = false;
         }
+
+        private void LoadData()
+        {
+            string search = txtSearch.Text.Trim();
+            string khoa = cmbKhoa.SelectedValue?.ToString();
+            string loai = cmbLoai.SelectedItem?.ToString();
+
+            DateTime? start = null;
+            if (dtpBD.CustomFormat != " ") start = dtpBD.Value;
+
+            DateTime? end = null;
+            if (dtpKT.CustomFormat != " ") end = dtpKT.Value;
+            try
+            {
+                var data = _service.GetPagedData(_currentPage, _pageSize, search, khoa, loai, start, end, out _totalRecords);
+
+                dgvSV.DataSource = data;
+                // Update Pagination UI
+                int totalPages = (int)Math.Ceiling((double)_totalRecords / _pageSize);
+                lblPage.Text = $"Trang {_currentPage} / {(totalPages == 0 ? 1 : totalPages)}";
+
+                btnPrev.Enabled = _currentPage > 1;
+                btnNext.Enabled = _currentPage < totalPages;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading data: " + ex.Message);
+            }
+        }
+
         public void DisplayCMBKhoa(ComboBox a)
         {
             var kh = db.KHOAs.Select(s => s).Where(s=>s.Hide == false);
@@ -284,7 +321,9 @@ namespace ServiceLearning
         }
         private void btnLoc_Click(object sender, EventArgs e)
         {
-            LocThongkeSinhVien();
+            //LocThongkeSinhVien();
+            _currentPage = 1;
+            LoadData();
         }
 
         private void dtpBD_ValueChanged(object sender, EventArgs e)
@@ -332,9 +371,10 @@ namespace ServiceLearning
             dtpBD.CustomFormat = " ";
             dtpKT.CustomFormat = " ";
             cmbKhoa.SelectedIndex = -1;
-            dgvSV.Rows.Clear();
-            dgvSV.Refresh();
-            ThongkeSinhVien();
+            LoadData();
+            //dgvSV.Rows.Clear();
+            //dgvSV.Refresh();
+            //ThongkeSinhVien();
             Xoa();
             btnLoc.Enabled = false;
         }
@@ -349,16 +389,47 @@ namespace ServiceLearning
             btnLoc.Enabled = true;
         }
 
-        private void btnExport_Click(object sender, EventArgs e)
+        private async void btnExport_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel files (*.xlsx)|*.xlsx|All files (*.*)|*.*" })
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    ToExcel(dgvSV, sfd.FileName);
+                    //ToExcel(dgvSV, sfd.FileName);
+                    btnExport.Enabled = false;
+                    await ToExcelNew(dgvSV, sfd.FileName);
                 }
         }
+
+        private async Task ToExcelNew(Guna2DataGridView dgvSV, string fileName)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+                // Get Filter Values again to pass to export
+                string search = txtSearch.Text.Trim();
+                string khoa = cmbKhoa.SelectedValue?.ToString();
+                string loai = cmbLoai.SelectedItem?.ToString();
+                DateTime? start = (dtpBD.CustomFormat != " ") ? (DateTime?)dtpBD.Value : null;
+                DateTime? end = (dtpKT.CustomFormat != " ") ? (DateTime?)dtpKT.Value : null;
+
+                //Call async method
+                await _service.ExportExcelAsync(fileName, search, khoa, loai, start, end);
+                
+                MessageBox.Show("Xuất dữ liệu ra Excel thành công!", "Thông Báo",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
+            }
+            catch (Exception ex) {
+                MessageBox.Show("Export Failed: " + ex.Message);
+            }
+            finally
+            {
+                btnExport.Enabled = true;
+                this.Cursor = Cursors.Default;
+            }
+        }
+
         private void ToExcel(DataGridView dtg, string fileName)
         {
+            this.Cursor = Cursors.WaitCursor;
             Microsoft.Office.Interop.Excel.Application excel;
             Microsoft.Office.Interop.Excel.Workbook workbook;
             Microsoft.Office.Interop.Excel.Worksheet worksheet;
@@ -409,6 +480,25 @@ namespace ServiceLearning
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
             btnLoc.Enabled = true;
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            if (_currentPage > 1)
+            {
+                _currentPage--;
+                LoadData();
+            }
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            int totalPages = (int)Math.Ceiling((double)_totalRecords / _pageSize);
+            if (_currentPage < totalPages)
+            {
+                _currentPage++;
+                LoadData();
+            }
         }
     }
 }

@@ -203,6 +203,7 @@
     <Compile Include="PHU_TRACH.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceStudent.cs" />
     <Compile Include="Service_LearningDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -323,6 +324,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon\photos_icon_156733.ico" />
+    <None Include="Resources\next.png" />
+    <None Include="Resources\previous.png" />
     <None Include="Resources\1485969921-5-refresh_78908.png" />
     <None Include="Resources\emblemsynchronizing_93485.ico" />
   </ItemGroup>
